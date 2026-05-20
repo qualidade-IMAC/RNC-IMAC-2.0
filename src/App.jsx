@@ -74,7 +74,7 @@ if (typeof document !== 'undefined' && !document.getElementById('imac-global-sty
 const saveToLocalStorage = (key, data) => {
   // O setTimeout tira essa tarefa da fila principal, destravando a tela imediatamente
   setTimeout(() => {
-    try { localStorage.setItem(key, JSON.stringify(data)); } catch (error) { console.warn(`[Aviso] Armazenamento local cheio para a chave: ${key}.`); }
+    try { localStorage.setItem(key, JSON.stringify(data)); } catch (error) { console.warn(`[Aviso] Armazenamento local cheio para a chave: ${key}.`); }
   }, 10);
 };
 
@@ -102,7 +102,7 @@ const shareViaWhatsApp = (registro) => {
 
 const shareViaEmail = (registro) => {
   const text = encodeURIComponent(getShareText(registro).replace(/\*/g, ''));
-  const subject = encodeURIComponent(`Relatório RNC Pendente - ${String(registro?.id || '').substring(0,8)}`);
+  const subject = encodeURIComponent(`Relatório RNC Pendente - ${String(registro?.id || '').substring(0, 8)}`);
   window.open(`mailto:?subject=${subject}&body=${text}`, '_blank');
 };
 
@@ -139,64 +139,64 @@ const X = (p) => <SvgIcon {...p}><path d="M18 6L6 18M6 6l12 12" /></SvgIcon>;
 const PenTool = (p) => <SvgIcon {...p}><path d="M12 19l7-7 3 3-7 7-3-3zM18 13l-1.5-7.5L2 2l3.5 14.5L13 18l5-5zM2 2l7.586 7.586M11 11l2 2" /></SvgIcon>;
 const Move = (p) => <SvgIcon {...p}><path d="M5 9l-3 3 3 3M9 5l3-3 3 3M9 19l3 3-3 3M19 9l3 3-3 3M2 12h20M12 2v20" /></SvgIcon>;
 const TypeIcon = (p) => <SvgIcon {...p}><polyline points="4 7 4 4 20 4 20 7" /><line x1="9" x2="15" y1="20" y2="20" /><line x1="12" x2="12" y1="4" y2="20" /></SvgIcon>;
-const BarChart2 = (p) => <SvgIcon {...p}><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></SvgIcon>;
-const BoldIcon = (p) => <SvgIcon {...p} strokeWidth={3}><path d="M6 4h8a4 4 0 0 1 4 4 4 4 0 0 1-4 4H6z"/><path d="M6 12h9a4 4 0 0 1 4 4 4 4 0 0 1-4 4H6z"/></SvgIcon>;
-const ItalicIcon = (p) => <SvgIcon {...p}><line x1="19" y1="4" x2="10" y2="4"/><line x1="14" y1="20" x2="5" y2="20"/><line x1="15" y1="4" x2="9" y2="20"/></SvgIcon>;
-const UnderlineIcon = (p) => <SvgIcon {...p}><path d="M6 3v7a6 6 0 0 0 6 6 6 6 0 0 0 6-6V3"/><line x1="4" y1="21" x2="20" y2="21"/></SvgIcon>;
-const Truck = (p) => <SvgIcon {...p}><path d="M16 3H1v13h15M8 16h7v4H8zM21 16h-2v4H5"/><circle cx="6.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></SvgIcon>;
-const ShoppingBag = (p) => <SvgIcon {...p}><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></SvgIcon>;
+const BarChart2 = (p) => <SvgIcon {...p}><line x1="18" y1="20" x2="18" y2="10" /><line x1="12" y1="20" x2="12" y2="4" /><line x1="6" y1="20" x2="6" y2="14" /></SvgIcon>;
+const BoldIcon = (p) => <SvgIcon {...p} strokeWidth={3}><path d="M6 4h8a4 4 0 0 1 4 4 4 4 0 0 1-4 4H6z" /><path d="M6 12h9a4 4 0 0 1 4 4 4 4 0 0 1-4 4H6z" /></SvgIcon>;
+const ItalicIcon = (p) => <SvgIcon {...p}><line x1="19" y1="4" x2="10" y2="4" /><line x1="14" y1="20" x2="5" y2="20" /><line x1="15" y1="4" x2="9" y2="20" /></SvgIcon>;
+const UnderlineIcon = (p) => <SvgIcon {...p}><path d="M6 3v7a6 6 0 0 0 6 6 6 6 0 0 0 6-6V3" /><line x1="4" y1="21" x2="20" y2="21" /></SvgIcon>;
+const Truck = (p) => <SvgIcon {...p}><path d="M16 3H1v13h15M8 16h7v4H8zM21 16h-2v4H5" /><circle cx="6.5" cy="18.5" r="2.5" /><circle cx="18.5" cy="18.5" r="2.5" /></SvgIcon>;
+const ShoppingBag = (p) => <SvgIcon {...p}><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z" /><line x1="3" y1="6" x2="21" y2="6" /><path d="M16 10a4 4 0 0 1-8 0" /></SvgIcon>;
 const Store = (p) => <SvgIcon {...p}><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" /><polyline points="9 22 9 12 15 12 15 22" /></SvgIcon>;
-const Eye = (p) => <SvgIcon {...p}><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></SvgIcon>;
-const Download = (p) => <SvgIcon {...p}><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-5M7 10l5 5 5-5M12 15V3"/></SvgIcon>;
-const Filter = (p) => <SvgIcon {...p}><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/></SvgIcon>;
-const RefreshCw = (p) => <SvgIcon {...p}><path d="M23 4v6h-6M1 20v-6h6"/><path d="M3.51 9a9 9 0 0114.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0020.49 15"/></SvgIcon>;
-const Scissors = (p) => <SvgIcon {...p}><circle cx="6" cy="6" r="3"/><circle cx="6" cy="18" r="3"/><line x1="20" y1="4" x2="8.12" y2="15.88"/><line x1="14.47" y1="14.48" x2="20" y2="20"/><line x1="8.12" y1="8.12" x2="12" y2="12"/></SvgIcon>;
-const AlertCircle = (p) => <SvgIcon {...p}><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></SvgIcon>;
-const CheckCircle = (p) => <SvgIcon {...p}><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></SvgIcon>;
-const Palette = (p) => <SvgIcon {...p}><path d="M12 2.69l5.66 5.66a8 8 0 11-11.31 0z"/></SvgIcon>;
-const LogOut = (p) => <SvgIcon {...p}><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4M16 17l5-5-5-5M21 12H9"/></SvgIcon>;
+const Eye = (p) => <SvgIcon {...p}><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" /><circle cx="12" cy="12" r="3" /></SvgIcon>;
+const Download = (p) => <SvgIcon {...p}><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-5M7 10l5 5 5-5M12 15V3" /></SvgIcon>;
+const Filter = (p) => <SvgIcon {...p}><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3" /></SvgIcon>;
+const RefreshCw = (p) => <SvgIcon {...p}><path d="M23 4v6h-6M1 20v-6h6" /><path d="M3.51 9a9 9 0 0114.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0020.49 15" /></SvgIcon>;
+const Scissors = (p) => <SvgIcon {...p}><circle cx="6" cy="6" r="3" /><circle cx="6" cy="18" r="3" /><line x1="20" y1="4" x2="8.12" y2="15.88" /><line x1="14.47" y1="14.48" x2="20" y2="20" /><line x1="8.12" y1="8.12" x2="12" y2="12" /></SvgIcon>;
+const AlertCircle = (p) => <SvgIcon {...p}><circle cx="12" cy="12" r="10" /><line x1="12" y1="8" x2="12" y2="12" /><line x1="12" y1="16" x2="12.01" y2="16" /></SvgIcon>;
+const CheckCircle = (p) => <SvgIcon {...p}><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" /><polyline points="22 4 12 14.01 9 11.01" /></SvgIcon>;
+const Palette = (p) => <SvgIcon {...p}><path d="M12 2.69l5.66 5.66a8 8 0 11-11.31 0z" /></SvgIcon>;
+const LogOut = (p) => <SvgIcon {...p}><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4M16 17l5-5-5-5M21 12H9" /></SvgIcon>;
 const ChevronLeft = (p) => <SvgIcon {...p}><polyline points="15 18 9 12 15 6" /></SvgIcon>;
 const ChevronRight = (p) => <SvgIcon {...p}><polyline points="9 18 15 12 9 6" /></SvgIcon>;
-const MessageCircle = (p) => <SvgIcon {...p}><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></SvgIcon>;
-const Mail = (p) => <SvgIcon {...p}><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></SvgIcon>;
-const Clock = (p) => <SvgIcon {...p}><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></SvgIcon>;
+const MessageCircle = (p) => <SvgIcon {...p}><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z" /></SvgIcon>;
+const Mail = (p) => <SvgIcon {...p}><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" /><polyline points="22,6 12,13 2,6" /></SvgIcon>;
+const Clock = (p) => <SvgIcon {...p}><circle cx="12" cy="12" r="10" /><polyline points="12 6 12 12 16 14" /></SvgIcon>;
 const Lock = (p) => <SvgIcon {...p}><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></SvgIcon>;
 const User = (p) => <SvgIcon {...p}><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></SvgIcon>;
 const Key = (p) => <SvgIcon {...p}><path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3m-3.5 3.5L19 4" /></SvgIcon>;
-const Settings = (p) => <SvgIcon {...p}><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.5a2 2 0 0 1-1 1.72l-.15.1a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0-.73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></SvgIcon>;
-const Building2 = (p) => <SvgIcon {...p}><path d="M6 22V4a2 2 0 012-2h8a2 2 0 012 2v18M2 22h20M10 6h4M10 10h4M10 14h4M10 18h4"/></SvgIcon>;
-const ClipboardCheck = (p) => <SvgIcon {...p}><path d="M16 4h2a2 2 0 012 2v14a2 2 0 01-2 2H6a2 2 0 01-2-2V6a2 2 0 012-2h2M15 2H9a1 1 0 00-1 1v2a1 1 0 001 1h6a1 1 0 001-1V3a1 1 0 00-1-1z"/><path d="M9 12l2 2 4-4"/></SvgIcon>;
-const SendHorizonal = (p) => <SvgIcon {...p}><path d="M3 8L10.89 15.9a2 2 0 002.83 0L21 8M3 8l9 5 9-5M3 8v10a2 2 0 002 2h14a2 2 0 002-2V8"/></SvgIcon>;
-const ExternalLink = (p) => <SvgIcon {...p}><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6M15 3h6v6M10 14L21 3"/></SvgIcon>;
-const Home = (p) => <SvgIcon {...p}><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></SvgIcon>;
+const Settings = (p) => <SvgIcon {...p}><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.5a2 2 0 0 1-1 1.72l-.15.1a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0-.73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z" /><circle cx="12" cy="12" r="3" /></SvgIcon>;
+const Building2 = (p) => <SvgIcon {...p}><path d="M6 22V4a2 2 0 012-2h8a2 2 0 012 2v18M2 22h20M10 6h4M10 10h4M10 14h4M10 18h4" /></SvgIcon>;
+const ClipboardCheck = (p) => <SvgIcon {...p}><path d="M16 4h2a2 2 0 012 2v14a2 2 0 01-2 2H6a2 2 0 01-2-2V6a2 2 0 012-2h2M15 2H9a1 1 0 00-1 1v2a1 1 0 001 1h6a1 1 0 001-1V3a1 1 0 00-1-1z" /><path d="M9 12l2 2 4-4" /></SvgIcon>;
+const SendHorizonal = (p) => <SvgIcon {...p}><path d="M3 8L10.89 15.9a2 2 0 002.83 0L21 8M3 8l9 5 9-5M3 8v10a2 2 0 002 2h14a2 2 0 002-2V8" /></SvgIcon>;
+const ExternalLink = (p) => <SvgIcon {...p}><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6M15 3h6v6M10 14L21 3" /></SvgIcon>;
+const Home = (p) => <SvgIcon {...p}><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z" /><polyline points="9 22 9 12 15 12 15 22" /></SvgIcon>;
 
-  return new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    reader.readAsDataURL(file);
-    reader.onload = (event) => {
-      const img = new Image();
-      img.src = event.target.result;
-      img.onload = () => {
-        const canvas = document.createElement('canvas');
-        const MAX_WIDTH = isLogo ? 400 : 800;
-        const MAX_HEIGHT = isLogo ? 400 : 800;
-        let width = img.width;
-        let height = img.height;
+return new Promise((resolve, reject) => {
+  const reader = new FileReader();
+  reader.readAsDataURL(file);
+  reader.onload = (event) => {
+    const img = new Image();
+    img.src = event.target.result;
+    img.onload = () => {
+      const canvas = document.createElement('canvas');
+      const MAX_WIDTH = isLogo ? 400 : 800;
+      const MAX_HEIGHT = isLogo ? 400 : 800;
+      let width = img.width;
+      let height = img.height;
 
-        if (width > height) {
-          if (width > MAX_WIDTH) { height *= MAX_WIDTH / width; width = MAX_WIDTH; }
-        } else {
-          if (height > MAX_HEIGHT) { width *= MAX_HEIGHT / height; height = MAX_HEIGHT; }
-        }
-        canvas.width = width;
-        canvas.height = height;
-        const ctx = canvas.getContext('2d');
-        ctx.drawImage(img, 0, 0, width, height);
-        resolve(canvas.toDataURL('image/jpeg', 0.6)); 
-      };
+      if (width > height) {
+        if (width > MAX_WIDTH) { height *= MAX_WIDTH / width; width = MAX_WIDTH; }
+      } else {
+        if (height > MAX_HEIGHT) { width *= MAX_HEIGHT / height; height = MAX_HEIGHT; }
+      }
+      canvas.width = width;
+      canvas.height = height;
+      const ctx = canvas.getContext('2d');
+      ctx.drawImage(img, 0, 0, width, height);
+      resolve(canvas.toDataURL('image/jpeg', 0.6));
     };
-    reader.onerror = error => reject(error);
-  });
+  };
+  reader.onerror = error => reject(error);
+});
 
 const RichTextEditor = ({ value, onChange, placeholder }) => {
   const editorRef = useRef(null);
@@ -217,7 +217,7 @@ const RichTextEditor = ({ value, onChange, placeholder }) => {
   const execCommand = (command, val = null) => {
     try {
       document.execCommand(command, false, val);
-      if(editorRef.current) editorRef.current.focus();
+      if (editorRef.current) editorRef.current.focus();
       handleInput();
     } catch (e) {
       console.error(e);
@@ -233,24 +233,24 @@ const RichTextEditor = ({ value, onChange, placeholder }) => {
             <button type="button" onClick={(e) => { e.preventDefault(); execCommand('italic'); }} className="p-1.5 hover:bg-gray-200 text-gray-700 rounded transition" title="Itálico"><ItalicIcon size={18} /></button>
             <button type="button" onClick={(e) => { e.preventDefault(); execCommand('underline'); }} className="p-1.5 hover:bg-gray-200 text-gray-700 rounded transition" title="Sublinhado"><UnderlineIcon size={18} /></button>
           </div>
-          
+
           <div className="flex items-center gap-1 border-r border-gray-300 pr-2">
-            <span className="text-xs text-gray-500 font-bold ml-1" title="Cor do Texto"><Palette size={16}/></span>
-            <input 
-               type="color" 
-               className="w-6 h-6 p-0 border-0 rounded cursor-pointer" 
-               title="Mudar Cor"
-               onChange={(e) => execCommand('foreColor', e.target.value)} 
-               defaultValue="#000000"
+            <span className="text-xs text-gray-500 font-bold ml-1" title="Cor do Texto"><Palette size={16} /></span>
+            <input
+              type="color"
+              className="w-6 h-6 p-0 border-0 rounded cursor-pointer"
+              title="Mudar Cor"
+              onChange={(e) => execCommand('foreColor', e.target.value)}
+              defaultValue="#000000"
             />
           </div>
 
           <div className="flex items-center gap-1">
-            <select 
-               className="text-sm bg-transparent border border-gray-300 rounded p-1 outline-none text-gray-700" 
-               title="Tamanho do Texto"
-               onChange={(e) => execCommand('fontSize', e.target.value)}
-               defaultValue="3"
+            <select
+              className="text-sm bg-transparent border border-gray-300 rounded p-1 outline-none text-gray-700"
+              title="Tamanho do Texto"
+              onChange={(e) => execCommand('fontSize', e.target.value)}
+              defaultValue="3"
             >
               <option value="1">Muito Pequeno</option>
               <option value="2">Pequeno</option>
@@ -277,20 +277,20 @@ const RichTextEditor = ({ value, onChange, placeholder }) => {
 
 const ImageAnnotator = ({ baseImageSrc, initialShapes = [], onSave, onCancel }) => {
   const canvasRef = useRef(null);
-  const [tool, setTool] = useState('arrow'); 
+  const [tool, setTool] = useState('arrow');
   const [color, setColor] = useState('#FF0000');
-  const [textSize, setTextSize] = useState(28); 
+  const [textSize, setTextSize] = useState(28);
   const [selectedShapeIndex, setSelectedShapeIndex] = useState(null);
   const [textInput, setTextInput] = useState(null);
-  const [forceRender, setForceRender] = useState(0); 
+  const [forceRender, setForceRender] = useState(0);
   const [cropRect, setCropRect] = useState(null);
-  const [cropRatio, setCropRatio] = useState(null); 
-  
+  const [cropRatio, setCropRatio] = useState(null);
+
   const shapesRef = useRef(Array.isArray(initialShapes) ? JSON.parse(JSON.stringify(initialShapes)) : []);
   const imageRef = useRef(null);
   const isDrawing = useRef(false);
   const draggedShapeIndex = useRef(null);
-  
+
   const startPos = useRef({ x: 0, y: 0 });
   const currentPos = useRef({ x: 0, y: 0 });
   const lastMousePos = useRef({ x: 0, y: 0 });
@@ -301,7 +301,7 @@ const ImageAnnotator = ({ baseImageSrc, initialShapes = [], onSave, onCancel }) 
     img.src = baseImageSrc;
     img.onload = () => {
       imageRef.current = img;
-      if(canvasRef.current) {
+      if (canvasRef.current) {
         canvasRef.current.width = img.width;
         canvasRef.current.height = img.height;
         redraw(null);
@@ -341,27 +341,27 @@ const ImageAnnotator = ({ baseImageSrc, initialShapes = [], onSave, onCancel }) 
 
   const getShapeCenter = (shape) => {
     if (shape.type === 'circle') return { x: shape.x1 || 0, y: shape.y1 || 0 };
-    if (shape.type === 'arrow') return { x: ((shape.x1 || 0) + (shape.x2 || 0))/2, y: ((shape.y1 || 0) + (shape.y2 || 0))/2 };
+    if (shape.type === 'arrow') return { x: ((shape.x1 || 0) + (shape.x2 || 0)) / 2, y: ((shape.y1 || 0) + (shape.y2 || 0)) / 2 };
     if (shape.type === 'text') {
       const w = shape.width || ((shape.text || '').length * ((shape.size || 28) * 0.6));
-      return { x: (shape.x || 0) + w/2, y: shape.y || 0 };
+      return { x: (shape.x || 0) + w / 2, y: shape.y || 0 };
     }
     return { x: 0, y: 0 };
   };
 
   const drawArrow = (ctx, fromx, fromy, tox, toy, color) => {
-    const headlen = 25; 
+    const headlen = 25;
     const dx = tox - fromx;
     const dy = toy - fromy;
     const angle = Math.atan2(dy, dx);
-    
+
     ctx.beginPath();
     ctx.moveTo(fromx, fromy);
     ctx.lineTo(tox, toy);
     ctx.strokeStyle = color;
     ctx.lineWidth = 6;
     ctx.stroke();
-    
+
     ctx.beginPath();
     ctx.moveTo(tox, toy);
     ctx.lineTo(tox - headlen * Math.cos(angle - Math.PI / 6), toy - headlen * Math.sin(angle - Math.PI / 6));
@@ -394,7 +394,7 @@ const ImageAnnotator = ({ baseImageSrc, initialShapes = [], onSave, onCancel }) 
   const drawSelectionBox = (ctx, shape) => {
     let minX, minY, maxX, maxY;
     const pad = 15;
-    
+
     if (shape.type === 'circle') {
       const r = Math.sqrt(Math.pow((shape.x2 || 0) - (shape.x1 || 0), 2) + Math.pow((shape.y2 || 0) - (shape.y1 || 0), 2));
       minX = shape.x1 - r; maxX = shape.x1 + r; minY = shape.y1 - r; maxY = shape.y1 + r;
@@ -405,11 +405,11 @@ const ImageAnnotator = ({ baseImageSrc, initialShapes = [], onSave, onCancel }) 
       const w = shape.width || ((shape.text || '').length * ((shape.size || 28) * 0.6));
       minX = shape.x || 0; maxX = (shape.x || 0) + w; minY = (shape.y || 0) - ((shape.size || 28) / 2); maxY = (shape.y || 0) + ((shape.size || 28) / 2);
     } else return;
-    
+
     ctx.beginPath();
     ctx.setLineDash([8, 8]); ctx.strokeStyle = '#00BFFF'; ctx.lineWidth = 3;
     ctx.rect(minX - pad, minY - pad, (maxX - minX) + pad * 2, (maxY - minY) + pad * 2);
-    ctx.stroke(); ctx.setLineDash([]); 
+    ctx.stroke(); ctx.setLineDash([]);
   };
 
   const drawCropOverlay = (ctx, start, current, ratio = null) => {
@@ -449,30 +449,30 @@ const ImageAnnotator = ({ baseImageSrc, initialShapes = [], onSave, onCancel }) 
     const ctx = canvasRef.current.getContext('2d');
     ctx.clearRect(0, 0, canvasRef.current.width, canvasRef.current.height);
     ctx.drawImage(imageRef.current, 0, 0);
-    
+
     const activeIndex = overrideSelectedIndex !== undefined ? overrideSelectedIndex : selectedShapeIndex;
 
     shapesRef.current.forEach((shape, index) => {
-      ctx.save(); 
+      ctx.save();
       const center = getShapeCenter(shape);
       const angle = shape.rotation || 0;
-      
+
       if (angle !== 0) {
         ctx.translate(center.x, center.y);
         ctx.rotate(angle);
         ctx.translate(-center.x, -center.y);
       }
-      
+
       if (shape.type === 'arrow') drawArrow(ctx, shape.x1, shape.y1, shape.x2, shape.y2, shape.color);
       else if (shape.type === 'circle') drawCircle(ctx, shape.x1, shape.y1, shape.x2, shape.y2, shape.color);
       else if (shape.type === 'text') drawText(ctx, shape.text, shape.x, shape.y, shape.color, shape.size);
-      
+
       if (index === activeIndex) {
         drawSelectionBox(ctx, shape);
       }
       ctx.restore();
     });
-    
+
     if (isDrawing.current && tool !== 'move' && tool !== 'text' && tool !== 'crop') {
       if (tool === 'arrow') drawArrow(ctx, startPos.current.x, startPos.current.y, currentPos.current.x, currentPos.current.y, color);
       else if (tool === 'circle') drawCircle(ctx, startPos.current.x, startPos.current.y, currentPos.current.x, currentPos.current.y, color);
@@ -481,12 +481,12 @@ const ImageAnnotator = ({ baseImageSrc, initialShapes = [], onSave, onCancel }) 
     if (tool === 'crop' && isDrawing.current) {
       drawCropOverlay(ctx, startPos.current, currentPos.current, cropRatio);
     } else if (cropRect) {
-      drawCropOverlay(ctx, {x: cropRect.x, y: cropRect.y}, {x: cropRect.x + cropRect.w, y: cropRect.y + cropRect.h}, null);
+      drawCropOverlay(ctx, { x: cropRect.x, y: cropRect.y }, { x: cropRect.x + cropRect.w, y: cropRect.y + cropRect.h }, null);
     }
   };
 
   const getPointerPos = (e) => {
-    if(!canvasRef.current) return {x:0, y:0};
+    if (!canvasRef.current) return { x: 0, y: 0 };
     const rect = canvasRef.current.getBoundingClientRect();
     const scaleX = canvasRef.current.width / rect.width;
     const scaleY = canvasRef.current.height / rect.height;
@@ -496,7 +496,7 @@ const ImageAnnotator = ({ baseImageSrc, initialShapes = [], onSave, onCancel }) 
   const isPointInShape = (px, py, shape) => {
     const center = getShapeCenter(shape);
     const angle = shape.rotation || 0;
-    
+
     let rpx = px, rpy = py;
     if (angle !== 0) {
       const dx = px - center.x, dy = py - center.y;
@@ -504,23 +504,23 @@ const ImageAnnotator = ({ baseImageSrc, initialShapes = [], onSave, onCancel }) 
       rpx = dx * cos - dy * sin + center.x; rpy = dx * sin + dy * cos + center.y;
     }
 
-    const pad = 25; 
+    const pad = 25;
     if (shape.type === 'circle') {
-      const r = Math.sqrt(Math.pow((shape.x2||0) - (shape.x1||0), 2) + Math.pow((shape.y2||0) - (shape.y1||0), 2));
-      return Math.sqrt(Math.pow(rpx - (shape.x1||0), 2) + Math.pow(rpy - (shape.y1||0), 2)) <= r + pad;
+      const r = Math.sqrt(Math.pow((shape.x2 || 0) - (shape.x1 || 0), 2) + Math.pow((shape.y2 || 0) - (shape.y1 || 0), 2));
+      return Math.sqrt(Math.pow(rpx - (shape.x1 || 0), 2) + Math.pow(rpy - (shape.y1 || 0), 2)) <= r + pad;
     } else if (shape.type === 'arrow') {
-      const minX = Math.min(shape.x1||0, shape.x2||0) - pad, maxX = Math.max(shape.x1||0, shape.x2||0) + pad;
-      const minY = Math.min(shape.y1||0, shape.y2||0) - pad, maxY = Math.max(shape.y1||0, shape.y2||0) + pad;
+      const minX = Math.min(shape.x1 || 0, shape.x2 || 0) - pad, maxX = Math.max(shape.x1 || 0, shape.x2 || 0) + pad;
+      const minY = Math.min(shape.y1 || 0, shape.y2 || 0) - pad, maxY = Math.max(shape.y1 || 0, shape.y2 || 0) + pad;
       if (rpx >= minX && rpx <= maxX && rpy >= minY && rpy <= maxY) {
-        const l2 = Math.pow((shape.x2||0) - (shape.x1||0), 2) + Math.pow((shape.y2||0) - (shape.y1||0), 2);
+        const l2 = Math.pow((shape.x2 || 0) - (shape.x1 || 0), 2) + Math.pow((shape.y2 || 0) - (shape.y1 || 0), 2);
         if (l2 === 0) return false;
-        let t = Math.max(0, Math.min(1, ((rpx - (shape.x1||0)) * ((shape.x2||0) - (shape.x1||0)) + (rpy - (shape.y1||0)) * ((shape.y2||0) - (shape.y1||0))) / l2));
-        const projX = (shape.x1||0) + t * ((shape.x2||0) - (shape.x1||0)), projY = (shape.y1||0) + t * ((shape.y2||0) - (shape.y1||0));
+        let t = Math.max(0, Math.min(1, ((rpx - (shape.x1 || 0)) * ((shape.x2 || 0) - (shape.x1 || 0)) + (rpy - (shape.y1 || 0)) * ((shape.y2 || 0) - (shape.y1 || 0))) / l2));
+        const projX = (shape.x1 || 0) + t * ((shape.x2 || 0) - (shape.x1 || 0)), projY = (shape.y1 || 0) + t * ((shape.y2 || 0) - (shape.y1 || 0));
         return Math.sqrt(Math.pow(rpx - projX, 2) + Math.pow(rpy - projY, 2)) <= pad;
       }
     } else if (shape.type === 'text') {
-      const w = shape.width || ((shape.text||'').length * ((shape.size||28) * 0.6));
-      return rpx >= (shape.x||0) - pad && rpx <= (shape.x||0) + w + pad && rpy >= (shape.y||0) - ((shape.size||28) / 2) - pad && rpy <= (shape.y||0) + ((shape.size||28) / 2) + pad;
+      const w = shape.width || ((shape.text || '').length * ((shape.size || 28) * 0.6));
+      return rpx >= (shape.x || 0) - pad && rpx <= (shape.x || 0) + w + pad && rpy >= (shape.y || 0) - ((shape.size || 28) / 2) - pad && rpy <= (shape.y || 0) + ((shape.size || 28) / 2) + pad;
     }
     return false;
   };
@@ -556,7 +556,7 @@ const ImageAnnotator = ({ baseImageSrc, initialShapes = [], onSave, onCancel }) 
   };
 
   const handlePointerMove = (e) => {
-    if (textInput) return; 
+    if (textInput) return;
     e.preventDefault();
     const pos = getPointerPos(e);
     currentPos.current = pos;
@@ -569,10 +569,10 @@ const ImageAnnotator = ({ baseImageSrc, initialShapes = [], onSave, onCancel }) 
     if (tool === 'move' && draggedShapeIndex.current !== null) {
       const shape = shapesRef.current[draggedShapeIndex.current];
       const dx = pos.x - lastMousePos.current.x, dy = pos.y - lastMousePos.current.y;
-      
-      if (shape.type === 'text') { shape.x += dx; shape.y += dy; } 
+
+      if (shape.type === 'text') { shape.x += dx; shape.y += dy; }
       else { shape.x1 += dx; shape.y1 += dy; shape.x2 += dx; shape.y2 += dy; }
-      
+
       lastMousePos.current = pos; redraw();
     } else if (isDrawing.current) {
       redraw();
@@ -586,7 +586,7 @@ const ImageAnnotator = ({ baseImageSrc, initialShapes = [], onSave, onCancel }) 
       isDrawing.current = false;
       let w = currentPos.current.x - startPos.current.x;
       let h = currentPos.current.y - startPos.current.y;
-      
+
       if (cropRatio) {
         const absW = Math.abs(w);
         const absH = Math.abs(h);
@@ -628,8 +628,8 @@ const ImageAnnotator = ({ baseImageSrc, initialShapes = [], onSave, onCancel }) 
   const handleWheel = (e) => {
     if (selectedShapeIndex !== null) {
       const shape = shapesRef.current[selectedShapeIndex];
-      const delta = e.deltaY > 0 ? 5 : -5; 
-      const currentDeg = (shape.rotation || 0) * (180/Math.PI);
+      const delta = e.deltaY > 0 ? 5 : -5;
+      const currentDeg = (shape.rotation || 0) * (180 / Math.PI);
       shape.rotation = (currentDeg + delta) * (Math.PI / 180);
       setForceRender(prev => prev + 1); redraw();
     }
@@ -642,7 +642,7 @@ const ImageAnnotator = ({ baseImageSrc, initialShapes = [], onSave, onCancel }) 
     if (val && val.trim() !== '' && canvasRef.current) {
       const ctx = canvasRef.current.getContext('2d');
       ctx.font = `bold ${textSize}px sans-serif`;
-      shapesRef.current.push({ 
+      shapesRef.current.push({
         type: 'text', text: val.trim(), x: textInput.canvasX, y: textInput.canvasY, color: color, size: textSize, width: ctx.measureText(val.trim()).width, rotation: 0
       });
       redraw(null);
@@ -662,8 +662,8 @@ const ImageAnnotator = ({ baseImageSrc, initialShapes = [], onSave, onCancel }) 
     const img = new Image();
     img.src = newImageSrc;
     img.onload = () => {
-      imageRef.current = img; 
-      if(canvasRef.current) {
+      imageRef.current = img;
+      if (canvasRef.current) {
         canvasRef.current.width = img.width;
         canvasRef.current.height = img.height;
       }
@@ -688,16 +688,16 @@ const ImageAnnotator = ({ baseImageSrc, initialShapes = [], onSave, onCancel }) 
 
   const handleSave = () => {
     setSelectedShapeIndex(null); setTextInput(null); setCropRect(null); redraw(null);
-    setTimeout(() => { 
+    setTimeout(() => {
       if (canvasRef.current && imageRef.current) {
-        onSave(canvasRef.current.toDataURL('image/jpeg', 0.6), imageRef.current.src, shapesRef.current); 
+        onSave(canvasRef.current.toDataURL('image/jpeg', 0.6), imageRef.current.src, shapesRef.current);
       }
     }, 50);
   };
 
   const handleRatioChange = (ratio) => {
     setCropRatio(ratio);
-    setCropRect(null); 
+    setCropRect(null);
     redraw(null);
   };
 
@@ -707,13 +707,13 @@ const ImageAnnotator = ({ baseImageSrc, initialShapes = [], onSave, onCancel }) 
         <div className="flex flex-wrap items-center justify-between gap-4 mb-4 bg-gray-800 p-3 rounded-lg">
           <div className="flex flex-wrap items-center gap-4">
             <div className="flex bg-gray-700 p-1 rounded-lg items-center">
-              <button onClick={() => {setTool('move'); setSelectedShapeIndex(null); setTextInput(null); setCropRect(null); redraw(null);}} className={`p-2 rounded flex items-center gap-1 ${tool === 'move' ? 'bg-[#F4B41A] text-[#5C3A21]' : 'text-white hover:bg-gray-600'}`} title="Mover Seleção"><Move size={20} strokeWidth={3} /></button>
+              <button onClick={() => { setTool('move'); setSelectedShapeIndex(null); setTextInput(null); setCropRect(null); redraw(null); }} className={`p-2 rounded flex items-center gap-1 ${tool === 'move' ? 'bg-[#F4B41A] text-[#5C3A21]' : 'text-white hover:bg-gray-600'}`} title="Mover Seleção"><Move size={20} strokeWidth={3} /></button>
               <div className="w-px h-6 bg-gray-500 mx-1"></div>
-              <button onClick={() => {setTool('crop'); setSelectedShapeIndex(null); setTextInput(null); setCropRect(null); redraw(null);}} className={`p-2 rounded ${tool === 'crop' ? 'bg-[#F4B41A] text-[#5C3A21]' : 'text-white hover:bg-gray-600'}`} title="Cortar Imagem"><Scissors size={20} strokeWidth={3} /></button>
+              <button onClick={() => { setTool('crop'); setSelectedShapeIndex(null); setTextInput(null); setCropRect(null); redraw(null); }} className={`p-2 rounded ${tool === 'crop' ? 'bg-[#F4B41A] text-[#5C3A21]' : 'text-white hover:bg-gray-600'}`} title="Cortar Imagem"><Scissors size={20} strokeWidth={3} /></button>
               <div className="w-px h-6 bg-gray-500 mx-1"></div>
-              <button onClick={() => {setTool('arrow'); setSelectedShapeIndex(null); setTextInput(null); setCropRect(null); redraw(null);}} className={`p-2 rounded ${tool === 'arrow' ? 'bg-[#F4B41A] text-[#5C3A21]' : 'text-white hover:bg-gray-600'}`} title="Desenhar Seta"><ArrowUpRight size={20} strokeWidth={3} /></button>
-              <button onClick={() => {setTool('circle'); setSelectedShapeIndex(null); setTextInput(null); setCropRect(null); redraw(null);}} className={`p-2 rounded ${tool === 'circle' ? 'bg-[#F4B41A] text-[#5C3A21]' : 'text-white hover:bg-gray-600'}`} title="Desenhar Círculo"><Circle size={20} strokeWidth={3} /></button>
-              <button onClick={() => {setTool('text'); setSelectedShapeIndex(null); setCropRect(null); redraw(null);}} className={`p-2 rounded ${tool === 'text' ? 'bg-[#F4B41A] text-[#5C3A21]' : 'text-white hover:bg-gray-600'}`} title="Escrever Texto"><TypeIcon size={20} strokeWidth={3} /></button>
+              <button onClick={() => { setTool('arrow'); setSelectedShapeIndex(null); setTextInput(null); setCropRect(null); redraw(null); }} className={`p-2 rounded ${tool === 'arrow' ? 'bg-[#F4B41A] text-[#5C3A21]' : 'text-white hover:bg-gray-600'}`} title="Desenhar Seta"><ArrowUpRight size={20} strokeWidth={3} /></button>
+              <button onClick={() => { setTool('circle'); setSelectedShapeIndex(null); setTextInput(null); setCropRect(null); redraw(null); }} className={`p-2 rounded ${tool === 'circle' ? 'bg-[#F4B41A] text-[#5C3A21]' : 'text-white hover:bg-gray-600'}`} title="Desenhar Círculo"><Circle size={20} strokeWidth={3} /></button>
+              <button onClick={() => { setTool('text'); setSelectedShapeIndex(null); setCropRect(null); redraw(null); }} className={`p-2 rounded ${tool === 'text' ? 'bg-[#F4B41A] text-[#5C3A21]' : 'text-white hover:bg-gray-600'}`} title="Escrever Texto"><TypeIcon size={20} strokeWidth={3} /></button>
             </div>
 
             {tool === 'crop' && (
@@ -721,14 +721,14 @@ const ImageAnnotator = ({ baseImageSrc, initialShapes = [], onSave, onCancel }) 
                 <span className="text-gray-400 text-[10px] font-bold mr-1 uppercase tracking-wider hidden sm:inline">Proporção:</span>
                 <button onClick={() => handleRatioChange(null)} className={`px-2 py-1 text-xs font-bold rounded transition ${cropRatio === null ? 'bg-[#F4B41A] text-[#5C3A21]' : 'text-white hover:bg-gray-600'}`}>Livre</button>
                 <button onClick={() => handleRatioChange(1)} className={`px-2 py-1 text-xs font-bold rounded transition ${cropRatio === 1 ? 'bg-[#F4B41A] text-[#5C3A21]' : 'text-white hover:bg-gray-600'}`}>1:1</button>
-                <button onClick={() => handleRatioChange(4/3)} className={`px-2 py-1 text-xs font-bold rounded transition ${cropRatio === 4/3 ? 'bg-[#F4B41A] text-[#5C3A21]' : 'text-white hover:bg-gray-600'}`}>4:3</button>
-                <button onClick={() => handleRatioChange(16/9)} className={`px-2 py-1 text-xs font-bold rounded transition ${cropRatio === 16/9 ? 'bg-[#F4B41A] text-[#5C3A21]' : 'text-white hover:bg-gray-600'}`}>16:9</button>
+                <button onClick={() => handleRatioChange(4 / 3)} className={`px-2 py-1 text-xs font-bold rounded transition ${cropRatio === 4 / 3 ? 'bg-[#F4B41A] text-[#5C3A21]' : 'text-white hover:bg-gray-600'}`}>4:3</button>
+                <button onClick={() => handleRatioChange(16 / 9)} className={`px-2 py-1 text-xs font-bold rounded transition ${cropRatio === 16 / 9 ? 'bg-[#F4B41A] text-[#5C3A21]' : 'text-white hover:bg-gray-600'}`}>16:9</button>
               </div>
             )}
 
             {cropRect && (
               <button onClick={applyCrop} className="ml-2 px-3 py-1.5 bg-green-500 text-white font-bold rounded hover:bg-green-600 transition flex items-center gap-1 animate-pulse">
-                <Check size={16}/> Aplicar Corte
+                <Check size={16} /> Aplicar Corte
               </button>
             )}
 
@@ -749,20 +749,20 @@ const ImageAnnotator = ({ baseImageSrc, initialShapes = [], onSave, onCancel }) 
             <div className="flex gap-2 ml-2 items-center">
               {tool === 'move' && selectedShapeIndex !== null && shapesRef.current[selectedShapeIndex]?.type === 'text' && (
                 <div className="flex items-center" title="Editar Texto Selecionado">
-                  <input 
-                    type="text" 
-                    value={shapesRef.current[selectedShapeIndex].text || ''} 
-                    onChange={(e) => { 
-                      shapesRef.current[selectedShapeIndex].text = e.target.value; 
-                      if(canvasRef.current) {
+                  <input
+                    type="text"
+                    value={shapesRef.current[selectedShapeIndex].text || ''}
+                    onChange={(e) => {
+                      shapesRef.current[selectedShapeIndex].text = e.target.value;
+                      if (canvasRef.current) {
                         const ctx = canvasRef.current.getContext('2d');
                         ctx.font = `bold ${shapesRef.current[selectedShapeIndex].size || 28}px sans-serif`;
                         shapesRef.current[selectedShapeIndex].width = ctx.measureText(e.target.value).width;
-                        setForceRender(prev => prev + 1); 
-                        redraw(); 
+                        setForceRender(prev => prev + 1);
+                        redraw();
                       }
-                    }} 
-                    className="ml-2 w-32 sm:w-48 px-2 py-1 rounded text-black font-bold outline-none border-2 border-[#F4B41A]" 
+                    }}
+                    className="ml-2 w-32 sm:w-48 px-2 py-1 rounded text-black font-bold outline-none border-2 border-[#F4B41A]"
                   />
                 </div>
               )}
@@ -770,7 +770,7 @@ const ImageAnnotator = ({ baseImageSrc, initialShapes = [], onSave, onCancel }) 
               {selectedShapeIndex !== null && shapesRef.current[selectedShapeIndex] && (
                 <div className="flex items-center gap-1.5 bg-[#F4B41A]/20 px-2 py-1 rounded-lg border border-[#F4B41A]/50" title="Girar (ou use o scroll do mouse)">
                   <RefreshCw size={16} className="text-[#F4B41A]" />
-                  <input type="range" min="-180" max="180" step="1" value={Math.round((shapesRef.current[selectedShapeIndex].rotation || 0) * (180/Math.PI)) || 0} onChange={(e) => { shapesRef.current[selectedShapeIndex].rotation = parseFloat(e.target.value) * (Math.PI / 180); setForceRender(prev => prev + 1); redraw(); }} className="w-16 sm:w-24 cursor-pointer accent-[#F4B41A]" />
+                  <input type="range" min="-180" max="180" step="1" value={Math.round((shapesRef.current[selectedShapeIndex].rotation || 0) * (180 / Math.PI)) || 0} onChange={(e) => { shapesRef.current[selectedShapeIndex].rotation = parseFloat(e.target.value) * (Math.PI / 180); setForceRender(prev => prev + 1); redraw(); }} className="w-16 sm:w-24 cursor-pointer accent-[#F4B41A]" />
                 </div>
               )}
               <button onClick={handleUndo} className="p-2 text-white hover:bg-gray-700 bg-gray-700/50 border border-gray-600 rounded-lg flex items-center gap-1" title="Desfazer último"><Undo size={18} /></button>
@@ -788,7 +788,7 @@ const ImageAnnotator = ({ baseImageSrc, initialShapes = [], onSave, onCancel }) 
           {textInput && (
             <div style={{ position: 'fixed', top: textInput.screenY - 20, left: textInput.screenX, zIndex: 60 }} className="flex items-center gap-2 bg-gray-800 p-2 rounded shadow-2xl border border-gray-600">
               <input autoFocus type="text" id="floating-text-input" placeholder="Escreva a anotação..." className="px-2 py-1.5 rounded text-black font-bold outline-none min-w-[200px] border-2 focus:border-[#F4B41A]" onKeyDown={(e) => { if (e.key === 'Enter') confirmText(); if (e.key === 'Escape') setTextInput(null); }} />
-              <button onClick={confirmText} className="bg-green-500 hover:bg-green-600 text-white p-1.5 rounded transition"><Check size={18}/></button>
+              <button onClick={confirmText} className="bg-green-500 hover:bg-green-600 text-white p-1.5 rounded transition"><Check size={18} /></button>
             </div>
           )}
         </div>
@@ -854,21 +854,21 @@ const ClienteSelect = ({ value, onChange, clientes, onAddCliente }) => {
   const selectedList = Array.isArray(value) ? value : (value ? [value] : []);
   const clientesFiltrados = (clientes || []).filter(c => c && typeof c === 'string' && c.toLowerCase().includes((searchTerm || '').toLowerCase()));
 
-  const handleSelect = (cliente) => { 
+  const handleSelect = (cliente) => {
     onChange(cliente); // No formulário nós interceptamos para adicionar à lista
-    setIsAdding(false); 
-    setSearchTerm(''); 
+    setIsAdding(false);
+    setSearchTerm('');
   };
-  
-  const handleAddNew = () => { 
-    if (novoCliente.trim()) { 
-        const n = novoCliente.trim();
-        onAddCliente(n); 
-        onChange(n); 
-        setNovoCliente(''); 
-        setIsAdding(false); 
-        setSearchTerm(''); 
-    } 
+
+  const handleAddNew = () => {
+    if (novoCliente.trim()) {
+      const n = novoCliente.trim();
+      onAddCliente(n);
+      onChange(n);
+      setNovoCliente('');
+      setIsAdding(false);
+      setSearchTerm('');
+    }
   };
 
   return (
@@ -921,7 +921,7 @@ const GerenciarFornecedoresModal = ({ isOpen, onClose, fornecedores, onAdd, onEd
   return (
     <div className="fixed inset-0 bg-black/70 z-[200] flex items-center justify-center p-4 backdrop-blur-sm no-print">
       <div className="bg-white rounded-xl shadow-2xl p-6 max-w-md w-full animate-fade-in-up flex flex-col max-h-[85vh] relative">
-        
+
         {fornecedorToDelete && (
           <div className="absolute inset-0 bg-black/80 flex items-center justify-center z-50 p-4 rounded-xl">
             <div className="bg-white p-6 rounded-lg shadow-xl w-full max-w-sm text-center animate-fade-in-up">
@@ -937,13 +937,13 @@ const GerenciarFornecedoresModal = ({ isOpen, onClose, fornecedores, onAdd, onEd
         )}
 
         <div className="flex justify-between items-center mb-5 border-b border-gray-200 pb-3">
-          <h3 className="text-xl font-black text-[#5C3A21] flex items-center gap-2"><Truck size={24}/> Gerenciar Fornecedores</h3>
-          <button onClick={onClose} className="text-gray-400 hover:text-red-500 bg-gray-100 hover:bg-red-50 p-2 rounded-lg transition"><X size={20}/></button>
+          <h3 className="text-xl font-black text-[#5C3A21] flex items-center gap-2"><Truck size={24} /> Gerenciar Fornecedores</h3>
+          <button onClick={onClose} className="text-gray-400 hover:text-red-500 bg-gray-100 hover:bg-red-50 p-2 rounded-lg transition"><X size={20} /></button>
         </div>
 
         <div className="flex gap-2 mb-5">
           <input type="text" value={newFornecedor} onChange={(e) => setNewFornecedor(e.target.value)} placeholder="Nome do novo fornecedor..." className="flex-1 border border-gray-300 p-2.5 rounded-lg focus:ring-2 focus:ring-green-500 outline-none shadow-sm font-medium" onKeyDown={(e) => { if (e.key === 'Enter') { onAdd(newFornecedor.trim()); setNewFornecedor(''); } }} />
-          <button onClick={() => { if(newFornecedor.trim()) { onAdd(newFornecedor.trim()); setNewFornecedor(''); } }} className="bg-green-600 text-white px-4 py-2.5 rounded-lg hover:bg-green-700 transition font-bold flex items-center gap-1 shadow-sm"><Plus size={18}/><span className="hidden sm:inline">Adicionar</span></button>
+          <button onClick={() => { if (newFornecedor.trim()) { onAdd(newFornecedor.trim()); setNewFornecedor(''); } }} className="bg-green-600 text-white px-4 py-2.5 rounded-lg hover:bg-green-700 transition font-bold flex items-center gap-1 shadow-sm"><Plus size={18} /><span className="hidden sm:inline">Adicionar</span></button>
         </div>
 
         <div className="overflow-y-auto flex-1 border border-gray-200 rounded-lg p-2 bg-gray-50">
@@ -954,15 +954,15 @@ const GerenciarFornecedoresModal = ({ isOpen, onClose, fornecedores, onAdd, onEd
                   {editingName === f ? (
                     <div className="flex flex-1 gap-2 items-center">
                       <input type="text" value={editValue} onChange={(e) => setEditValue(e.target.value)} autoFocus className="flex-1 border-b-2 border-[#F4B41A] outline-none px-1 text-sm font-bold bg-yellow-50" onKeyDown={(e) => { if (e.key === 'Enter') handleSaveEdit(f); if (e.key === 'Escape') setEditingName(null); }} />
-                      <button onClick={() => handleSaveEdit(f)} className="text-white bg-green-500 hover:bg-green-600 p-1.5 rounded transition"><Check size={16}/></button>
-                      <button onClick={() => setEditingName(null)} className="text-gray-500 bg-gray-200 hover:bg-gray-300 p-1.5 rounded transition"><X size={16}/></button>
+                      <button onClick={() => handleSaveEdit(f)} className="text-white bg-green-500 hover:bg-green-600 p-1.5 rounded transition"><Check size={16} /></button>
+                      <button onClick={() => setEditingName(null)} className="text-gray-500 bg-gray-200 hover:bg-gray-300 p-1.5 rounded transition"><X size={16} /></button>
                     </div>
                   ) : (
                     <>
                       <span className="font-bold text-gray-700 text-sm truncate pr-2" title={f}>{f}</span>
                       <div className="flex items-center gap-1.5">
-                        <button onClick={() => { setEditingName(f); setEditValue(f); }} className="text-blue-600 hover:text-white bg-blue-50 hover:bg-blue-600 p-1.5 rounded transition" title="Editar nome"><Edit3 size={16}/></button>
-                        <button onClick={() => setFornecedorToDelete(f)} className="text-red-500 hover:text-white bg-red-50 hover:bg-red-600 p-1.5 rounded transition" title="Excluir"><Trash2 size={16}/></button>
+                        <button onClick={() => { setEditingName(f); setEditValue(f); }} className="text-blue-600 hover:text-white bg-blue-50 hover:bg-blue-600 p-1.5 rounded transition" title="Editar nome"><Edit3 size={16} /></button>
+                        <button onClick={() => setFornecedorToDelete(f)} className="text-red-500 hover:text-white bg-red-50 hover:bg-red-600 p-1.5 rounded transition" title="Excluir"><Trash2 size={16} /></button>
                       </div>
                     </>
                   )}
@@ -992,7 +992,7 @@ const GerenciarClientesModal = ({ isOpen, onClose, clientes, onAdd, onEdit, onRe
   return (
     <div className="fixed inset-0 bg-black/70 z-[200] flex items-center justify-center p-4 backdrop-blur-sm no-print">
       <div className="bg-white rounded-xl shadow-2xl p-6 max-w-md w-full animate-fade-in-up flex flex-col max-h-[85vh] relative">
-        
+
         {clienteToDelete && (
           <div className="absolute inset-0 bg-black/80 flex items-center justify-center z-50 p-4 rounded-xl">
             <div className="bg-white p-6 rounded-lg shadow-xl w-full max-w-sm text-center animate-fade-in-up">
@@ -1008,13 +1008,13 @@ const GerenciarClientesModal = ({ isOpen, onClose, clientes, onAdd, onEdit, onRe
         )}
 
         <div className="flex justify-between items-center mb-5 border-b border-gray-200 pb-3">
-          <h3 className="text-xl font-black text-indigo-900 flex items-center gap-2"><ShoppingBag size={24}/> Gerenciar Clientes</h3>
-          <button onClick={onClose} className="text-gray-400 hover:text-red-500 bg-gray-100 hover:bg-red-50 p-2 rounded-lg transition"><X size={20}/></button>
+          <h3 className="text-xl font-black text-indigo-900 flex items-center gap-2"><ShoppingBag size={24} /> Gerenciar Clientes</h3>
+          <button onClick={onClose} className="text-gray-400 hover:text-red-500 bg-gray-100 hover:bg-red-50 p-2 rounded-lg transition"><X size={20} /></button>
         </div>
 
         <div className="flex gap-2 mb-5">
           <input type="text" value={newCliente} onChange={(e) => setNewCliente(e.target.value)} placeholder="Nome do novo cliente..." className="flex-1 border border-gray-300 p-2.5 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none shadow-sm font-medium" onKeyDown={(e) => { if (e.key === 'Enter') { onAdd(newCliente.trim()); setNewCliente(''); } }} />
-          <button onClick={() => { if(newCliente.trim()) { onAdd(newCliente.trim()); setNewCliente(''); } }} className="bg-indigo-600 text-white px-4 py-2.5 rounded-lg hover:bg-indigo-700 transition font-bold flex items-center gap-1 shadow-sm"><Plus size={18}/><span className="hidden sm:inline">Adicionar</span></button>
+          <button onClick={() => { if (newCliente.trim()) { onAdd(newCliente.trim()); setNewCliente(''); } }} className="bg-indigo-600 text-white px-4 py-2.5 rounded-lg hover:bg-indigo-700 transition font-bold flex items-center gap-1 shadow-sm"><Plus size={18} /><span className="hidden sm:inline">Adicionar</span></button>
         </div>
 
         <div className="overflow-y-auto flex-1 border border-gray-200 rounded-lg p-2 bg-gray-50">
@@ -1025,15 +1025,15 @@ const GerenciarClientesModal = ({ isOpen, onClose, clientes, onAdd, onEdit, onRe
                   {editingName === c ? (
                     <div className="flex flex-1 gap-2 items-center">
                       <input type="text" value={editValue} onChange={(e) => setEditValue(e.target.value)} autoFocus className="flex-1 border-b-2 border-indigo-500 outline-none px-1 text-sm font-bold bg-indigo-50" onKeyDown={(e) => { if (e.key === 'Enter') handleSaveEdit(c); if (e.key === 'Escape') setEditingName(null); }} />
-                      <button onClick={() => handleSaveEdit(c)} className="text-white bg-green-500 hover:bg-green-600 p-1.5 rounded transition"><Check size={16}/></button>
-                      <button onClick={() => setEditingName(null)} className="text-gray-500 bg-gray-200 hover:bg-gray-300 p-1.5 rounded transition"><X size={16}/></button>
+                      <button onClick={() => handleSaveEdit(c)} className="text-white bg-green-500 hover:bg-green-600 p-1.5 rounded transition"><Check size={16} /></button>
+                      <button onClick={() => setEditingName(null)} className="text-gray-500 bg-gray-200 hover:bg-gray-300 p-1.5 rounded transition"><X size={16} /></button>
                     </div>
                   ) : (
                     <>
                       <span className="font-bold text-gray-700 text-sm truncate pr-2" title={c}>{c}</span>
                       <div className="flex items-center gap-1.5">
-                        <button onClick={() => { setEditingName(c); setEditValue(c); }} className="text-blue-600 hover:text-white bg-blue-50 hover:bg-blue-600 p-1.5 rounded transition" title="Editar nome"><Edit3 size={16}/></button>
-                        <button onClick={() => setClienteToDelete(c)} className="text-red-500 hover:text-white bg-red-50 hover:bg-red-600 p-1.5 rounded transition" title="Excluir"><Trash2 size={16}/></button>
+                        <button onClick={() => { setEditingName(c); setEditValue(c); }} className="text-blue-600 hover:text-white bg-blue-50 hover:bg-blue-600 p-1.5 rounded transition" title="Editar nome"><Edit3 size={16} /></button>
+                        <button onClick={() => setClienteToDelete(c)} className="text-red-500 hover:text-white bg-red-50 hover:bg-red-600 p-1.5 rounded transition" title="Excluir"><Trash2 size={16} /></button>
                       </div>
                     </>
                   )}
@@ -1048,27 +1048,27 @@ const GerenciarClientesModal = ({ isOpen, onClose, clientes, onAdd, onEdit, onRe
 };
 
 const GerenciarUsuariosModal = ({ isOpen, onClose, usersDirectory, currentUid, onAddUser, onRemoveUser, onResetPassword, onUpdatePermissions }) => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [nome, setNome] = useState('');
-  const [cargo, setCargo] = useState('');
-  const [isNewAdmin, setIsNewAdmin] = useState(false);
-  const [isCanApprove, setIsCanApprove] = useState(false);
-  const [isManager, setIsManager] = useState(false);
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  
-  const [modalMessage, setModalMessage] = useState('');
-  const [userToRemove, setUserToRemove] = useState(null);
-  const [userToReset, setUserToReset] = useState(null);
-  const [newResetPassword, setNewResetPassword] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [nome, setNome] = useState('');
+  const [cargo, setCargo] = useState('');
+  const [isNewAdmin, setIsNewAdmin] = useState(false);
+  const [isCanApprove, setIsCanApprove] = useState(false);
+  const [isManager, setIsManager] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
-  // === NOVOS ESTADOS PARA EDIÇÃO ===
-  const [userToEdit, setUserToEdit] = useState(null);
-  const [editIsAdmin, setEditIsAdmin] = useState(false);
-  const [editCanApprove, setEditCanApprove] = useState(false);
-  const [editIsManager, setEditIsManager] = useState(false);
+  const [modalMessage, setModalMessage] = useState('');
+  const [userToRemove, setUserToRemove] = useState(null);
+  const [userToReset, setUserToReset] = useState(null);
+  const [newResetPassword, setNewResetPassword] = useState('');
 
-  if (!isOpen) return null;
+  // === NOVOS ESTADOS PARA EDIÇÃO ===
+  const [userToEdit, setUserToEdit] = useState(null);
+  const [editIsAdmin, setEditIsAdmin] = useState(false);
+  const [editCanApprove, setEditCanApprove] = useState(false);
+  const [editIsManager, setEditIsManager] = useState(false);
+
+  if (!isOpen) return null;
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (password.length < 6) {
@@ -1085,18 +1085,18 @@ const GerenciarUsuariosModal = ({ isOpen, onClose, usersDirectory, currentUid, o
   };
 
   const handleConfirmReset = () => {
-      if(newResetPassword.length < 6) {
-          setModalMessage('A nova senha deve ter 6 caracteres no mínimo.');
-          setTimeout(() => setModalMessage(''), 3000);
-          return;
-      }
-      onResetPassword(userToReset.id, newResetPassword);
-      setUserToReset(null);
-      setNewResetPassword('');
-      setModalMessage('Senha atualizada com sucesso!');
+    if (newResetPassword.length < 6) {
+      setModalMessage('A nova senha deve ter 6 caracteres no mínimo.');
       setTimeout(() => setModalMessage(''), 3000);
+      return;
+    }
+    onResetPassword(userToReset.id, newResetPassword);
+    setUserToReset(null);
+    setNewResetPassword('');
+    setModalMessage('Senha atualizada com sucesso!');
+    setTimeout(() => setModalMessage(''), 3000);
   };
-const handleConfirmEditPermissions = () => {
+  const handleConfirmEditPermissions = () => {
     onUpdatePermissions(userToEdit.id, editIsAdmin, editCanApprove, editIsManager);
     setUserToEdit(null);
     setModalMessage('Permissões atualizadas com sucesso!');
@@ -1105,7 +1105,7 @@ const handleConfirmEditPermissions = () => {
   return (
     <div className="fixed inset-0 bg-black/70 z-[200] flex items-center justify-center p-4 backdrop-blur-sm no-print">
       <div className="bg-white rounded-xl shadow-2xl p-6 max-w-4xl w-full animate-fade-in-up flex flex-col md:flex-row gap-6 max-h-[90vh] overflow-y-auto relative">
-        
+
         {userToRemove && (
           <div className="absolute inset-0 bg-black/80 flex items-center justify-center z-50 p-4 rounded-xl">
             <div className="bg-white p-6 rounded-lg shadow-xl w-full max-w-sm text-center animate-fade-in-up">
@@ -1128,22 +1128,22 @@ const handleConfirmEditPermissions = () => {
               <p className="text-gray-600 text-sm mb-4">Digite a nova senha para <strong>{userToReset.nome}</strong>:</p>
               <input type="password" value={newResetPassword} onChange={(e) => setNewResetPassword(e.target.value)} placeholder="Nova senha (min. 6)" className="w-full border border-gray-300 p-2.5 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none mb-6" />
               <div className="flex justify-center gap-3">
-                <button onClick={() => {setUserToReset(null); setNewResetPassword('');}} className="px-5 py-2.5 bg-gray-200 hover:bg-gray-300 rounded-lg font-bold text-gray-700 transition">Cancelar</button>
+                <button onClick={() => { setUserToReset(null); setNewResetPassword(''); }} className="px-5 py-2.5 bg-gray-200 hover:bg-gray-300 rounded-lg font-bold text-gray-700 transition">Cancelar</button>
                 <button onClick={handleConfirmReset} className="px-5 py-2.5 bg-blue-600 hover:bg-blue-700 rounded-lg font-bold text-white transition shadow-md">Salvar Senha</button>
               </div>
             </div>
           </div>
         )}
-{userToEdit && (
+        {userToEdit && (
           <div className="absolute inset-0 bg-black/80 flex items-center justify-center z-50 p-4 rounded-xl">
             <div className="bg-white p-6 rounded-lg shadow-xl w-full max-w-sm text-center animate-fade-in-up">
               <Settings size={40} className="text-gray-600 mx-auto mb-4" />
               <p className="font-bold text-gray-800 text-lg mb-2">Editar Permissões</p>
               <p className="text-gray-600 text-sm mb-4">Configurar acesso para <strong>{userToEdit.nome}</strong>:</p>
-              
+
               <div className="flex flex-col gap-3 text-left bg-gray-50 p-4 rounded-lg border border-gray-200 mb-6">
                 <div className="flex items-center gap-2">
-                  <input type="checkbox" id="editIsAdmin" checked={editIsAdmin} onChange={(e) => { setEditIsAdmin(e.target.checked); if(e.target.checked) setEditCanApprove(true); }} className="w-5 h-5 accent-[#5C3A21] cursor-pointer" />
+                  <input type="checkbox" id="editIsAdmin" checked={editIsAdmin} onChange={(e) => { setEditIsAdmin(e.target.checked); if (e.target.checked) setEditCanApprove(true); }} className="w-5 h-5 accent-[#5C3A21] cursor-pointer" />
                   <label htmlFor="editIsAdmin" className="font-bold text-gray-700 cursor-pointer text-sm">Administrador</label>
                 </div>
                 <div className="flex items-center gap-2">
@@ -1165,9 +1165,9 @@ const handleConfirmEditPermissions = () => {
         )}
         <div className="flex-1 border-r border-gray-200 pr-6">
           <div className="flex justify-between items-center mb-5 border-b border-gray-200 pb-3">
-            <h3 className="text-xl font-black text-[#5C3A21] flex items-center gap-2"><Plus size={24}/> Criar Novo Usuário</h3>
+            <h3 className="text-xl font-black text-[#5C3A21] flex items-center gap-2"><Plus size={24} /> Criar Novo Usuário</h3>
           </div>
-          
+
           {modalMessage && (
             <div className="mb-4 bg-blue-50 border-l-4 border-blue-500 p-3 rounded text-sm text-blue-700 animate-fade-in-up flex items-start gap-2">
               <AlertCircle size={16} className="mt-0.5 shrink-0" />
@@ -1194,10 +1194,10 @@ const handleConfirmEditPermissions = () => {
                 <input type="password" required value={password} onChange={(e) => setPassword(e.target.value)} placeholder="Mínimo 6 caracteres" minLength="6" className="w-full border border-gray-300 p-2.5 rounded-lg focus:ring-2 focus:ring-[#F4B41A] outline-none" />
               </div>
             </div>
-            
+
             <div className="flex flex-col gap-3 bg-gray-50 p-4 rounded-lg border border-gray-200 mt-2">
               <div className="flex items-center gap-2">
-                <input type="checkbox" id="isAdmin" checked={isNewAdmin} onChange={(e) => { setIsNewAdmin(e.target.checked); if(e.target.checked) setIsCanApprove(true); }} className="w-5 h-5 accent-[#5C3A21] cursor-pointer" />
+                <input type="checkbox" id="isAdmin" checked={isNewAdmin} onChange={(e) => { setIsNewAdmin(e.target.checked); if (e.target.checked) setIsCanApprove(true); }} className="w-5 h-5 accent-[#5C3A21] cursor-pointer" />
                 <label htmlFor="isAdmin" className="font-bold text-gray-700 cursor-pointer">Acesso de Administrador</label>
                 <span className="text-xs text-gray-500 ml-2 hidden sm:inline">(Pode gerenciar usuários e fornecedores)</span>
               </div>
@@ -1221,17 +1221,17 @@ const handleConfirmEditPermissions = () => {
 
         <div className="flex-1 flex flex-col">
           <div className="flex justify-between items-center mb-5 border-b border-gray-200 pb-3">
-            <h3 className="text-xl font-black text-[#5C3A21] flex items-center gap-2"><Users size={24}/> Usuários Cadastrados</h3>
-            <button onClick={onClose} className="text-gray-400 hover:text-red-500 bg-gray-100 hover:bg-red-50 p-2 rounded-lg transition"><X size={20}/></button>
+            <h3 className="text-xl font-black text-[#5C3A21] flex items-center gap-2"><Users size={24} /> Usuários Cadastrados</h3>
+            <button onClick={onClose} className="text-gray-400 hover:text-red-500 bg-gray-100 hover:bg-red-50 p-2 rounded-lg transition"><X size={20} /></button>
           </div>
-          
+
           <div className="overflow-y-auto flex-1 bg-gray-50 rounded-lg p-2 border border-gray-200">
             <ul className="space-y-2">
               {usersDirectory.map(u => (
                 <li key={u.id} className="bg-white p-3 rounded-lg shadow-sm border border-gray-200 flex justify-between items-center">
                   <div>
                     <p className="font-bold text-gray-800 text-sm flex items-center gap-2 flex-wrap">
-                      {u.nome} 
+                      {u.nome}
                       {u.isAdmin && <span className="bg-[#5C3A21] text-[#F4B41A] text-[10px] px-2 py-0.5 rounded-full uppercase tracking-wider">Admin</span>}
                       {!u.isAdmin && u.canApprove && <span className="bg-purple-600 text-white text-[10px] px-2 py-0.5 rounded-full uppercase tracking-wider">Aprovador</span>}
                       {u.isManager && <span className="bg-pink-600 text-white text-[10px] px-2 py-0.5 rounded-full uppercase tracking-wider">Gerente</span>}
@@ -1239,20 +1239,20 @@ const handleConfirmEditPermissions = () => {
                     <p className="text-xs text-gray-500">{u.email} • {u.cargo}</p>
                   </div>
                   <div className="flex gap-2">
-                  <button onClick={() => setUserToReset(u)} className="text-blue-500 hover:text-white bg-blue-50 hover:bg-blue-600 p-2 rounded transition" title="Resetar Senha">
-                    <Key size={16}/>
-                  </button>
-                  
-                  <button onClick={() => { setUserToEdit(u); setEditIsAdmin(u.isAdmin || false); setEditCanApprove(u.canApprove || false); setEditIsManager(u.isManager || false); }} className="text-gray-500 hover:text-white bg-gray-100 hover:bg-gray-600 p-2 rounded transition" title="Editar Permissões">
-                    <Settings size={16}/>
-                  </button>
-
-                  {u.id !== currentUid && (
-                    <button onClick={() => setUserToRemove(u)} className="text-red-500 hover:text-white bg-red-50 hover:bg-red-600 p-2 rounded transition" title="Revogar Acesso">
-                      <Trash2 size={16}/>
+                    <button onClick={() => setUserToReset(u)} className="text-blue-500 hover:text-white bg-blue-50 hover:bg-blue-600 p-2 rounded transition" title="Resetar Senha">
+                      <Key size={16} />
                     </button>
-                  )}
-                </div>
+
+                    <button onClick={() => { setUserToEdit(u); setEditIsAdmin(u.isAdmin || false); setEditCanApprove(u.canApprove || false); setEditIsManager(u.isManager || false); }} className="text-gray-500 hover:text-white bg-gray-100 hover:bg-gray-600 p-2 rounded transition" title="Editar Permissões">
+                      <Settings size={16} />
+                    </button>
+
+                    {u.id !== currentUid && (
+                      <button onClick={() => setUserToRemove(u)} className="text-red-500 hover:text-white bg-red-50 hover:bg-red-600 p-2 rounded transition" title="Revogar Acesso">
+                        <Trash2 size={16} />
+                      </button>
+                    )}
+                  </div>
                 </li>
               ))}
             </ul>
@@ -1288,8 +1288,8 @@ const EditProfileModal = ({ isOpen, onClose, initialName, initialRole, onSave })
     <div className="fixed inset-0 bg-black/70 z-[200] flex items-center justify-center p-4 backdrop-blur-sm no-print">
       <div className="bg-white rounded-xl shadow-2xl p-6 max-w-md w-full animate-fade-in-up">
         <div className="flex justify-between items-center mb-5 border-b border-gray-200 pb-3">
-          <h3 className="text-xl font-black text-[#5C3A21] flex items-center gap-2"><User size={24}/> Editar Perfil</h3>
-          <button onClick={onClose} className="text-gray-400 hover:text-red-500 bg-gray-100 hover:bg-red-50 p-2 rounded-lg transition"><X size={20}/></button>
+          <h3 className="text-xl font-black text-[#5C3A21] flex items-center gap-2"><User size={24} /> Editar Perfil</h3>
+          <button onClick={onClose} className="text-gray-400 hover:text-red-500 bg-gray-100 hover:bg-red-50 p-2 rounded-lg transition"><X size={20} /></button>
         </div>
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
@@ -1302,7 +1302,7 @@ const EditProfileModal = ({ isOpen, onClose, initialName, initialRole, onSave })
           </div>
           <div className="flex justify-end gap-3 mt-6">
             <button type="button" onClick={onClose} className="px-5 py-2.5 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 font-bold transition text-sm">Cancelar</button>
-            <button type="submit" className="px-5 py-2.5 bg-[#5C3A21] text-[#F4B41A] rounded-lg hover:bg-[#4a2e1a] font-bold transition text-sm flex items-center gap-2 shadow-md"><Check size={18}/> Salvar Alterações</button>
+            <button type="submit" className="px-5 py-2.5 bg-[#5C3A21] text-[#F4B41A] rounded-lg hover:bg-[#4a2e1a] font-bold transition text-sm flex items-center gap-2 shadow-md"><Check size={18} /> Salvar Alterações</button>
           </div>
         </form>
       </div>
@@ -1320,7 +1320,7 @@ const StatusModal = ({ registro, onClose, onSave, avaliadorAtual, canApprove }) 
       <div className="bg-white rounded-xl shadow-2xl p-6 max-w-md w-full border-t-4 border-purple-500 animate-fade-in-up">
         <h3 className="text-xl font-black text-gray-900 mb-1">{canApprove ? 'Avaliar RNC' : 'Registrar Envio'}</h3>
         <p className="text-gray-500 text-sm mb-6 font-medium">Ação realizada por: <span className="font-bold">{avaliadorAtual}</span></p>
-        
+
         <div className="space-y-5">
           {canApprove && (
             <div>
@@ -1340,14 +1340,14 @@ const StatusModal = ({ registro, onClose, onSave, avaliadorAtual, canApprove }) 
               <option value="sim">📤 Enviado</option>
             </select>
           </div>
-          
+
           {canApprove && status === 'Não Liberado' && (
             <div className="animate-fade-in-up">
               <label className="block text-sm font-bold text-gray-700 mb-2">Motivo / Observações para Correção</label>
-              <textarea 
-                rows="4" 
-                value={obs} 
-                onChange={(e) => setObs(e.target.value)} 
+              <textarea
+                rows="4"
+                value={obs}
+                onChange={(e) => setObs(e.target.value)}
                 placeholder="Explique o que o emissor precisa corrigir ou adicionar no relatório..."
                 className="w-full border border-red-300 p-3 rounded-lg focus:ring-2 focus:ring-red-500 outline-none resize-y text-sm bg-red-50 shadow-sm"
               />
@@ -1357,7 +1357,7 @@ const StatusModal = ({ registro, onClose, onSave, avaliadorAtual, canApprove }) 
 
         <div className="flex justify-end gap-3 mt-8">
           <button onClick={onClose} className="px-5 py-2.5 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 font-bold transition text-sm">Cancelar</button>
-          <button onClick={() => onSave(registro?.id, status, status === 'Não Liberado' ? obs : '', enviado)} className="px-5 py-2.5 bg-purple-600 text-white rounded-lg hover:bg-purple-700 font-bold transition text-sm flex items-center gap-2 shadow-md"><Check size={18}/> Salvar {canApprove ? 'Avaliação' : 'Envio'}</button>
+          <button onClick={() => onSave(registro?.id, status, status === 'Não Liberado' ? obs : '', enviado)} className="px-5 py-2.5 bg-purple-600 text-white rounded-lg hover:bg-purple-700 font-bold transition text-sm flex items-center gap-2 shadow-md"><Check size={18} /> Salvar {canApprove ? 'Avaliação' : 'Envio'}</button>
         </div>
       </div>
     </div>
@@ -1424,7 +1424,7 @@ const PieChartComponent = ({ data, title }) => {
   if (!data || data.length === 0) return null;
   const total = (data || []).reduce((sum, item) => sum + (item.value || 0), 0);
   if (total === 0) return null;
-  
+
   const colors = ['#F4B41A', '#ED7D31', '#5C3A21', '#22C55E', '#3B82F6', '#EF4444', '#8B5CF6', '#EC4899'];
   let currentAngle = 0;
   const slices = (data || []).map((item, index) => {
@@ -1478,14 +1478,14 @@ const RelatorioViewModal = ({ registro, onClose }) => {
   return (
     <div className="fixed inset-0 bg-black/70 z-[200] flex items-center justify-center p-4 backdrop-blur-sm no-print">
       <div className="bg-white rounded-xl shadow-2xl p-6 max-w-2xl w-full animate-fade-in-up flex flex-col max-h-[90vh]">
-        
+
         {/* Cabeçalho */}
         <div className="flex justify-between items-center mb-5 border-b border-gray-200 pb-3">
           <h3 className="text-xl font-black text-[#5C3A21] flex items-center gap-2">
-            <FileText size={24}/> Visão Rápida do Relatório
+            <FileText size={24} /> Visão Rápida do Relatório
           </h3>
           <button onClick={onClose} className="text-gray-400 hover:text-red-500 bg-gray-100 hover:bg-red-50 p-2 rounded-lg transition">
-            <X size={20}/>
+            <X size={20} />
           </button>
         </div>
 
@@ -1524,17 +1524,15 @@ const RelatorioViewModal = ({ registro, onClose }) => {
           {/* Status Atual */}
           <div className="flex flex-wrap items-center gap-3 mt-4 pt-4 border-t border-gray-200">
             <span className="text-sm font-bold text-gray-700">Status da Avaliação:</span>
-            <span className={`px-3 py-1 rounded-md text-[11px] font-bold uppercase border tracking-wide ${
-                (!registro.status || registro.status === 'Pendente') ? 'bg-yellow-50 text-yellow-700 border-yellow-200' :
-                registro.status === 'Liberado' ? 'bg-green-50 text-green-700 border-green-200' :
+            <span className={`px-3 py-1 rounded-md text-[11px] font-bold uppercase border tracking-wide ${(!registro.status || registro.status === 'Pendente') ? 'bg-yellow-50 text-yellow-700 border-yellow-200' :
+              registro.status === 'Liberado' ? 'bg-green-50 text-green-700 border-green-200' :
                 'bg-red-50 text-red-700 border-red-200'
               }`}>
-                {registro.status || 'Pendente'}
+              {registro.status || 'Pendente'}
             </span>
-            <span className={`px-3 py-1 rounded-md text-[11px] font-bold uppercase border tracking-wide flex items-center gap-1 ${
-                registro.enviado ? 'bg-blue-50 text-blue-700 border-blue-200' : 'bg-gray-100 text-gray-500 border-gray-200'
+            <span className={`px-3 py-1 rounded-md text-[11px] font-bold uppercase border tracking-wide flex items-center gap-1 ${registro.enviado ? 'bg-blue-50 text-blue-700 border-blue-200' : 'bg-gray-100 text-gray-500 border-gray-200'
               }`}>
-                <Send size={12} /> {registro.enviado ? 'Enviado' : 'Não Enviado'}
+              <Send size={12} /> {registro.enviado ? 'Enviado' : 'Não Enviado'}
             </span>
           </div>
         </div>
@@ -1551,12 +1549,12 @@ const RelatorioViewModal = ({ registro, onClose }) => {
   );
 };
 function App() {
-  const [view, setView] = useState('loading'); 
+  const [view, setView] = useState('loading');
   const [authLoading, setAuthLoading] = useState(true);
-  
-  const [editingImageIndex, setEditingImageIndex] = useState(null); 
-  const [registros, setRegistros] = useState([]); 
-  const [registroToDelete, setRegistroToDelete] = useState(null); 
+
+  const [editingImageIndex, setEditingImageIndex] = useState(null);
+  const [registros, setRegistros] = useState([]);
+  const [registroToDelete, setRegistroToDelete] = useState(null);
   const [registroToView, setRegistroToView] = useState(null);
   const [evaluatingRegistro, setEvaluatingRegistro] = useState(null);
   const [editingReportId, setEditingReportId] = useState(null);
@@ -1572,10 +1570,10 @@ function App() {
   const [rncClienteExtForm, setRncClienteExtForm] = useState({ nomeCliente: '', produto: '', lote: '', validade: '', dataOcorrencia: '', descricao: '', quantidade: '', contato: '' });
   const [showPublicClientForm, setShowPublicClientForm] = useState(false);
 
-  const [dbError, setDbError] = useState(false); 
+  const [dbError, setDbError] = useState(false);
   const [fornecedores, setFornecedores] = useState([]);
   const [clientes, setClientes] = useState([]);
-  
+
   const [appMessage, setAppMessage] = useState(null);
   const [user, setUser] = useState(null);
   const [dashboardFilters, setDashboardFilters] = useState({ periodo: 'mes_atual', fornecedor: '', tipo: '', status: '' });
@@ -1592,7 +1590,7 @@ function App() {
   const [loginCargo, setLoginCargo] = useState('');
   const [isAdmin, setIsAdmin] = useState(false);
   const [canApprove, setCanApprove] = useState(false);
-  
+
   // Login e Solicitação Pública (Welcome Screen)
   const [welcomeMode, setWelcomeMode] = useState('choice'); // choice, login, solicitar
   const [solicitacoes, setSolicitacoes] = useState([]);
@@ -1629,21 +1627,21 @@ function App() {
       setAuthLoading(false);
       return;
     }
-    
+
     const initAuth = async () => {
       try {
         if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
           await signInWithCustomToken(auth, __initial_auth_token);
         } else {
-          await signInAnonymously(auth); 
+          await signInAnonymously(auth);
         }
-      } catch (error) { 
+      } catch (error) {
         console.error("Auth Init Error:", error);
-        setAuthLoading(false); 
+        setAuthLoading(false);
       }
     };
     initAuth();
-    
+
     const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
       setUser(currentUser);
       setAuthLoading(false);
@@ -1668,9 +1666,9 @@ function App() {
 
     const savedDir = localStorage.getItem('imac_users_directory');
     if (savedDir) {
-      try { setUsersDirectory(JSON.parse(savedDir)); } catch(e) {}
+      try { setUsersDirectory(JSON.parse(savedDir)); } catch (e) { }
     }
-    
+
     return () => unsubscribe();
   }, []);
 
@@ -1683,15 +1681,15 @@ function App() {
     const timeout = setTimeout(() => {
       setCheckingDirectory(false);
       setDbSyncError(true);
-    }, 12000); 
+    }, 12000);
 
     if (!db || !user) return;
-    
-    const unsubscribeUsers = onSnapshot(collection(db, 'artifacts', appId, 'public', 'data', 'users_directory'), 
+
+    const unsubscribeUsers = onSnapshot(collection(db, 'artifacts', appId, 'public', 'data', 'users_directory'),
       (snapshot) => {
         clearTimeout(timeout);
         const cloudData = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-        
+
         if (cloudData.length === 0) {
           setIsDbConfirmedEmpty(true);
         } else {
@@ -1707,20 +1705,20 @@ function App() {
 
           const sessionUserStr = localStorage.getItem('imac_app_session_user');
           if (sessionUserStr && cloudData.length > 0) {
-             try {
-               const currentUser = JSON.parse(sessionUserStr);
-               const stillExists = merged.find(u => u.id === currentUser.id);
-               if (!stillExists) {
-                  localStorage.removeItem('imac_app_session_user');
-                  window.location.reload(); 
-               } else {
-                  localStorage.setItem('imac_app_session_user', JSON.stringify(stillExists));
-               }
-             } catch(e){}
+            try {
+              const currentUser = JSON.parse(sessionUserStr);
+              const stillExists = merged.find(u => u.id === currentUser.id);
+              if (!stillExists) {
+                localStorage.removeItem('imac_app_session_user');
+                window.location.reload();
+              } else {
+                localStorage.setItem('imac_app_session_user', JSON.stringify(stillExists));
+              }
+            } catch (e) { }
           }
           return merged;
         });
-        setCheckingDirectory(false); 
+        setCheckingDirectory(false);
       },
       (error) => {
         clearTimeout(timeout);
@@ -1749,7 +1747,7 @@ function App() {
     e.preventDefault();
     setAuthError('');
     const foundUser = usersDirectory.find(u => u.email === loginEmail && u.password === loginPassword);
-    
+
     if (foundUser) {
       loginUser(foundUser);
     } else {
@@ -1778,15 +1776,15 @@ function App() {
         dataCriacao: new Date().toISOString(),
         _isUnsynced: true
       };
-      
+
       const newDirectory = [...usersDirectory, newUser];
       setUsersDirectory(newDirectory);
       localStorage.setItem('imac_users_directory', JSON.stringify(newDirectory));
-      
+
       if (db && isConfigured) {
-        setDoc(doc(db, 'artifacts', appId, 'public', 'data', 'users_directory', newId), newUser).catch(()=>{});
+        setDoc(doc(db, 'artifacts', appId, 'public', 'data', 'users_directory', newId), newUser).catch(() => { });
       }
-      
+
       loginUser(newUser);
     } catch (error) {
       setAuthError("Erro ao configurar a conta mestre: " + error.message);
@@ -1800,7 +1798,7 @@ function App() {
         setAppMessage("❌ E-mail já está em uso.");
         return false;
       }
-      
+
       const newId = "user_" + Date.now();
       const newUser = {
         id: newId,
@@ -1822,7 +1820,7 @@ function App() {
       });
 
       if (db && isConfigured) {
-        setDoc(doc(db, 'artifacts', appId, 'public', 'data', 'users_directory', newId), newUser).catch(()=>{});
+        setDoc(doc(db, 'artifacts', appId, 'public', 'data', 'users_directory', newId), newUser).catch(() => { });
       }
 
       setAppMessage("✅ Usuário criado com sucesso!");
@@ -1832,7 +1830,7 @@ function App() {
       return false;
     }
   };
-const handleUpdatePermissions = async (uid, newIsAdmin, newCanApprove, newIsManager) => {
+  const handleUpdatePermissions = async (uid, newIsAdmin, newCanApprove, newIsManager) => {
     try {
       setUsersDirectory(prev => {
         const newList = prev.map(u => u.id === uid ? { ...u, isAdmin: newIsAdmin, canApprove: newCanApprove, isManager: newIsManager } : u);
@@ -1841,11 +1839,11 @@ const handleUpdatePermissions = async (uid, newIsAdmin, newCanApprove, newIsMana
       });
 
       if (db && isConfigured) {
-        updateDoc(doc(db, 'artifacts', appId, 'public', 'data', 'users_directory', uid), { 
-          isAdmin: newIsAdmin, 
-          canApprove: newCanApprove, 
-          isManager: newIsManager 
-        }).catch(()=>{});
+        updateDoc(doc(db, 'artifacts', appId, 'public', 'data', 'users_directory', uid), {
+          isAdmin: newIsAdmin,
+          canApprove: newCanApprove,
+          isManager: newIsManager
+        }).catch(() => { });
       }
     } catch (e) {
       setAppMessage("❌ Erro ao atualizar permissões.");
@@ -1860,9 +1858,9 @@ const handleUpdatePermissions = async (uid, newIsAdmin, newCanApprove, newIsMana
       });
 
       if (db && isConfigured) {
-        updateDoc(doc(db, 'artifacts', appId, 'public', 'data', 'users_directory', uid), { password: newPass }).catch(()=>{});
+        updateDoc(doc(db, 'artifacts', appId, 'public', 'data', 'users_directory', uid), { password: newPass }).catch(() => { });
       }
-    } catch (e) {}
+    } catch (e) { }
   };
 
   const handleRemoveUser = async (uidToRemove) => {
@@ -1874,7 +1872,7 @@ const handleUpdatePermissions = async (uid, newIsAdmin, newCanApprove, newIsMana
       });
 
       if (db && isConfigured) {
-        deleteDoc(doc(db, 'artifacts', appId, 'public', 'data', 'users_directory', uidToRemove)).catch(()=>{});
+        deleteDoc(doc(db, 'artifacts', appId, 'public', 'data', 'users_directory', uidToRemove)).catch(() => { });
       }
       setAppMessage("✅ Usuário revogado do sistema.");
     } catch (e) {
@@ -1932,7 +1930,7 @@ const handleUpdatePermissions = async (uid, newIsAdmin, newCanApprove, newIsMana
       try {
         const parsed = JSON.parse(savedFornecedores);
         if (Array.isArray(parsed)) setFornecedores(parsed);
-      } catch (e) {}
+      } catch (e) { }
     }
 
     const savedClientes = localStorage.getItem('imac_clientes');
@@ -1944,28 +1942,28 @@ const handleUpdatePermissions = async (uid, newIsAdmin, newCanApprove, newIsMana
       try {
         const parsed = JSON.parse(savedClientes);
         if (Array.isArray(parsed)) setClientes(parsed);
-      } catch (e) {}
+      } catch (e) { }
     }
   }, []);
 
   useEffect(() => {
     if (!db || !isConfigured || !user) return;
-    
+
     const unsubscribeFornecedores = onSnapshot(collection(db, 'artifacts', appId, 'public', 'data', 'fornecedores'), (snapshot) => {
       const data = snapshot.docs.map(doc => doc.data().nome);
-      if (data.length > 0) { 
-        setFornecedores(data); 
-        saveToLocalStorage('imac_fornecedores', data); 
+      if (data.length > 0) {
+        setFornecedores(data);
+        saveToLocalStorage('imac_fornecedores', data);
       }
-    }, (error) => {});
+    }, (error) => { });
 
     const unsubscribeClientes = onSnapshot(collection(db, 'artifacts', appId, 'public', 'data', 'clientes'), (snapshot) => {
       const data = snapshot.docs.map(doc => doc.data().nome);
-      if (data.length > 0) { 
-        setClientes(data); 
-        saveToLocalStorage('imac_clientes', data); 
+      if (data.length > 0) {
+        setClientes(data);
+        saveToLocalStorage('imac_clientes', data);
       }
-    }, (error) => {});
+    }, (error) => { });
 
     return () => {
       unsubscribeFornecedores();
@@ -1978,24 +1976,24 @@ const handleUpdatePermissions = async (uid, newIsAdmin, newCanApprove, newIsMana
     if (!(fornecedores || []).includes(nomeLimpo)) {
       setFornecedores(prev => { const newList = [...(prev || []), nomeLimpo]; saveToLocalStorage('imac_fornecedores', newList); return newList; });
       if (db && isConfigured) {
-        addDoc(collection(db, 'artifacts', appId, 'public', 'data', 'fornecedores'), { nome: nomeLimpo, dataCriacao: new Date().toISOString() }).catch(()=>{});
+        addDoc(collection(db, 'artifacts', appId, 'public', 'data', 'fornecedores'), { nome: nomeLimpo, dataCriacao: new Date().toISOString() }).catch(() => { });
       }
     }
   };
 
   const editFornecedorObj = async (oldName, newName) => {
-    if(!newName.trim() || oldName === newName) return;
+    if (!newName.trim() || oldName === newName) return;
     const cleanNew = newName.trim();
     const newList = (fornecedores || []).map(f => f === oldName ? cleanNew : f);
     setFornecedores(newList);
     saveToLocalStorage('imac_fornecedores', newList);
 
     if (db && isConfigured) {
-        getDocs(collection(db, 'artifacts', appId, 'public', 'data', 'fornecedores')).then(qDocs => {
-            const docToEdit = qDocs.docs.find(d => d.data().nome === oldName);
-            if (docToEdit) updateDoc(docToEdit.ref, { nome: cleanNew }).catch(()=>{});
-            else addDoc(collection(db, 'artifacts', appId, 'public', 'data', 'fornecedores'), { nome: cleanNew, dataCriacao: new Date().toISOString() }).catch(()=>{});
-        }).catch(()=>{});
+      getDocs(collection(db, 'artifacts', appId, 'public', 'data', 'fornecedores')).then(qDocs => {
+        const docToEdit = qDocs.docs.find(d => d.data().nome === oldName);
+        if (docToEdit) updateDoc(docToEdit.ref, { nome: cleanNew }).catch(() => { });
+        else addDoc(collection(db, 'artifacts', appId, 'public', 'data', 'fornecedores'), { nome: cleanNew, dataCriacao: new Date().toISOString() }).catch(() => { });
+      }).catch(() => { });
     }
   };
 
@@ -2005,10 +2003,10 @@ const handleUpdatePermissions = async (uid, newIsAdmin, newCanApprove, newIsMana
     saveToLocalStorage('imac_fornecedores', newList);
 
     if (db && isConfigured) {
-        getDocs(collection(db, 'artifacts', appId, 'public', 'data', 'fornecedores')).then(qDocs => {
-            const docToDel = qDocs.docs.find(d => d.data().nome === nomeToRemove);
-            if (docToDel) deleteDoc(docToDel.ref).catch(()=>{});
-        }).catch(()=>{});
+      getDocs(collection(db, 'artifacts', appId, 'public', 'data', 'fornecedores')).then(qDocs => {
+        const docToDel = qDocs.docs.find(d => d.data().nome === nomeToRemove);
+        if (docToDel) deleteDoc(docToDel.ref).catch(() => { });
+      }).catch(() => { });
     }
   };
 
@@ -2017,24 +2015,24 @@ const handleUpdatePermissions = async (uid, newIsAdmin, newCanApprove, newIsMana
     if (!(clientes || []).includes(nomeLimpo)) {
       setClientes(prev => { const newList = [...(prev || []), nomeLimpo]; saveToLocalStorage('imac_clientes', newList); return newList; });
       if (db && isConfigured) {
-        addDoc(collection(db, 'artifacts', appId, 'public', 'data', 'clientes'), { nome: nomeLimpo, dataCriacao: new Date().toISOString() }).catch(()=>{});
+        addDoc(collection(db, 'artifacts', appId, 'public', 'data', 'clientes'), { nome: nomeLimpo, dataCriacao: new Date().toISOString() }).catch(() => { });
       }
     }
   };
 
   const editClienteObj = async (oldName, newName) => {
-    if(!newName.trim() || oldName === newName) return;
+    if (!newName.trim() || oldName === newName) return;
     const cleanNew = newName.trim();
     const newList = (clientes || []).map(c => c === oldName ? cleanNew : c);
     setClientes(newList);
     saveToLocalStorage('imac_clientes', newList);
 
     if (db && isConfigured) {
-        getDocs(collection(db, 'artifacts', appId, 'public', 'data', 'clientes')).then(qDocs => {
-            const docToEdit = qDocs.docs.find(d => d.data().nome === oldName);
-            if (docToEdit) updateDoc(docToEdit.ref, { nome: cleanNew }).catch(()=>{});
-            else addDoc(collection(db, 'artifacts', appId, 'public', 'data', 'clientes'), { nome: cleanNew, dataCriacao: new Date().toISOString() }).catch(()=>{});
-        }).catch(()=>{});
+      getDocs(collection(db, 'artifacts', appId, 'public', 'data', 'clientes')).then(qDocs => {
+        const docToEdit = qDocs.docs.find(d => d.data().nome === oldName);
+        if (docToEdit) updateDoc(docToEdit.ref, { nome: cleanNew }).catch(() => { });
+        else addDoc(collection(db, 'artifacts', appId, 'public', 'data', 'clientes'), { nome: cleanNew, dataCriacao: new Date().toISOString() }).catch(() => { });
+      }).catch(() => { });
     }
   };
 
@@ -2044,39 +2042,39 @@ const handleUpdatePermissions = async (uid, newIsAdmin, newCanApprove, newIsMana
     saveToLocalStorage('imac_clientes', newList);
 
     if (db && isConfigured) {
-        getDocs(collection(db, 'artifacts', appId, 'public', 'data', 'clientes')).then(qDocs => {
-            const docToDel = qDocs.docs.find(d => d.data().nome === nomeToRemove);
-            if (docToDel) deleteDoc(docToDel.ref).catch(()=>{});
-        }).catch(()=>{});
+      getDocs(collection(db, 'artifacts', appId, 'public', 'data', 'clientes')).then(qDocs => {
+        const docToDel = qDocs.docs.find(d => d.data().nome === nomeToRemove);
+        if (docToDel) deleteDoc(docToDel.ref).catch(() => { });
+      }).catch(() => { });
     }
   };
 
   useEffect(() => {
     const savedSolicitacoes = localStorage.getItem('imac_solicitacoes');
     if (savedSolicitacoes) {
-        try { setSolicitacoes(JSON.parse(savedSolicitacoes)); } catch (e) {}
+      try { setSolicitacoes(JSON.parse(savedSolicitacoes)); } catch (e) { }
     }
-    
-    if (!db || !isConfigured || !user) return; 
-    
+
+    if (!db || !isConfigured || !user) return;
+
     const unsub = onSnapshot(collection(db, 'artifacts', appId, 'public', 'data', 'solicitacoes'), (snapshot) => {
-        const cloudData = snapshot.docs.map(doc => ({ ...doc.data(), id: doc.id }));
-        setSolicitacoes(cloudData.sort((a,b) => new Date(b.dataCriacao) - new Date(a.dataCriacao)));
-        saveToLocalStorage('imac_solicitacoes', cloudData);
-    }, (error) => {});
+      const cloudData = snapshot.docs.map(doc => ({ ...doc.data(), id: doc.id }));
+      setSolicitacoes(cloudData.sort((a, b) => new Date(b.dataCriacao) - new Date(a.dataCriacao)));
+      saveToLocalStorage('imac_solicitacoes', cloudData);
+    }, (error) => { });
     return () => unsub();
   }, [db, isConfigured, user]);
 
   const submitSolicitacao = async (e) => {
     e.preventDefault();
     try {
-      const newSol = { 
-        ...solicitacaoForm, 
-        id: 'sol_' + Date.now(), 
+      const newSol = {
+        ...solicitacaoForm,
+        id: 'sol_' + Date.now(),
         dataCriacao: new Date().toISOString(),
-        status: 'Pendente' 
+        status: 'Pendente'
       };
-      
+
       setSolicitacoes(prev => {
         const list = [newSol, ...prev];
         saveToLocalStorage('imac_solicitacoes', list);
@@ -2084,14 +2082,14 @@ const handleUpdatePermissions = async (uid, newIsAdmin, newCanApprove, newIsMana
       });
 
       if (db && isConfigured) {
-        setDoc(doc(db, 'artifacts', appId, 'public', 'data', 'solicitacoes', newSol.id), newSol).catch(()=>{});
+        setDoc(doc(db, 'artifacts', appId, 'public', 'data', 'solicitacoes', newSol.id), newSol).catch(() => { });
       }
-      
+
       setAppMessage("✅ Solicitação enviada com sucesso!");
       setSolicitacaoForm({ tipoRelatorio: 'Problema com Fornecedor', solicitante: '', urgencia: 'Média', produto: '', lote: '', nf: '', dataRecebimento: '', validade: '', dataFabricacao: '', descricao: '', imagens: [] });
       setWelcomeMode('choice');
       setTimeout(() => setAppMessage(null), 3000);
-    } catch(e) {
+    } catch (e) {
       setAppMessage("❌ Erro ao enviar solicitação.");
     }
   };
@@ -2105,11 +2103,11 @@ const handleUpdatePermissions = async (uid, newIsAdmin, newCanApprove, newIsMana
           parsed.sort((a, b) => new Date(b.dataCriacao || 0) - new Date(a.dataCriacao || 0));
           setRegistros(parsed);
         }
-      } catch (e) {}
+      } catch (e) { }
     }
-    
-    if (!db || !isConfigured || !user) return; 
-    
+
+    if (!db || !isConfigured || !user) return;
+
     const unsubscribe = onSnapshot(collection(db, 'artifacts', appId, 'public', 'data', 'registros'), (snapshot) => {
       const cloudData = snapshot.docs.map(doc => ({ ...doc.data(), id: doc.id }));
       setRegistros(prev => {
@@ -2135,19 +2133,19 @@ const handleUpdatePermissions = async (uid, newIsAdmin, newCanApprove, newIsMana
       const data = snapshot.docs.map(doc => ({ ...doc.data(), id: doc.id }));
       data.sort((a, b) => new Date(b.dataCriacao || 0) - new Date(a.dataCriacao || 0));
       setRncClientesExt(data);
-    }, () => {});
+    }, () => { });
 
     const unsubInt = onSnapshot(collection(db, 'artifacts', appId, 'public', 'data', 'rnc_internas'), (snapshot) => {
       const data = snapshot.docs.map(doc => ({ ...doc.data(), id: doc.id }));
       data.sort((a, b) => new Date(b.dataCriacao || 0) - new Date(a.dataCriacao || 0));
       setRncInternas(data);
-    }, () => {});
+    }, () => { });
 
     const unsubSolForn = onSnapshot(collection(db, 'artifacts', appId, 'public', 'data', 'sol_fornecedor'), (snapshot) => {
       const data = snapshot.docs.map(doc => ({ ...doc.data(), id: doc.id }));
       data.sort((a, b) => new Date(b.dataCriacao || 0) - new Date(a.dataCriacao || 0));
       setSolFornecedor(data);
-    }, () => {});
+    }, () => { });
 
     return () => { unsubExt(); unsubInt(); unsubSolForn(); };
   }, [db, isConfigured, user]);
@@ -2155,35 +2153,35 @@ const handleUpdatePermissions = async (uid, newIsAdmin, newCanApprove, newIsMana
   const submitRncClienteExt = async (data) => {
     const novo = { ...data, id: 'rnc_cli_' + Date.now(), dataCriacao: new Date().toISOString(), status: 'Pendente', origem: 'Externo' };
     setRncClientesExt(prev => [novo, ...prev]);
-    if (db && isConfigured) setDoc(doc(db, 'artifacts', appId, 'public', 'data', 'rnc_clientes', novo.id), novo).catch(() => {});
+    if (db && isConfigured) setDoc(doc(db, 'artifacts', appId, 'public', 'data', 'rnc_clientes', novo.id), novo).catch(() => { });
     setAppMessage('✅ RNC do cliente registrada!');
     setTimeout(() => setAppMessage(null), 3000);
   };
   const submitRncInterna = async (data) => {
     const novo = { ...data, id: 'rnc_int_' + Date.now(), dataCriacao: new Date().toISOString(), status: 'Pendente', autorNome: userName, autorCargo: userRole };
     setRncInternas(prev => [novo, ...prev]);
-    if (db && isConfigured) setDoc(doc(db, 'artifacts', appId, 'public', 'data', 'rnc_internas', novo.id), novo).catch(() => {});
+    if (db && isConfigured) setDoc(doc(db, 'artifacts', appId, 'public', 'data', 'rnc_internas', novo.id), novo).catch(() => { });
     setAppMessage('✅ NC Interna registrada!');
     setTimeout(() => setAppMessage(null), 3000);
   };
   const submitSolFornecedor = async (data) => {
     const novo = { ...data, id: 'sol_forn_' + Date.now(), dataCriacao: new Date().toISOString(), status: 'Pendente', solicitanteNome: userName };
     setSolFornecedor(prev => [novo, ...prev]);
-    if (db && isConfigured) setDoc(doc(db, 'artifacts', appId, 'public', 'data', 'sol_fornecedor', novo.id), novo).catch(() => {});
+    if (db && isConfigured) setDoc(doc(db, 'artifacts', appId, 'public', 'data', 'sol_fornecedor', novo.id), novo).catch(() => { });
     setAppMessage('✅ Solicitação ao fornecedor enviada!');
     setTimeout(() => setAppMessage(null), 3000);
   };
   const updateStatusRncCliente = (id, ns) => {
     setRncClientesExt(prev => prev.map(r => r.id === id ? { ...r, status: ns } : r));
-    if (db && isConfigured) updateDoc(doc(db, 'artifacts', appId, 'public', 'data', 'rnc_clientes', id), { status: ns }).catch(() => {});
+    if (db && isConfigured) updateDoc(doc(db, 'artifacts', appId, 'public', 'data', 'rnc_clientes', id), { status: ns }).catch(() => { });
   };
   const updateStatusRncInterna = (id, ns) => {
     setRncInternas(prev => prev.map(r => r.id === id ? { ...r, status: ns } : r));
-    if (db && isConfigured) updateDoc(doc(db, 'artifacts', appId, 'public', 'data', 'rnc_internas', id), { status: ns }).catch(() => {});
+    if (db && isConfigured) updateDoc(doc(db, 'artifacts', appId, 'public', 'data', 'rnc_internas', id), { status: ns }).catch(() => { });
   };
   const updateStatusSolForn = (id, ns) => {
     setSolFornecedor(prev => prev.map(r => r.id === id ? { ...r, status: ns } : r));
-    if (db && isConfigured) updateDoc(doc(db, 'artifacts', appId, 'public', 'data', 'sol_fornecedor', id), { status: ns }).catch(() => {});
+    if (db && isConfigured) updateDoc(doc(db, 'artifacts', appId, 'public', 'data', 'sol_fornecedor', id), { status: ns }).catch(() => { });
   };
   const criarRelDeRncCliente = (rnc) => {
     setFormData({ ...getEmptyForm(), tipoRelatorio: 'Relatório de Não Conformidade - Cliente', produto: rnc.produto || '', lote: rnc.lote || '', validade: rnc.validade || '', dataOcorrencia: rnc.dataOcorrencia || '', descricao: rnc.descricao || '', quantidade: rnc.quantidade || '', ocorrencia: (rnc.descricao || '').substring(0, 100) });
@@ -2204,8 +2202,8 @@ const handleUpdatePermissions = async (uid, newIsAdmin, newCanApprove, newIsMana
       try {
         const compressedLogo = await compressImage(files[0], true);
         setFormData(prev => ({ ...prev, logo: compressedLogo }));
-        try { localStorage.setItem('imac_logo_oficial', compressedLogo); } catch(e){}
-      } catch (error) {}
+        try { localStorage.setItem('imac_logo_oficial', compressedLogo); } catch (e) { }
+      } catch (error) { }
       return;
     }
 
@@ -2214,16 +2212,16 @@ const handleUpdatePermissions = async (uid, newIsAdmin, newCanApprove, newIsMana
       const newImageObjects = compressedImages.map(base64 => ({
         isObject: true,
         id: Date.now() + Math.random(),
-        baseSrc: base64, 
+        baseSrc: base64,
         displaySrc: base64,
-        shapes: [] 
+        shapes: []
       }));
       setFormData(prev => ({ ...prev, imagens: [...(prev.imagens || []), ...newImageObjects] }));
-    } catch (error) {}
+    } catch (error) { }
   };
 
   const removeImage = (indexToRemove) => setFormData((prev) => ({ ...prev, imagens: (prev.imagens || []).filter((_, index) => index !== indexToRemove) }));
-  
+
   const moveImage = (index, step) => {
     setFormData(prev => {
       const novasImagens = [...(prev.imagens || [])];
@@ -2238,7 +2236,7 @@ const handleUpdatePermissions = async (uid, newIsAdmin, newCanApprove, newIsMana
   };
 
   const updateAnnotatedImage = (flattenedSrc, newBaseSrc, newShapes) => {
-    setFormData(prev => { 
+    setFormData(prev => {
       const novasImagens = [...(prev.imagens || [])];
       const item = novasImagens[editingImageIndex];
       if (typeof item === 'string') {
@@ -2246,16 +2244,16 @@ const handleUpdatePermissions = async (uid, newIsAdmin, newCanApprove, newIsMana
       } else if (item) {
         novasImagens[editingImageIndex] = { ...item, baseSrc: newBaseSrc, displaySrc: flattenedSrc, shapes: newShapes };
       }
-      return { ...prev, imagens: novasImagens }; 
+      return { ...prev, imagens: novasImagens };
     });
-    setEditingImageIndex(null); 
+    setEditingImageIndex(null);
   };
-  
+
   const removeLogo = () => { setFormData(prev => ({ ...prev, logo: null })); localStorage.removeItem('imac_logo_oficial'); };
-  
+
   const handleAssinaturaChange = (index, field, value) => {
-    const novasAssinaturas = [...(formData.assinaturas || [])]; 
-    if(novasAssinaturas[index]) {
+    const novasAssinaturas = [...(formData.assinaturas || [])];
+    if (novasAssinaturas[index]) {
       novasAssinaturas[index][field] = value;
       setFormData(prev => ({ ...prev, assinaturas: novasAssinaturas }));
     }
@@ -2264,7 +2262,7 @@ const handleUpdatePermissions = async (uid, newIsAdmin, newCanApprove, newIsMana
   const removeAssinatura = (indexToRemove) => setFormData(prev => ({ ...prev, assinaturas: (prev.assinaturas || []).filter((_, index) => index !== indexToRemove) }));
 
   const startEditingReport = (registro) => {
-    if(!registro) return;
+    if (!registro) return;
     setFormData({
       logo: registro.logo || localStorage.getItem('imac_logo_oficial') || null,
       tipoRelatorio: registro.tipoRelatorio || 'Problema com Fornecedor',
@@ -2311,20 +2309,20 @@ const handleUpdatePermissions = async (uid, newIsAdmin, newCanApprove, newIsMana
     const currentAssinaturas = Array.isArray(reg.assinaturas) ? reg.assinaturas : [];
     const jaAssinou = currentAssinaturas.some(a => a.nome === userName);
     if (jaAssinou) {
-       setAppMessage("⚠️ Você já assinou este relatório.");
-       setTimeout(() => setAppMessage(null), 3000);
-       return;
+      setAppMessage("⚠️ Você já assinou este relatório.");
+      setTimeout(() => setAppMessage(null), 3000);
+      return;
     }
 
     const newAssinaturas = [...currentAssinaturas, { nome: userName, cargo: 'Gerente Industrial\nResponsável Técnica\nIMAC Congelados' }];
     const payload = { assinaturas: newAssinaturas, dataModificacao: new Date().toISOString() };
-    
+
     setRegistros(prev => {
       const updatedList = (prev || []).map(r => r && r.id === reg.id ? { ...r, ...payload } : r);
       saveToLocalStorage('imac_registros', updatedList);
       return updatedList;
     });
-    
+
     if (db && isConfigured) {
       updateDoc(doc(db, 'artifacts', appId, 'public', 'data', 'registros', String(reg.id)), payload)
         .then(() => setAppMessage("✅ Visto adicionado com sucesso!"))
@@ -2334,27 +2332,27 @@ const handleUpdatePermissions = async (uid, newIsAdmin, newCanApprove, newIsMana
   };
 
   const handleUpdateStatus = (id, newStatus, newObs, newEnviado) => {
-    const payload = { 
-      status: newStatus, 
-      observacoesStatus: newObs, 
+    const payload = {
+      status: newStatus,
+      observacoesStatus: newObs,
       enviado: newEnviado,
       dataModificacao: new Date().toISOString(),
       avaliadorNome: userName
     };
-    
+
     setRegistros(prev => {
       const updatedList = (prev || []).map(r => r && r.id === id ? { ...r, ...payload } : r);
       saveToLocalStorage('imac_registros', updatedList);
       return updatedList;
     });
-    
+
     if (db && isConfigured) {
       const safePayload = JSON.parse(JSON.stringify(payload));
       updateDoc(doc(db, 'artifacts', appId, 'public', 'data', 'registros', String(id)), safePayload)
         .then(() => setAppMessage("✅ Avaliação salva com sucesso e sincronizada!"))
         .catch(() => setAppMessage("💾 Avaliação salva localmente (offline)"));
     } else { setAppMessage("💾 Avaliação salva localmente"); }
-    
+
     setEvaluatingRegistro(null);
     setTimeout(() => setAppMessage(null), 3000);
   };
@@ -2372,7 +2370,7 @@ const handleUpdatePermissions = async (uid, newIsAdmin, newCanApprove, newIsMana
       lojasLocais: formData.lojasLocais || [], dataFabricacao: formData.dataFabricacao || '', supervisor: formData.supervisor || '',
       sabor: formData.sabor || '', odor: formData.odor || '', cor: formData.cor || '', temperatura: formData.temperatura || '',
       statusParecer: formData.statusParecer || '', acaoCorretiva: formData.acaoCorretiva || '', conclusaoParecer: formData.conclusaoParecer || '',
-      imagens: Array.isArray(formData.imagens) ? formData.imagens : [], 
+      imagens: Array.isArray(formData.imagens) ? formData.imagens : [],
       assinaturas: Array.isArray(formData.assinaturas) ? formData.assinaturas : [],
       logo: formData.logo || null, localData: formData.localData || '',
       userId: appUser?.id || 'anonimo',
@@ -2388,9 +2386,9 @@ const handleUpdatePermissions = async (uid, newIsAdmin, newCanApprove, newIsMana
       const payloadEdicao = { ...registroData, dataModificacao: updatedAt };
       const existingReport = registros.find(r => r.id === editingReportId);
       if (existingReport && typeof existingReport.enviado !== 'undefined') {
-         payloadEdicao.enviado = existingReport.enviado;
+        payloadEdicao.enviado = existingReport.enviado;
       }
-      
+
       setRegistros(prev => {
         const updatedList = (prev || []).map(r => r && r.id === editingReportId ? { ...r, ...payloadEdicao } : r);
         saveToLocalStorage('imac_registros', updatedList);
@@ -2403,14 +2401,14 @@ const handleUpdatePermissions = async (uid, newIsAdmin, newCanApprove, newIsMana
           .then(() => setAppMessage("✅ Relatório atualizado na nuvem!"))
           .catch(() => setAppMessage("💾 Atualização salva localmente"));
       } else { setAppMessage("💾 Edição salva localmente"); }
-      
+
     } else {
       const tempId = Date.now().toString();
       const novoRegistro = { ...registroData, id: tempId, dataCriacao: new Date().toISOString(), _isUnsynced: true };
       currentId = tempId;
 
       setRegistros(prev => { const newList = [novoRegistro, ...(prev || [])]; saveToLocalStorage('imac_registros', newList); return newList; });
-      
+
       if (db && isConfigured) {
         const { id, _isUnsynced, ...registroParaNuvem } = novoRegistro;
         const safePayload = JSON.parse(JSON.stringify(registroParaNuvem));
@@ -2419,7 +2417,7 @@ const handleUpdatePermissions = async (uid, newIsAdmin, newCanApprove, newIsMana
           .catch(() => setAppMessage("💾 Salvo localmente (offline)"));
       } else { setAppMessage("💾 Relatório salvo localmente"); }
     }
-    
+
     if (action === 'save_and_preview') {
       setEditingReportId(currentId);
       setView('preview');
@@ -2436,31 +2434,31 @@ const handleUpdatePermissions = async (uid, newIsAdmin, newCanApprove, newIsMana
   const handlePrintAndSave = () => window.print();
 
   const confirmDeleteRegistro = (id) => {
-    setRegistros(prev => { 
-      const newList = (prev || []).filter(r => r && r.id !== id); 
-      saveToLocalStorage('imac_registros', newList); 
-      return newList; 
+    setRegistros(prev => {
+      const newList = (prev || []).filter(r => r && r.id !== id);
+      saveToLocalStorage('imac_registros', newList);
+      return newList;
     });
     if (db && isConfigured) {
-      deleteDoc(doc(db, 'artifacts', appId, 'public', 'data', 'registros', String(id))).catch(()=>{});
+      deleteDoc(doc(db, 'artifacts', appId, 'public', 'data', 'registros', String(id))).catch(() => { });
     }
     setRegistroToDelete(null);
   };
 
   const getFilteredRecords = () => {
     return (registros || []).filter(r => {
-      if(!r || !r.dataCriacao) return false;
-      const d = new Date(r.dataCriacao); 
+      if (!r || !r.dataCriacao) return false;
+      const d = new Date(r.dataCriacao);
       if (isNaN(d.getTime())) return false;
 
       const now = new Date();
-      if (dashboardFilters.periodo === 'mes_atual') { if (d.getMonth() !== now.getMonth() || d.getFullYear() !== now.getFullYear()) return false; } 
-      else if (dashboardFilters.periodo === 'mes_anterior') { const lm = new Date(now.getFullYear(), now.getMonth() - 1, 1); if (d.getMonth() !== lm.getMonth() || d.getFullYear() !== lm.getFullYear()) return false; } 
-      else if (dashboardFilters.periodo === 'trimestre') { const t = new Date(); t.setMonth(t.getMonth() - 3); if (d < t) return false; } 
+      if (dashboardFilters.periodo === 'mes_atual') { if (d.getMonth() !== now.getMonth() || d.getFullYear() !== now.getFullYear()) return false; }
+      else if (dashboardFilters.periodo === 'mes_anterior') { const lm = new Date(now.getFullYear(), now.getMonth() - 1, 1); if (d.getMonth() !== lm.getMonth() || d.getFullYear() !== lm.getFullYear()) return false; }
+      else if (dashboardFilters.periodo === 'trimestre') { const t = new Date(); t.setMonth(t.getMonth() - 3); if (d < t) return false; }
       else if (dashboardFilters.periodo === 'ano') { if (d.getFullYear() !== now.getFullYear()) return false; }
       if (dashboardFilters.fornecedor && r.fornecedor !== dashboardFilters.fornecedor) return false;
       if (dashboardFilters.tipo && r.tipoRelatorio !== dashboardFilters.tipo) return false;
-      
+
       const recordStatus = r.status || 'Pendente';
       if (dashboardFilters.status && recordStatus !== dashboardFilters.status && !(dashboardFilters.status === 'Pendente' && !r.status)) return false;
 
@@ -2512,10 +2510,10 @@ const handleUpdatePermissions = async (uid, newIsAdmin, newCanApprove, newIsMana
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4 relative overflow-hidden">
         {appMessage && <div className="fixed top-4 right-4 z-[100] animate-fade-in-up"><div className="bg-white rounded-xl shadow-lg p-4 border-t-4 border-[#F4B41A] max-w-sm"><p className="text-sm font-medium text-gray-800">{appMessage}</p></div></div>}
-        
+
         <div className="absolute top-[-10%] left-[-10%] w-96 h-96 bg-[#F4B41A] opacity-20 rounded-full mix-blend-multiply filter blur-3xl animate-pulse-soft"></div>
-        <div className="absolute bottom-[-10%] right-[-10%] w-96 h-96 bg-[#5C3A21] opacity-10 rounded-full mix-blend-multiply filter blur-3xl animate-pulse-soft" style={{animationDelay: '1s'}}></div>
-        
+        <div className="absolute bottom-[-10%] right-[-10%] w-96 h-96 bg-[#5C3A21] opacity-10 rounded-full mix-blend-multiply filter blur-3xl animate-pulse-soft" style={{ animationDelay: '1s' }}></div>
+
         <div className="max-w-md w-full bg-white rounded-2xl shadow-2xl overflow-hidden relative z-10 border-t-[8px] border-[#5C3A21] animate-fade-in-up">
           <div className="bg-gray-50 p-8 text-center border-b border-gray-100">
             {localStorage.getItem('imac_logo_oficial') ? (
@@ -2526,7 +2524,7 @@ const handleUpdatePermissions = async (uid, newIsAdmin, newCanApprove, newIsMana
               </div>
             )}
             <h2 className="text-2xl font-black text-gray-800">Controle de Qualidade</h2>
-            {welcomeMode === 'login' && <p className="text-gray-500 mt-2 text-sm flex items-center justify-center gap-1"><Lock size={14}/> Acesso Restrito Corporativo</p>}
+            {welcomeMode === 'login' && <p className="text-gray-500 mt-2 text-sm flex items-center justify-center gap-1"><Lock size={14} /> Acesso Restrito Corporativo</p>}
             {welcomeMode === 'solicitar' && <p className="text-gray-500 mt-2 text-sm">Solicitação de Relatório de Não Conformidade</p>}
           </div>
 
@@ -2579,27 +2577,27 @@ const handleUpdatePermissions = async (uid, newIsAdmin, newCanApprove, newIsMana
             ) : welcomeMode === 'choice' ? (
               <div className="space-y-4 animate-fade-in-up">
                 <button onClick={() => setWelcomeMode('solicitar')} className="w-full bg-white border-2 border-[#F4B41A] text-[#5C3A21] font-bold py-4 px-4 rounded-xl shadow-sm hover:bg-[#F4B41A]/10 transition flex items-center justify-center gap-2">
-                  <FileText size={20}/> Solicitar Relatório (Público)
+                  <FileText size={20} /> Solicitar Relatório (Público)
                 </button>
                 <button onClick={() => setWelcomeMode('rnc-cliente-externo')} className="w-full bg-white border-2 border-orange-400 text-orange-700 font-bold py-4 px-4 rounded-xl shadow-sm hover:bg-orange-50 transition flex items-center justify-center gap-2">
-                  <AlertCircle size={20}/> Registrar Não Conformidade (Cliente)
+                  <AlertCircle size={20} /> Registrar Não Conformidade (Cliente)
                 </button>
                 <button onClick={() => setWelcomeMode('login')} className="w-full bg-[#5C3A21] text-[#F4B41A] font-bold py-4 px-4 rounded-xl shadow-md hover:bg-[#4a2e1a] transition flex items-center justify-center gap-2">
-                  <Lock size={20}/> Entrar no Sistema Restrito
+                  <Lock size={20} /> Entrar no Sistema Restrito
                 </button>
               </div>
             ) : welcomeMode === 'solicitar' ? (
               <form onSubmit={submitSolicitacao} className="space-y-4 text-left animate-fade-in-up text-sm max-h-[50vh] overflow-y-auto p-2">
-                
+
                 {/* NOVO: Solicitante e Urgência */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                   <div>
                     <label className="block font-bold text-gray-700 mb-1">Quem está solicitando?</label>
-                    <input type="text" required value={solicitacaoForm.solicitante} onChange={(e) => setSolicitacaoForm({...solicitacaoForm, solicitante: e.target.value})} placeholder="Seu nome / Setor" className="w-full border border-gray-300 p-2.5 rounded-lg focus:ring-2 focus:ring-[#F4B41A] outline-none" />
+                    <input type="text" required value={solicitacaoForm.solicitante} onChange={(e) => setSolicitacaoForm({ ...solicitacaoForm, solicitante: e.target.value })} placeholder="Seu nome / Setor" className="w-full border border-gray-300 p-2.5 rounded-lg focus:ring-2 focus:ring-[#F4B41A] outline-none" />
                   </div>
                   <div>
                     <label className="block font-bold text-gray-700 mb-1">Nível de Urgência</label>
-                    <select required value={solicitacaoForm.urgencia} onChange={(e) => setSolicitacaoForm({...solicitacaoForm, urgencia: e.target.value})} className="w-full border border-gray-300 p-2.5 rounded-lg focus:ring-2 focus:ring-[#F4B41A] outline-none font-bold">
+                    <select required value={solicitacaoForm.urgencia} onChange={(e) => setSolicitacaoForm({ ...solicitacaoForm, urgencia: e.target.value })} className="w-full border border-gray-300 p-2.5 rounded-lg focus:ring-2 focus:ring-[#F4B41A] outline-none font-bold">
                       <option value="Baixa">🟢 Baixa (Pode aguardar)</option>
                       <option value="Média">🟡 Média (Atenção em breve)</option>
                       <option value="Alta">🔴 Alta (Ação imediata)</option>
@@ -2609,7 +2607,7 @@ const handleUpdatePermissions = async (uid, newIsAdmin, newCanApprove, newIsMana
 
                 <div>
                   <label className="block font-bold text-gray-700 mb-1">Tipo de Problema</label>
-                  <select required value={solicitacaoForm.tipoRelatorio} onChange={(e) => setSolicitacaoForm({...solicitacaoForm, tipoRelatorio: e.target.value})} className="w-full border border-gray-300 p-2.5 rounded-lg focus:ring-2 focus:ring-[#F4B41A] outline-none">
+                  <select required value={solicitacaoForm.tipoRelatorio} onChange={(e) => setSolicitacaoForm({ ...solicitacaoForm, tipoRelatorio: e.target.value })} className="w-full border border-gray-300 p-2.5 rounded-lg focus:ring-2 focus:ring-[#F4B41A] outline-none">
                     <option value="Problema com Fornecedor">Problema com Fornecedor / Matéria-prima</option>
                     <option value="Relatório de Não Conformidade - Cliente">Reclamação de Cliente / Loja</option>
                     <option value="Ocorrência Interna">Problema Interno</option>
@@ -2617,38 +2615,38 @@ const handleUpdatePermissions = async (uid, newIsAdmin, newCanApprove, newIsMana
                 </div>
                 <div>
                   <label className="block font-bold text-gray-700 mb-1">Produto / Material Afetado</label>
-                  <input type="text" required value={solicitacaoForm.produto} onChange={(e) => setSolicitacaoForm({...solicitacaoForm, produto: e.target.value})} placeholder="Qual o produto?" className="w-full border border-gray-300 p-2.5 rounded-lg focus:ring-2 focus:ring-[#F4B41A] outline-none" />
+                  <input type="text" required value={solicitacaoForm.produto} onChange={(e) => setSolicitacaoForm({ ...solicitacaoForm, produto: e.target.value })} placeholder="Qual o produto?" className="w-full border border-gray-300 p-2.5 rounded-lg focus:ring-2 focus:ring-[#F4B41A] outline-none" />
                 </div>
 
                 {solicitacaoForm.tipoRelatorio === 'Relatório de Não Conformidade - Cliente' && (
                   <div>
                     <label className="block font-bold text-gray-700 mb-1">Loja / Cliente Afetado</label>
-                    <input type="text" required value={solicitacaoForm.lojaLocal || ''} onChange={(e) => setSolicitacaoForm({...solicitacaoForm, lojaLocal: e.target.value})} placeholder="Ex: Matriz, Loja 02..." className="w-full border border-gray-300 p-2.5 rounded-lg focus:ring-2 focus:ring-[#F4B41A] outline-none" />
+                    <input type="text" required value={solicitacaoForm.lojaLocal || ''} onChange={(e) => setSolicitacaoForm({ ...solicitacaoForm, lojaLocal: e.target.value })} placeholder="Ex: Matriz, Loja 02..." className="w-full border border-gray-300 p-2.5 rounded-lg focus:ring-2 focus:ring-[#F4B41A] outline-none" />
                   </div>
                 )}
 
                 {solicitacaoForm.tipoRelatorio === 'Problema com Fornecedor' && (
                   <div>
                     <label className="block font-bold text-gray-700 mb-1">Nome do Fornecedor</label>
-                    <input type="text" required value={solicitacaoForm.fornecedor || ''} onChange={(e) => setSolicitacaoForm({...solicitacaoForm, fornecedor: e.target.value})} placeholder="Ex: Aurora, Seara..." className="w-full border border-gray-300 p-2.5 rounded-lg focus:ring-2 focus:ring-[#F4B41A] outline-none" />
+                    <input type="text" required value={solicitacaoForm.fornecedor || ''} onChange={(e) => setSolicitacaoForm({ ...solicitacaoForm, fornecedor: e.target.value })} placeholder="Ex: Aurora, Seara..." className="w-full border border-gray-300 p-2.5 rounded-lg focus:ring-2 focus:ring-[#F4B41A] outline-none" />
                   </div>
                 )}
 
                 <div className="grid grid-cols-2 gap-3">
                   <div>
                     <label className="block font-bold text-gray-700 mb-1">Lote</label>
-                    <input type="text" required value={solicitacaoForm.lote} onChange={(e) => setSolicitacaoForm({...solicitacaoForm, lote: e.target.value})} placeholder="Obrigatório" className="w-full border border-gray-300 p-2.5 rounded-lg focus:ring-2 focus:ring-[#F4B41A] outline-none" />
+                    <input type="text" required value={solicitacaoForm.lote} onChange={(e) => setSolicitacaoForm({ ...solicitacaoForm, lote: e.target.value })} placeholder="Obrigatório" className="w-full border border-gray-300 p-2.5 rounded-lg focus:ring-2 focus:ring-[#F4B41A] outline-none" />
                   </div>
-                  
+
                   <div>
                     <label className="block font-bold text-gray-700 mb-1">Quantidade</label>
-                    <input type="text" required value={solicitacaoForm.quantidade || ''} onChange={(e) => setSolicitacaoForm({...solicitacaoForm, quantidade: e.target.value})} placeholder="Ex: 5 kg, 2 caixas" className="w-full border border-gray-300 p-2.5 rounded-lg focus:ring-2 focus:ring-[#F4B41A] outline-none" />
+                    <input type="text" required value={solicitacaoForm.quantidade || ''} onChange={(e) => setSolicitacaoForm({ ...solicitacaoForm, quantidade: e.target.value })} placeholder="Ex: 5 kg, 2 caixas" className="w-full border border-gray-300 p-2.5 rounded-lg focus:ring-2 focus:ring-[#F4B41A] outline-none" />
                   </div>
 
                   {(solicitacaoForm.tipoRelatorio === 'Problema com Fornecedor' || solicitacaoForm.tipoRelatorio === 'Relatório de Não Conformidade - Cliente' || solicitacaoForm.tipoRelatorio === 'Ocorrência Interna') && (
                     <div>
                       <label className="block font-bold text-gray-700 mb-1">Validade</label>
-                      <input type="text" required={solicitacaoForm.tipoRelatorio !== 'Ocorrência Interna'} value={solicitacaoForm.validade || ''} onChange={(e) => setSolicitacaoForm({...solicitacaoForm, validade: e.target.value})} placeholder="Ex: 10/12/2026" className="w-full border border-gray-300 p-2.5 rounded-lg focus:ring-2 focus:ring-[#F4B41A] outline-none" />
+                      <input type="text" required={solicitacaoForm.tipoRelatorio !== 'Ocorrência Interna'} value={solicitacaoForm.validade || ''} onChange={(e) => setSolicitacaoForm({ ...solicitacaoForm, validade: e.target.value })} placeholder="Ex: 10/12/2026" className="w-full border border-gray-300 p-2.5 rounded-lg focus:ring-2 focus:ring-[#F4B41A] outline-none" />
                     </div>
                   )}
 
@@ -2656,11 +2654,11 @@ const handleUpdatePermissions = async (uid, newIsAdmin, newCanApprove, newIsMana
                     <>
                       <div>
                         <label className="block font-bold text-gray-700 mb-1">Nota Fiscal</label>
-                        <input type="text" required value={solicitacaoForm.nf || ''} onChange={(e) => setSolicitacaoForm({...solicitacaoForm, nf: e.target.value})} placeholder="Obrigatório" className="w-full border border-gray-300 p-2.5 rounded-lg focus:ring-2 focus:ring-[#F4B41A] outline-none" />
+                        <input type="text" required value={solicitacaoForm.nf || ''} onChange={(e) => setSolicitacaoForm({ ...solicitacaoForm, nf: e.target.value })} placeholder="Obrigatório" className="w-full border border-gray-300 p-2.5 rounded-lg focus:ring-2 focus:ring-[#F4B41A] outline-none" />
                       </div>
                       <div>
                         <label className="block font-bold text-gray-700 mb-1">Recebimento</label>
-                        <input type="text" required value={solicitacaoForm.dataRecebimento || ''} onChange={(e) => setSolicitacaoForm({...solicitacaoForm, dataRecebimento: e.target.value})} placeholder="Ex: 10/05/2026" className="w-full border border-gray-300 p-2.5 rounded-lg focus:ring-2 focus:ring-[#F4B41A] outline-none" />
+                        <input type="text" required value={solicitacaoForm.dataRecebimento || ''} onChange={(e) => setSolicitacaoForm({ ...solicitacaoForm, dataRecebimento: e.target.value })} placeholder="Ex: 10/05/2026" className="w-full border border-gray-300 p-2.5 rounded-lg focus:ring-2 focus:ring-[#F4B41A] outline-none" />
                       </div>
                     </>
                   )}
@@ -2668,38 +2666,38 @@ const handleUpdatePermissions = async (uid, newIsAdmin, newCanApprove, newIsMana
                   {solicitacaoForm.tipoRelatorio === 'Relatório de Não Conformidade - Cliente' && (
                     <div>
                       <label className="block font-bold text-gray-700 mb-1">Fabricação</label>
-                      <input type="text" required value={solicitacaoForm.dataFabricacao || ''} onChange={(e) => setSolicitacaoForm({...solicitacaoForm, dataFabricacao: e.target.value})} placeholder="Ex: 01/05/2026" className="w-full border border-gray-300 p-2.5 rounded-lg focus:ring-2 focus:ring-[#F4B41A] outline-none" />
+                      <input type="text" required value={solicitacaoForm.dataFabricacao || ''} onChange={(e) => setSolicitacaoForm({ ...solicitacaoForm, dataFabricacao: e.target.value })} placeholder="Ex: 01/05/2026" className="w-full border border-gray-300 p-2.5 rounded-lg focus:ring-2 focus:ring-[#F4B41A] outline-none" />
                     </div>
                   )}
 
                   {solicitacaoForm.tipoRelatorio === 'Ocorrência Interna' && (
                     <div>
                       <label className="block font-bold text-gray-700 mb-1">Ocorrência</label>
-                      <input type="text" required value={solicitacaoForm.dataOcorrencia || ''} onChange={(e) => setSolicitacaoForm({...solicitacaoForm, dataOcorrencia: e.target.value})} placeholder="Ex: 20/05/2026" className="w-full border border-gray-300 p-2.5 rounded-lg focus:ring-2 focus:ring-[#F4B41A] outline-none" />
+                      <input type="text" required value={solicitacaoForm.dataOcorrencia || ''} onChange={(e) => setSolicitacaoForm({ ...solicitacaoForm, dataOcorrencia: e.target.value })} placeholder="Ex: 20/05/2026" className="w-full border border-gray-300 p-2.5 rounded-lg focus:ring-2 focus:ring-[#F4B41A] outline-none" />
                     </div>
                   )}
                 </div>
                 <div>
                   <label className="block font-bold text-gray-700 mb-1">Descreva o problema</label>
-                  <textarea required rows="3" value={solicitacaoForm.descricao} onChange={(e) => setSolicitacaoForm({...solicitacaoForm, descricao: e.target.value})} placeholder="Detalhe o que aconteceu..." className="w-full border border-gray-300 p-2.5 rounded-lg focus:ring-2 focus:ring-[#F4B41A] outline-none resize-y"></textarea>
+                  <textarea required rows="3" value={solicitacaoForm.descricao} onChange={(e) => setSolicitacaoForm({ ...solicitacaoForm, descricao: e.target.value })} placeholder="Detalhe o que aconteceu..." className="w-full border border-gray-300 p-2.5 rounded-lg focus:ring-2 focus:ring-[#F4B41A] outline-none resize-y"></textarea>
                 </div>
                 <div className="bg-gray-50 border border-dashed border-gray-300 p-4 rounded-lg text-center cursor-pointer hover:bg-gray-100 transition">
-                   <label className="cursor-pointer flex flex-col items-center justify-center">
-                      <ImagePlus size={24} className="text-[#5C3A21] mb-2" />
-                      <span className="font-bold text-sm text-[#5C3A21]">Anexar Fotos ({solicitacaoForm.imagens?.length || 0})</span>
-                      <input type="file" multiple accept="image/*" className="hidden" onChange={async (e) => {
-                         const files = Array.from(e.target.files);
-                         if (files.length === 0) return;
-                         try {
-                           const compressedImages = await Promise.all(files.map(f => compressImage(f, false)));
-                           setSolicitacaoForm(prev => ({...prev, imagens: [...prev.imagens, ...compressedImages]}));
-                         } catch(err){}
-                      }} />
-                   </label>
+                  <label className="cursor-pointer flex flex-col items-center justify-center">
+                    <ImagePlus size={24} className="text-[#5C3A21] mb-2" />
+                    <span className="font-bold text-sm text-[#5C3A21]">Anexar Fotos ({solicitacaoForm.imagens?.length || 0})</span>
+                    <input type="file" multiple accept="image/*" className="hidden" onChange={async (e) => {
+                      const files = Array.from(e.target.files);
+                      if (files.length === 0) return;
+                      try {
+                        const compressedImages = await Promise.all(files.map(f => compressImage(f, false)));
+                        setSolicitacaoForm(prev => ({ ...prev, imagens: [...prev.imagens, ...compressedImages] }));
+                      } catch (err) { }
+                    }} />
+                  </label>
                 </div>
                 <div className="flex gap-2 pt-2">
-                   <button type="button" onClick={() => setWelcomeMode('choice')} className="flex-1 bg-gray-200 text-gray-800 font-bold py-3 rounded-xl hover:bg-gray-300 transition">Voltar</button>
-                   <button type="submit" className="flex-1 bg-[#F4B41A] text-[#5C3A21] font-bold py-3 rounded-xl hover:bg-[#e0a210] transition shadow-md">Enviar</button>
+                  <button type="button" onClick={() => setWelcomeMode('choice')} className="flex-1 bg-gray-200 text-gray-800 font-bold py-3 rounded-xl hover:bg-gray-300 transition">Voltar</button>
+                  <button type="submit" className="flex-1 bg-[#F4B41A] text-[#5C3A21] font-bold py-3 rounded-xl hover:bg-[#e0a210] transition shadow-md">Enviar</button>
                 </div>
               </form>
             ) : welcomeMode === 'rnc-cliente-externo' ? (
@@ -2712,36 +2710,36 @@ const handleUpdatePermissions = async (uid, newIsAdmin, newCanApprove, newIsMana
                 <div className="grid grid-cols-2 gap-3">
                   <div className="col-span-2">
                     <label className="block font-bold text-gray-700 mb-1">Nome / Empresa do Cliente *</label>
-                    <input type="text" required value={rncClienteExtForm.nomeCliente} onChange={e => setRncClienteExtForm({...rncClienteExtForm, nomeCliente: e.target.value})} placeholder="Ex: Supermercado ABC" className="w-full border border-gray-300 p-2.5 rounded-lg focus:ring-2 focus:ring-orange-400 outline-none" />
+                    <input type="text" required value={rncClienteExtForm.nomeCliente} onChange={e => setRncClienteExtForm({ ...rncClienteExtForm, nomeCliente: e.target.value })} placeholder="Ex: Supermercado ABC" className="w-full border border-gray-300 p-2.5 rounded-lg focus:ring-2 focus:ring-orange-400 outline-none" />
                   </div>
                   <div>
                     <label className="block font-bold text-gray-700 mb-1">Produto *</label>
-                    <input type="text" required value={rncClienteExtForm.produto} onChange={e => setRncClienteExtForm({...rncClienteExtForm, produto: e.target.value})} placeholder="Ex: Salsicha Hot Dog" className="w-full border border-gray-300 p-2.5 rounded-lg focus:ring-2 focus:ring-orange-400 outline-none" />
+                    <input type="text" required value={rncClienteExtForm.produto} onChange={e => setRncClienteExtForm({ ...rncClienteExtForm, produto: e.target.value })} placeholder="Ex: Salsicha Hot Dog" className="w-full border border-gray-300 p-2.5 rounded-lg focus:ring-2 focus:ring-orange-400 outline-none" />
                   </div>
                   <div>
                     <label className="block font-bold text-gray-700 mb-1">Lote *</label>
-                    <input type="text" required value={rncClienteExtForm.lote} onChange={e => setRncClienteExtForm({...rncClienteExtForm, lote: e.target.value})} placeholder="Ex: 0426011411" className="w-full border border-gray-300 p-2.5 rounded-lg focus:ring-2 focus:ring-orange-400 outline-none" />
+                    <input type="text" required value={rncClienteExtForm.lote} onChange={e => setRncClienteExtForm({ ...rncClienteExtForm, lote: e.target.value })} placeholder="Ex: 0426011411" className="w-full border border-gray-300 p-2.5 rounded-lg focus:ring-2 focus:ring-orange-400 outline-none" />
                   </div>
                   <div>
                     <label className="block font-bold text-gray-700 mb-1">Validade</label>
-                    <input type="text" value={rncClienteExtForm.validade} onChange={e => setRncClienteExtForm({...rncClienteExtForm, validade: e.target.value})} placeholder="Ex: 12/2026" className="w-full border border-gray-300 p-2.5 rounded-lg focus:ring-2 focus:ring-orange-400 outline-none" />
+                    <input type="text" value={rncClienteExtForm.validade} onChange={e => setRncClienteExtForm({ ...rncClienteExtForm, validade: e.target.value })} placeholder="Ex: 12/2026" className="w-full border border-gray-300 p-2.5 rounded-lg focus:ring-2 focus:ring-orange-400 outline-none" />
                   </div>
                   <div>
                     <label className="block font-bold text-gray-700 mb-1">Quantidade Afetada</label>
-                    <input type="text" value={rncClienteExtForm.quantidade} onChange={e => setRncClienteExtForm({...rncClienteExtForm, quantidade: e.target.value})} placeholder="Ex: 2 unidades" className="w-full border border-gray-300 p-2.5 rounded-lg focus:ring-2 focus:ring-orange-400 outline-none" />
+                    <input type="text" value={rncClienteExtForm.quantidade} onChange={e => setRncClienteExtForm({ ...rncClienteExtForm, quantidade: e.target.value })} placeholder="Ex: 2 unidades" className="w-full border border-gray-300 p-2.5 rounded-lg focus:ring-2 focus:ring-orange-400 outline-none" />
                   </div>
                   <div>
                     <label className="block font-bold text-gray-700 mb-1">Data da Ocorrência</label>
-                    <input type="text" value={rncClienteExtForm.dataOcorrencia} onChange={e => setRncClienteExtForm({...rncClienteExtForm, dataOcorrencia: e.target.value})} placeholder="Ex: 20/05/2026" className="w-full border border-gray-300 p-2.5 rounded-lg focus:ring-2 focus:ring-orange-400 outline-none" />
+                    <input type="text" value={rncClienteExtForm.dataOcorrencia} onChange={e => setRncClienteExtForm({ ...rncClienteExtForm, dataOcorrencia: e.target.value })} placeholder="Ex: 20/05/2026" className="w-full border border-gray-300 p-2.5 rounded-lg focus:ring-2 focus:ring-orange-400 outline-none" />
                   </div>
                   <div>
                     <label className="block font-bold text-gray-700 mb-1">Contato (tel/e-mail)</label>
-                    <input type="text" value={rncClienteExtForm.contato} onChange={e => setRncClienteExtForm({...rncClienteExtForm, contato: e.target.value})} placeholder="Para retorno" className="w-full border border-gray-300 p-2.5 rounded-lg focus:ring-2 focus:ring-orange-400 outline-none" />
+                    <input type="text" value={rncClienteExtForm.contato} onChange={e => setRncClienteExtForm({ ...rncClienteExtForm, contato: e.target.value })} placeholder="Para retorno" className="w-full border border-gray-300 p-2.5 rounded-lg focus:ring-2 focus:ring-orange-400 outline-none" />
                   </div>
                 </div>
                 <div>
                   <label className="block font-bold text-gray-700 mb-1">Descrição da Não Conformidade *</label>
-                  <textarea required rows="3" value={rncClienteExtForm.descricao} onChange={e => setRncClienteExtForm({...rncClienteExtForm, descricao: e.target.value})} placeholder="Descreva o problema encontrado no produto..." className="w-full border border-gray-300 p-2.5 rounded-lg focus:ring-2 focus:ring-orange-400 outline-none resize-y text-sm"></textarea>
+                  <textarea required rows="3" value={rncClienteExtForm.descricao} onChange={e => setRncClienteExtForm({ ...rncClienteExtForm, descricao: e.target.value })} placeholder="Descreva o problema encontrado no produto..." className="w-full border border-gray-300 p-2.5 rounded-lg focus:ring-2 focus:ring-orange-400 outline-none resize-y text-sm"></textarea>
                 </div>
                 <div className="flex gap-2 pt-2">
                   <button type="button" onClick={() => setWelcomeMode('choice')} className="flex-1 bg-gray-200 text-gray-800 font-bold py-3 rounded-xl hover:bg-gray-300 transition">Voltar</button>
@@ -2749,6 +2747,7 @@ const handleUpdatePermissions = async (uid, newIsAdmin, newCanApprove, newIsMana
                 </div>
               </form>
             ) : (
+<form> {/* A TAG FALTANDO ENTRA AQUI */}
                 <div>
                   <label className="block text-sm font-bold text-gray-700 mb-1">E-mail corporativo</label>
                   <input type="email" required value={loginEmail} onChange={(e) => setLoginEmail(e.target.value)} placeholder="Digite seu e-mail" className="w-full border border-gray-300 p-3 rounded-lg focus:ring-2 focus:ring-[#F4B41A] outline-none" />
@@ -2764,10 +2763,10 @@ const handleUpdatePermissions = async (uid, newIsAdmin, newCanApprove, newIsMana
               </form>
             )}
 
-            <p className="text-xs text-gray-400 mt-6 pt-4 border-t border-gray-100">Controle de Qualidade • IMAC</p>
-          </div>
+          <p className="text-xs text-gray-400 mt-6 pt-4 border-t border-gray-100">Controle de Qualidade • IMAC</p>
         </div>
       </div>
+      </div >
     );
   }
 
@@ -2778,25 +2777,25 @@ const handleUpdatePermissions = async (uid, newIsAdmin, newCanApprove, newIsMana
     const clienteCounts = {};
     const produtoCounts = {};
     const statusCounts = { 'Pendente': 0, 'Liberado': 0, 'Não Liberado': 0 };
-    
+
     filteredRecords.forEach(r => {
       const tipo = r.tipoRelatorio || 'Problema com Fornecedor';
       if (countsPorTipo[tipo] !== undefined) countsPorTipo[tipo]++;
       if (r.fornecedor) fornecedorCounts[r.fornecedor] = (fornecedorCounts[r.fornecedor] || 0) + 1;
-      
+
       const st = r.status || 'Pendente';
       if (statusCounts[st] !== undefined) statusCounts[st]++;
 
       if (r.tipoRelatorio === 'Relatório de Não Conformidade - Cliente') {
-          if(r.lojasLocais && r.lojasLocais.length > 0) {
-              r.lojasLocais.forEach(l => clienteCounts[l] = (clienteCounts[l] || 0) + 1);
-          } else if (r.lojaLocal) {
-              clienteCounts[r.lojaLocal] = (clienteCounts[r.lojaLocal] || 0) + 1;
-          }
+        if (r.lojasLocais && r.lojasLocais.length > 0) {
+          r.lojasLocais.forEach(l => clienteCounts[l] = (clienteCounts[l] || 0) + 1);
+        } else if (r.lojaLocal) {
+          clienteCounts[r.lojaLocal] = (clienteCounts[r.lojaLocal] || 0) + 1;
+        }
       }
 
       if (r.produto && r.produto !== 'Não especificado') {
-         produtoCounts[r.produto] = (produtoCounts[r.produto] || 0) + 1;
+        produtoCounts[r.produto] = (produtoCounts[r.produto] || 0) + 1;
       }
     });
 
@@ -2804,8 +2803,8 @@ const handleUpdatePermissions = async (uid, newIsAdmin, newCanApprove, newIsMana
     const barData = Object.entries(fornecedorCounts).map(([label, value]) => ({ label, value })).sort((a, b) => b.value - a.value).slice(0, 10);
     const tipoBarras = Object.entries(countsPorTipo).map(([nome, valor]) => ({ label: nome, value: valor, color: nome.includes('Fornecedor') ? '#EF4444' : nome.includes('Insumo') ? '#F59E0B' : nome.includes('Interna') ? '#3B82F6' : nome.includes('Produto') ? '#22C55E' : '#8B5CF6' }));
 
-    const pieStatusData = Object.entries(statusCounts).filter(([_, v]) => v > 0).map(([label, value]) => ({ 
-      label, value, color: label === 'Liberado' ? '#22C55E' : label === 'Não Liberado' ? '#EF4444' : '#F59E0B' 
+    const pieStatusData = Object.entries(statusCounts).filter(([_, v]) => v > 0).map(([label, value]) => ({
+      label, value, color: label === 'Liberado' ? '#22C55E' : label === 'Não Liberado' ? '#EF4444' : '#F59E0B'
     }));
     const clienteBarData = Object.entries(clienteCounts).map(([label, value]) => ({ label, value })).sort((a, b) => b.value - a.value).slice(0, 10);
     const produtoBarData = Object.entries(produtoCounts).map(([label, value]) => ({ label, value })).sort((a, b) => b.value - a.value).slice(0, 5);
@@ -2816,13 +2815,13 @@ const handleUpdatePermissions = async (uid, newIsAdmin, newCanApprove, newIsMana
       <div className="min-h-screen bg-[#f8f9fa] py-8 px-4 font-sans text-gray-800 print:bg-white print:py-0 print:px-0">
         {registroToView && <RelatorioViewModal registro={registroToView} onClose={() => setRegistroToView(null)} />}
         {evaluatingRegistro && <StatusModal registro={evaluatingRegistro} onClose={() => setEvaluatingRegistro(null)} onSave={handleUpdateStatus} avaliadorAtual={userName} canApprove={canApprove} />}
-        
-        <EditProfileModal 
-          isOpen={isProfileModalOpen} 
-          onClose={() => setIsProfileModalOpen(false)} 
-          initialName={userName} 
-          initialRole={userRole} 
-          onSave={handleUpdateProfile} 
+
+        <EditProfileModal
+          isOpen={isProfileModalOpen}
+          onClose={() => setIsProfileModalOpen(false)}
+          initialName={userName}
+          initialRole={userRole}
+          onSave={handleUpdateProfile}
         />
 
         <GerenciarUsuariosModal
@@ -2837,25 +2836,25 @@ const handleUpdatePermissions = async (uid, newIsAdmin, newCanApprove, newIsMana
         />
 
         {isFornecedoresModalOpen && (
-           <GerenciarFornecedoresModal 
-             isOpen={isFornecedoresModalOpen} 
-             onClose={() => setFornecedoresModalOpen(false)} 
-             fornecedores={fornecedores}
-             onAdd={addFornecedor}
-             onEdit={editFornecedorObj}
-             onRemove={removeFornecedorObj}
-           />
+          <GerenciarFornecedoresModal
+            isOpen={isFornecedoresModalOpen}
+            onClose={() => setFornecedoresModalOpen(false)}
+            fornecedores={fornecedores}
+            onAdd={addFornecedor}
+            onEdit={editFornecedorObj}
+            onRemove={removeFornecedorObj}
+          />
         )}
 
         {isClientesModalOpen && (
-           <GerenciarClientesModal 
-             isOpen={isClientesModalOpen} 
-             onClose={() => setClientesModalOpen(false)} 
-             clientes={clientes}
-             onAdd={addCliente}
-             onEdit={editClienteObj}
-             onRemove={removeClienteObj}
-           />
+          <GerenciarClientesModal
+            isOpen={isClientesModalOpen}
+            onClose={() => setClientesModalOpen(false)}
+            clientes={clientes}
+            onAdd={addCliente}
+            onEdit={editClienteObj}
+            onRemove={removeClienteObj}
+          />
         )}
 
         {registroToDelete && (
@@ -2866,16 +2865,16 @@ const handleUpdatePermissions = async (uid, newIsAdmin, newCanApprove, newIsMana
               <p className="text-gray-600 text-sm mb-6">Esta ação removerá o registro permanentemente.</p>
               <div className="flex justify-center gap-3">
                 <button onClick={() => setRegistroToDelete(null)} className="px-5 py-2.5 bg-gray-200 rounded-lg hover:bg-gray-300 font-bold transition text-sm">Cancelar</button>
-                <button onClick={() => confirmDeleteRegistro(registroToDelete)} className="px-5 py-2.5 bg-red-600 text-white rounded-lg hover:bg-red-700 font-bold transition text-sm flex items-center gap-1"><Trash2 size={16}/> Sim, Apagar</button>
+                <button onClick={() => confirmDeleteRegistro(registroToDelete)} className="px-5 py-2.5 bg-red-600 text-white rounded-lg hover:bg-red-700 font-bold transition text-sm flex items-center gap-1"><Trash2 size={16} /> Sim, Apagar</button>
               </div>
             </div>
           </div>
         )}
-        
+
         {appMessage && <div className="fixed top-4 right-4 z-[100] animate-fade-in-up no-print"><div className="bg-white rounded-xl shadow-lg p-4 border-t-4 border-[#F4B41A] max-w-sm"><p className="text-sm font-medium text-gray-800">{appMessage}</p></div></div>}
 
         <div className={`max-w-7xl mx-auto ${registroToView ? 'no-print' : ''}`}>
-          
+
           {/* Header principal */}
           <div className="flex flex-col md:flex-row md:justify-between md:items-start mb-4 gap-4 bg-white p-4 rounded-xl shadow-sm border border-gray-200">
             <div className="flex items-center gap-4">
@@ -2899,10 +2898,10 @@ const handleUpdatePermissions = async (uid, newIsAdmin, newCanApprove, newIsMana
           {/* Barra de navegação dos módulos */}
           <div className="flex gap-1 bg-white p-2 rounded-xl shadow-sm border border-gray-200 mb-6 overflow-x-auto">
             {[
-              { id: 'dashboard', label: 'Dashboard', icon: <Home size={16}/>, color: 'text-[#5C3A21]', active: 'bg-[#5C3A21] text-white' },
-              { id: 'rnc-cliente', label: 'RNC Cliente', icon: <ShoppingBag size={16}/>, color: 'text-orange-700', active: 'bg-orange-500 text-white', badge: rncClientesExt.filter(r => r.status === 'Pendente').length },
-              { id: 'rnc-interna', label: 'NC Interna', icon: <Building2 size={16}/>, color: 'text-blue-700', active: 'bg-blue-600 text-white', badge: rncInternas.filter(r => r.status === 'Pendente').length },
-              { id: 'sol-fornecedor', label: 'Sol. Fornecedor', icon: <Truck size={16}/>, color: 'text-purple-700', active: 'bg-purple-600 text-white', badge: solFornecedor.filter(r => r.status === 'Pendente').length },
+              { id: 'dashboard', label: 'Dashboard', icon: <Home size={16} />, color: 'text-[#5C3A21]', active: 'bg-[#5C3A21] text-white' },
+              { id: 'rnc-cliente', label: 'RNC Cliente', icon: <ShoppingBag size={16} />, color: 'text-orange-700', active: 'bg-orange-500 text-white', badge: rncClientesExt.filter(r => r.status === 'Pendente').length },
+              { id: 'rnc-interna', label: 'NC Interna', icon: <Building2 size={16} />, color: 'text-blue-700', active: 'bg-blue-600 text-white', badge: rncInternas.filter(r => r.status === 'Pendente').length },
+              { id: 'sol-fornecedor', label: 'Sol. Fornecedor', icon: <Truck size={16} />, color: 'text-purple-700', active: 'bg-purple-600 text-white', badge: solFornecedor.filter(r => r.status === 'Pendente').length },
             ].map(tab => (
               <button key={tab.id} onClick={() => setActiveModule(tab.id)} className={`relative flex items-center gap-2 px-4 py-2.5 rounded-lg font-bold text-sm transition whitespace-nowrap ${activeModule === tab.id ? tab.active : 'hover:bg-gray-100 text-gray-600'}`}>
                 {tab.icon} {tab.label}
@@ -2913,160 +2912,158 @@ const handleUpdatePermissions = async (uid, newIsAdmin, newCanApprove, newIsMana
 
           {/* ===================== MÓDULO: DASHBOARD ===================== */}
           {activeModule === 'dashboard' && (<>
-          <div className="mb-6"><DashboardFilters onFilterChange={setDashboardFilters} fornecedores={fornecedores} /></div>
+            <div className="mb-6"><DashboardFilters onFilterChange={setDashboardFilters} fornecedores={fornecedores} /></div>
 
-          {solicitacoes.filter(s => s.status === 'Pendente').length > 0 && (
-            <div className="mb-6 bg-blue-50 border-l-4 border-blue-500 p-4 rounded-r-xl shadow-sm animate-fade-in-up">
-              <div className="flex items-center gap-2 mb-3">
-                <FileText size={20} className="text-blue-600" />
-                <h2 className="text-lg font-bold text-blue-800">Solicitações Recebidas ({solicitacoes.filter(s => s.status === 'Pendente').length})</h2>
-              </div>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
-                {solicitacoes.filter(s => s.status === 'Pendente').map(sol => (
-                  <div key={sol.id} className="bg-white p-3 rounded-lg border border-blue-200 shadow-sm flex flex-col gap-2 relative overflow-hidden">
-  {/* Faixa de Urgência colorida na lateral */}
-  {sol.urgencia === 'Alta' && <div className="absolute top-0 left-0 w-1 h-full bg-red-500"></div>}
-  {sol.urgencia === 'Média' && <div className="absolute top-0 left-0 w-1 h-full bg-yellow-400"></div>}
-  {sol.urgencia === 'Baixa' && <div className="absolute top-0 left-0 w-1 h-full bg-green-500"></div>}
+            {solicitacoes.filter(s => s.status === 'Pendente').length > 0 && (
+              <div className="mb-6 bg-blue-50 border-l-4 border-blue-500 p-4 rounded-r-xl shadow-sm animate-fade-in-up">
+                <div className="flex items-center gap-2 mb-3">
+                  <FileText size={20} className="text-blue-600" />
+                  <h2 className="text-lg font-bold text-blue-800">Solicitações Recebidas ({solicitacoes.filter(s => s.status === 'Pendente').length})</h2>
+                </div>
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+                  {solicitacoes.filter(s => s.status === 'Pendente').map(sol => (
+                    <div key={sol.id} className="bg-white p-3 rounded-lg border border-blue-200 shadow-sm flex flex-col gap-2 relative overflow-hidden">
+                      {/* Faixa de Urgência colorida na lateral */}
+                      {sol.urgencia === 'Alta' && <div className="absolute top-0 left-0 w-1 h-full bg-red-500"></div>}
+                      {sol.urgencia === 'Média' && <div className="absolute top-0 left-0 w-1 h-full bg-yellow-400"></div>}
+                      {sol.urgencia === 'Baixa' && <div className="absolute top-0 left-0 w-1 h-full bg-green-500"></div>}
 
-  <div className="flex justify-between items-start pl-2">
-    <span className="text-[10px] font-bold px-2 py-1 rounded bg-blue-100 text-blue-800">{safeDate(sol.dataCriacao)}</span>
-    <span className={`text-[10px] font-bold px-2 py-1 rounded ${sol.urgencia === 'Alta' ? 'bg-red-100 text-red-700' : sol.urgencia === 'Média' ? 'bg-yellow-100 text-yellow-700' : 'bg-green-100 text-green-700'}`}>
-      {sol.urgencia ? `Urgência: ${sol.urgencia}` : 'Urgência: Média'}
-    </span>
-  </div>
-  
-  <div className="pl-2">
-    <p className="text-sm font-bold text-gray-800 truncate" title={sol.produto}>{sol.produto}</p>
-    <p className="text-xs font-semibold text-indigo-600 mt-0.5">Solicitante: {sol.solicitante || 'Não informado'}</p>
-    <p className="text-[11px] text-gray-500 mt-0.5">{sol.tipoRelatorio}</p>
-  </div>
-
-  <p className="text-xs text-gray-600 line-clamp-2 pl-2 border-t border-gray-100 pt-1 mt-1">{sol.descricao}</p>
-                    <button onClick={() => {
-                       const formImages = (sol.imagens || []).map(b64 => ({ isObject: true, id: Date.now() + Math.random(), baseSrc: b64, displaySrc: b64, shapes: [] }));
-                       setFormData({ ...getEmptyForm(), ...sol, imagens: formImages });
-                       setEditingReportId(null);
-                       setView('form');
-                       window.scrollTo(0, 0);
-                       if(db && isConfigured) updateDoc(doc(db, 'artifacts', appId, 'public', 'data', 'solicitacoes', sol.id), { status: 'Atendido' }).catch(()=>{});
-                       setSolicitacoes(prev => { const n = prev.map(s => s.id === sol.id ? {...s, status: 'Atendido'} : s); saveToLocalStorage('imac_solicitacoes', n); return n;});
-                    }} className="mt-2 w-full bg-blue-600 hover:bg-blue-700 text-white py-1.5 rounded text-xs font-bold transition flex items-center justify-center gap-1"><Plus size={14}/> Criar Relatório</button>
-                  </div>
-                ))}
-              </div>
-            </div>
-          )}
-
-          {pendingRecords.length > 0 && (
-            <div className="mb-6 bg-orange-50 border-l-4 border-orange-500 p-4 rounded-r-xl shadow-sm animate-fade-in-up">
-              <div className="flex items-center gap-2 mb-3">
-                <Clock size={20} className="text-orange-600" />
-                <h2 className="text-lg font-bold text-orange-800">Atenção: Relatórios Pendentes de Avaliação ({pendingRecords.length})</h2>
-              </div>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
-                {pendingRecords.map(reg => {
-                  const dias = getPendingDays(reg.dataCriacao);
-                  return (
-                    <div key={reg.id} className="bg-white p-3 rounded-lg border border-orange-200 shadow-sm flex flex-col gap-2">
-                      <div className="flex justify-between items-start">
-                        <div className="flex flex-col gap-1 items-start">
-                          <span className="text-xs font-bold bg-orange-100 text-orange-800 px-2 py-1 rounded">ID: {String(reg.id).substring(0, 6)}</span>
-                          <span className={`text-[10px] font-bold px-1.5 py-0.5 rounded flex items-center gap-1 border ${reg.enviado ? 'bg-blue-50 text-blue-700 border-blue-200' : 'bg-gray-100 text-gray-500 border-gray-200'}`}>
-                            <Send size={10} /> {reg.enviado ? 'Enviado' : 'Não Enviado'}
-                          </span>
-                        </div>
-                        <span className={`text-xs font-bold px-2 py-1 rounded ${dias > 3 ? 'bg-red-100 text-red-700' : 'bg-yellow-100 text-yellow-700'}`}>
-                          {dias === 0 ? 'Criado hoje' : `${dias} dia${dias > 1 ? 's' : ''} parado`}
+                      <div className="flex justify-between items-start pl-2">
+                        <span className="text-[10px] font-bold px-2 py-1 rounded bg-blue-100 text-blue-800">{safeDate(sol.dataCriacao)}</span>
+                        <span className={`text-[10px] font-bold px-2 py-1 rounded ${sol.urgencia === 'Alta' ? 'bg-red-100 text-red-700' : sol.urgencia === 'Média' ? 'bg-yellow-100 text-yellow-700' : 'bg-green-100 text-green-700'}`}>
+                          {sol.urgencia ? `Urgência: ${sol.urgencia}` : 'Urgência: Média'}
                         </span>
                       </div>
-                      <p className="text-sm font-bold text-gray-800 truncate mt-1" title={reg.produto}>{reg.produto || 'Produto não informado'}</p>
-                      <p className="text-xs text-gray-600 truncate" title={reg.ocorrencia}>{reg.ocorrencia}</p>
-                      <div className="mt-2 flex gap-2">
-                        <button onClick={() => setEvaluatingRegistro(reg)} className="flex-1 bg-purple-100 hover:bg-purple-200 text-purple-700 py-1.5 rounded text-xs font-bold transition flex justify-center items-center gap-1"><CheckCircle size={14}/> Avaliar</button>
-                        <button onClick={() => shareViaWhatsApp(reg)} className="bg-green-100 hover:bg-green-200 text-green-700 px-2 py-1.5 rounded text-xs transition flex justify-center items-center" title="Cobrar por WhatsApp"><MessageCircle size={14}/></button>
+
+                      <div className="pl-2">
+                        <p className="text-sm font-bold text-gray-800 truncate" title={sol.produto}>{sol.produto}</p>
+                        <p className="text-xs font-semibold text-indigo-600 mt-0.5">Solicitante: {sol.solicitante || 'Não informado'}</p>
+                        <p className="text-[11px] text-gray-500 mt-0.5">{sol.tipoRelatorio}</p>
                       </div>
+
+                      <p className="text-xs text-gray-600 line-clamp-2 pl-2 border-t border-gray-100 pt-1 mt-1">{sol.descricao}</p>
+                      <button onClick={() => {
+                        const formImages = (sol.imagens || []).map(b64 => ({ isObject: true, id: Date.now() + Math.random(), baseSrc: b64, displaySrc: b64, shapes: [] }));
+                        setFormData({ ...getEmptyForm(), ...sol, imagens: formImages });
+                        setEditingReportId(null);
+                        setView('form');
+                        window.scrollTo(0, 0);
+                        if (db && isConfigured) updateDoc(doc(db, 'artifacts', appId, 'public', 'data', 'solicitacoes', sol.id), { status: 'Atendido' }).catch(() => { });
+                        setSolicitacoes(prev => { const n = prev.map(s => s.id === sol.id ? { ...s, status: 'Atendido' } : s); saveToLocalStorage('imac_solicitacoes', n); return n; });
+                      }} className="mt-2 w-full bg-blue-600 hover:bg-blue-700 text-white py-1.5 rounded text-xs font-bold transition flex items-center justify-center gap-1"><Plus size={14} /> Criar Relatório</button>
                     </div>
-                  );
-                })}
+                  ))}
+                </div>
               </div>
-            </div>
-          )}
+            )}
 
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
-            <div className="bg-white p-5 rounded-xl shadow-sm border-t-4 border-[#5C3A21]"><p className="text-xs font-bold text-gray-500 uppercase">Total no Período</p><p className="text-3xl font-black text-[#5C3A21] mt-1">{filteredRecords.length}</p></div>
-            <div className="bg-white p-5 rounded-xl shadow-sm border-t-4 border-[#EF4444]"><p className="text-xs font-bold text-gray-500 uppercase">Fornecedores</p><p className="text-3xl font-black text-[#5C3A21] mt-1">{Object.keys(fornecedorCounts).length}</p></div>
-            <div className="bg-white p-5 rounded-xl shadow-sm border-t-4 border-[#F4B41A]"><p className="text-xs font-bold text-gray-500 uppercase">Tipos</p><p className="text-3xl font-black text-[#5C3A21] mt-1">{pieData.length}</p></div>
-            <div className="bg-white p-5 rounded-xl shadow-sm border-t-4 border-[#22C55E]"><p className="text-xs font-bold text-gray-500 uppercase">Período</p><p className="text-sm font-black text-[#5C3A21] mt-1">{dashboardFilters.periodo.replace('_', ' ').toUpperCase()}</p></div>
-          </div>
-
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
-            {pieData.length > 0 && <PieChartComponent data={pieData} title="Distribuição por Tipo" />}
-            {tipoBarras.some(t => t.value > 0) && <BarChart data={tipoBarras} title="Ocorrências por Tipo" />}
-          </div>
-          
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
-            {pieStatusData.length > 0 && <PieChartComponent data={pieStatusData} title="Status dos Relatórios" />}
-            {produtoBarData.length > 0 && <BarChart data={produtoBarData} title="Top 5 Produtos Problemáticos" color="#8B5CF6" />}
-          </div>
-          
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
-            {barData.length > 0 && <BarChart data={barData} title="Top 10 Fornecedores" color="#EF4444" />}
-            {clienteBarData.length > 0 && <BarChart data={clienteBarData} title="Top 10 Clientes" color="#4F46E5" />}
-          </div>
-
-          <div className="bg-white rounded-xl shadow-sm overflow-hidden border border-gray-200">
-            <div className="bg-gray-50 px-6 py-4 border-b border-gray-200 flex justify-between items-center">
-              <h2 className="font-bold text-gray-700">Histórico de Emissões <span className="text-gray-400 font-normal ml-2">({filteredRecords.length} registros)</span></h2>
-            </div>
-            <div className="overflow-x-auto">
-              <table className="w-full text-left text-sm">
-                <thead className="bg-gray-50 text-gray-500"><tr><th className="px-4 py-3 font-bold">Data</th><th className="px-4 py-3 font-bold">Tipo</th><th className="px-4 py-3 font-bold">Produto</th><th className="px-4 py-3 font-bold">Autor</th><th className="px-4 py-3 font-bold">Ocorrência</th><th className="px-4 py-3 font-bold">Status</th><th className="px-4 py-3 font-bold text-center">Ações</th></tr></thead>
-                <tbody className="divide-y divide-gray-100">
-                  {filteredRecords.length === 0 ? <tr><td colSpan="7" className="text-center py-8 text-gray-400">Nenhum registro encontrado.</td></tr> : 
-                    filteredRecords.map(reg => (
-                      <tr key={reg.id || Math.random()} className="hover:bg-gray-50 transition">
-                        <td className="px-4 py-3 whitespace-nowrap text-xs">{safeDate(reg.dataCriacao)}</td>
-                        <td className="px-4 py-3"><span className="bg-gray-200 text-gray-800 px-2 py-1 rounded-full text-xs font-bold whitespace-nowrap">{reg.tipoRelatorio === 'Relatório de Não Conformidade - Cliente' ? 'Cliente' : (reg.tipoRelatorio || 'Desconhecido')}</span></td>
-                        <td className="px-4 py-3 font-medium text-gray-800 max-w-[150px] truncate" title={reg.produto || ''}>{reg.produto || ''}</td>
-                        <td className="px-4 py-3 text-gray-500 max-w-[120px] truncate text-xs" title={reg.autorNome || ''}>{typeof reg.autorNome === 'string' ? reg.autorNome.split(' ')[0] : 'Desconhecido'}</td>
-                        <td className="px-4 py-3 text-gray-600 max-w-[200px] truncate" title={reg.ocorrencia || ''}>{reg.ocorrencia || ''}</td>
-                        <td className="px-4 py-3">
+            {pendingRecords.length > 0 && (
+              <div className="mb-6 bg-orange-50 border-l-4 border-orange-500 p-4 rounded-r-xl shadow-sm animate-fade-in-up">
+                <div className="flex items-center gap-2 mb-3">
+                  <Clock size={20} className="text-orange-600" />
+                  <h2 className="text-lg font-bold text-orange-800">Atenção: Relatórios Pendentes de Avaliação ({pendingRecords.length})</h2>
+                </div>
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+                  {pendingRecords.map(reg => {
+                    const dias = getPendingDays(reg.dataCriacao);
+                    return (
+                      <div key={reg.id} className="bg-white p-3 rounded-lg border border-orange-200 shadow-sm flex flex-col gap-2">
+                        <div className="flex justify-between items-start">
                           <div className="flex flex-col gap-1 items-start">
-                            <span className={`px-2 py-1 rounded-md text-[11px] font-bold whitespace-nowrap border tracking-wide uppercase ${
-                              (!reg.status || reg.status === 'Pendente') ? 'bg-yellow-50 text-yellow-700 border-yellow-200' :
-                              reg.status === 'Liberado' ? 'bg-green-50 text-green-700 border-green-200' :
-                              'bg-red-50 text-red-700 border-red-200'
-                            }`}>
-                              {reg.status || 'Pendente'}
-                            </span>
-                            <span className={`px-2 py-1 rounded-md text-[10px] font-bold whitespace-nowrap border tracking-wide uppercase flex items-center gap-1 ${
-                              reg.enviado ? 'bg-blue-50 text-blue-700 border-blue-200' : 'bg-gray-100 text-gray-500 border-gray-200'
-                            }`}>
+                            <span className="text-xs font-bold bg-orange-100 text-orange-800 px-2 py-1 rounded">ID: {String(reg.id).substring(0, 6)}</span>
+                            <span className={`text-[10px] font-bold px-1.5 py-0.5 rounded flex items-center gap-1 border ${reg.enviado ? 'bg-blue-50 text-blue-700 border-blue-200' : 'bg-gray-100 text-gray-500 border-gray-200'}`}>
                               <Send size={10} /> {reg.enviado ? 'Enviado' : 'Não Enviado'}
                             </span>
                           </div>
-                        </td>
-                        <td className="px-4 py-3 text-center">
-                          <div className="flex items-center justify-center gap-1">
-                            {appUser?.isManager && (
-                               <button onClick={() => handleDarVisto(reg)} className="text-pink-600 hover:text-pink-800 bg-pink-50 hover:bg-pink-100 p-2 rounded-lg transition" title="Dar Visto (Assinar)"><PenTool size={16} /></button>
-                            )}
-                            <button onClick={() => setEvaluatingRegistro(reg)} className="text-purple-600 hover:text-purple-800 bg-purple-50 hover:bg-purple-100 p-2 rounded-lg transition" title="Avaliar / Marcar Envio"><CheckCircle size={16} /></button>
-                            <button onClick={() => shareViaWhatsApp(reg)} className="text-green-600 hover:text-green-800 bg-green-50 hover:bg-green-100 p-2 rounded-lg transition" title="Cobrar por WhatsApp"><MessageCircle size={16} /></button>
-                            <button onClick={() => { startEditingReport(reg); setView('preview'); }} className="text-blue-600 hover:text-blue-800 bg-blue-50 hover:bg-blue-100 p-2 rounded-lg transition" title="Visualizar Documento"><Eye size={16} /></button>
-                            <button onClick={() => startEditingReport(reg)} className="text-yellow-600 hover:text-yellow-800 bg-yellow-50 hover:bg-yellow-100 p-2 rounded-lg transition" title="Editar este Relatório"><Edit3 size={16} /></button>
-                            <button onClick={() => setRegistroToDelete(reg.id)} className="text-gray-400 hover:text-red-600 bg-gray-100 hover:bg-red-50 p-2 rounded-lg transition" title="Apagar"><Trash2 size={16} /></button>
-                          </div>
-                        </td>
-                      </tr>
-                    ))
-                  }
-                </tbody>
-              </table>
+                          <span className={`text-xs font-bold px-2 py-1 rounded ${dias > 3 ? 'bg-red-100 text-red-700' : 'bg-yellow-100 text-yellow-700'}`}>
+                            {dias === 0 ? 'Criado hoje' : `${dias} dia${dias > 1 ? 's' : ''} parado`}
+                          </span>
+                        </div>
+                        <p className="text-sm font-bold text-gray-800 truncate mt-1" title={reg.produto}>{reg.produto || 'Produto não informado'}</p>
+                        <p className="text-xs text-gray-600 truncate" title={reg.ocorrencia}>{reg.ocorrencia}</p>
+                        <div className="mt-2 flex gap-2">
+                          <button onClick={() => setEvaluatingRegistro(reg)} className="flex-1 bg-purple-100 hover:bg-purple-200 text-purple-700 py-1.5 rounded text-xs font-bold transition flex justify-center items-center gap-1"><CheckCircle size={14} /> Avaliar</button>
+                          <button onClick={() => shareViaWhatsApp(reg)} className="bg-green-100 hover:bg-green-200 text-green-700 px-2 py-1.5 rounded text-xs transition flex justify-center items-center" title="Cobrar por WhatsApp"><MessageCircle size={14} /></button>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+            )}
+
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+              <div className="bg-white p-5 rounded-xl shadow-sm border-t-4 border-[#5C3A21]"><p className="text-xs font-bold text-gray-500 uppercase">Total no Período</p><p className="text-3xl font-black text-[#5C3A21] mt-1">{filteredRecords.length}</p></div>
+              <div className="bg-white p-5 rounded-xl shadow-sm border-t-4 border-[#EF4444]"><p className="text-xs font-bold text-gray-500 uppercase">Fornecedores</p><p className="text-3xl font-black text-[#5C3A21] mt-1">{Object.keys(fornecedorCounts).length}</p></div>
+              <div className="bg-white p-5 rounded-xl shadow-sm border-t-4 border-[#F4B41A]"><p className="text-xs font-bold text-gray-500 uppercase">Tipos</p><p className="text-3xl font-black text-[#5C3A21] mt-1">{pieData.length}</p></div>
+              <div className="bg-white p-5 rounded-xl shadow-sm border-t-4 border-[#22C55E]"><p className="text-xs font-bold text-gray-500 uppercase">Período</p><p className="text-sm font-black text-[#5C3A21] mt-1">{dashboardFilters.periodo.replace('_', ' ').toUpperCase()}</p></div>
             </div>
-          </div>
-          <div className="text-center mt-8 text-xs text-gray-400 no-print">Desenvolvido por: Cristiamberg</div>
+
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+              {pieData.length > 0 && <PieChartComponent data={pieData} title="Distribuição por Tipo" />}
+              {tipoBarras.some(t => t.value > 0) && <BarChart data={tipoBarras} title="Ocorrências por Tipo" />}
+            </div>
+
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+              {pieStatusData.length > 0 && <PieChartComponent data={pieStatusData} title="Status dos Relatórios" />}
+              {produtoBarData.length > 0 && <BarChart data={produtoBarData} title="Top 5 Produtos Problemáticos" color="#8B5CF6" />}
+            </div>
+
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+              {barData.length > 0 && <BarChart data={barData} title="Top 10 Fornecedores" color="#EF4444" />}
+              {clienteBarData.length > 0 && <BarChart data={clienteBarData} title="Top 10 Clientes" color="#4F46E5" />}
+            </div>
+
+            <div className="bg-white rounded-xl shadow-sm overflow-hidden border border-gray-200">
+              <div className="bg-gray-50 px-6 py-4 border-b border-gray-200 flex justify-between items-center">
+                <h2 className="font-bold text-gray-700">Histórico de Emissões <span className="text-gray-400 font-normal ml-2">({filteredRecords.length} registros)</span></h2>
+              </div>
+              <div className="overflow-x-auto">
+                <table className="w-full text-left text-sm">
+                  <thead className="bg-gray-50 text-gray-500"><tr><th className="px-4 py-3 font-bold">Data</th><th className="px-4 py-3 font-bold">Tipo</th><th className="px-4 py-3 font-bold">Produto</th><th className="px-4 py-3 font-bold">Autor</th><th className="px-4 py-3 font-bold">Ocorrência</th><th className="px-4 py-3 font-bold">Status</th><th className="px-4 py-3 font-bold text-center">Ações</th></tr></thead>
+                  <tbody className="divide-y divide-gray-100">
+                    {filteredRecords.length === 0 ? <tr><td colSpan="7" className="text-center py-8 text-gray-400">Nenhum registro encontrado.</td></tr> :
+                      filteredRecords.map(reg => (
+                        <tr key={reg.id || Math.random()} className="hover:bg-gray-50 transition">
+                          <td className="px-4 py-3 whitespace-nowrap text-xs">{safeDate(reg.dataCriacao)}</td>
+                          <td className="px-4 py-3"><span className="bg-gray-200 text-gray-800 px-2 py-1 rounded-full text-xs font-bold whitespace-nowrap">{reg.tipoRelatorio === 'Relatório de Não Conformidade - Cliente' ? 'Cliente' : (reg.tipoRelatorio || 'Desconhecido')}</span></td>
+                          <td className="px-4 py-3 font-medium text-gray-800 max-w-[150px] truncate" title={reg.produto || ''}>{reg.produto || ''}</td>
+                          <td className="px-4 py-3 text-gray-500 max-w-[120px] truncate text-xs" title={reg.autorNome || ''}>{typeof reg.autorNome === 'string' ? reg.autorNome.split(' ')[0] : 'Desconhecido'}</td>
+                          <td className="px-4 py-3 text-gray-600 max-w-[200px] truncate" title={reg.ocorrencia || ''}>{reg.ocorrencia || ''}</td>
+                          <td className="px-4 py-3">
+                            <div className="flex flex-col gap-1 items-start">
+                              <span className={`px-2 py-1 rounded-md text-[11px] font-bold whitespace-nowrap border tracking-wide uppercase ${(!reg.status || reg.status === 'Pendente') ? 'bg-yellow-50 text-yellow-700 border-yellow-200' :
+                                reg.status === 'Liberado' ? 'bg-green-50 text-green-700 border-green-200' :
+                                  'bg-red-50 text-red-700 border-red-200'
+                                }`}>
+                                {reg.status || 'Pendente'}
+                              </span>
+                              <span className={`px-2 py-1 rounded-md text-[10px] font-bold whitespace-nowrap border tracking-wide uppercase flex items-center gap-1 ${reg.enviado ? 'bg-blue-50 text-blue-700 border-blue-200' : 'bg-gray-100 text-gray-500 border-gray-200'
+                                }`}>
+                                <Send size={10} /> {reg.enviado ? 'Enviado' : 'Não Enviado'}
+                              </span>
+                            </div>
+                          </td>
+                          <td className="px-4 py-3 text-center">
+                            <div className="flex items-center justify-center gap-1">
+                              {appUser?.isManager && (
+                                <button onClick={() => handleDarVisto(reg)} className="text-pink-600 hover:text-pink-800 bg-pink-50 hover:bg-pink-100 p-2 rounded-lg transition" title="Dar Visto (Assinar)"><PenTool size={16} /></button>
+                              )}
+                              <button onClick={() => setEvaluatingRegistro(reg)} className="text-purple-600 hover:text-purple-800 bg-purple-50 hover:bg-purple-100 p-2 rounded-lg transition" title="Avaliar / Marcar Envio"><CheckCircle size={16} /></button>
+                              <button onClick={() => shareViaWhatsApp(reg)} className="text-green-600 hover:text-green-800 bg-green-50 hover:bg-green-100 p-2 rounded-lg transition" title="Cobrar por WhatsApp"><MessageCircle size={16} /></button>
+                              <button onClick={() => { startEditingReport(reg); setView('preview'); }} className="text-blue-600 hover:text-blue-800 bg-blue-50 hover:bg-blue-100 p-2 rounded-lg transition" title="Visualizar Documento"><Eye size={16} /></button>
+                              <button onClick={() => startEditingReport(reg)} className="text-yellow-600 hover:text-yellow-800 bg-yellow-50 hover:bg-yellow-100 p-2 rounded-lg transition" title="Editar este Relatório"><Edit3 size={16} /></button>
+                              <button onClick={() => setRegistroToDelete(reg.id)} className="text-gray-400 hover:text-red-600 bg-gray-100 hover:bg-red-50 p-2 rounded-lg transition" title="Apagar"><Trash2 size={16} /></button>
+                            </div>
+                          </td>
+                        </tr>
+                      ))
+                    }
+                  </tbody>
+                </table>
+              </div>
+            </div>
+            <div className="text-center mt-8 text-xs text-gray-400 no-print">Desenvolvido por: Cristiamberg</div>
           </>)} {/* fim activeModule === dashboard */}
 
           {/* ===================== MÓDULO: RNC CLIENTE ===================== */}
@@ -3076,7 +3073,7 @@ const handleUpdatePermissions = async (uid, newIsAdmin, newCanApprove, newIsMana
                 {/* Formulário de nova RNC Cliente (interno) */}
                 <div className="md:w-80 shrink-0">
                   <div className="bg-white rounded-xl shadow-sm border border-orange-200 border-t-4 border-t-orange-500 p-5">
-                    <h2 className="font-black text-orange-700 text-lg mb-4 flex items-center gap-2"><AlertCircle size={20}/> Registrar NC do Cliente</h2>
+                    <h2 className="font-black text-orange-700 text-lg mb-4 flex items-center gap-2"><AlertCircle size={20} /> Registrar NC do Cliente</h2>
                     <div className="space-y-3 text-sm">
                       {[
                         { label: 'Cliente / Empresa *', key: 'nomeCliente', placeholder: 'Ex: Supermercado ABC' },
@@ -3089,14 +3086,14 @@ const handleUpdatePermissions = async (uid, newIsAdmin, newCanApprove, newIsMana
                       ].map(f => (
                         <div key={f.key}>
                           <label className="block font-bold text-gray-700 mb-1">{f.label}</label>
-                          <input type="text" value={rncClienteExtForm[f.key] || ''} onChange={e => setRncClienteExtForm({...rncClienteExtForm, [f.key]: e.target.value})} placeholder={f.placeholder} className="w-full border border-gray-300 p-2 rounded-lg focus:ring-2 focus:ring-orange-400 outline-none" />
+                          <input type="text" value={rncClienteExtForm[f.key] || ''} onChange={e => setRncClienteExtForm({ ...rncClienteExtForm, [f.key]: e.target.value })} placeholder={f.placeholder} className="w-full border border-gray-300 p-2 rounded-lg focus:ring-2 focus:ring-orange-400 outline-none" />
                         </div>
                       ))}
                       <div>
                         <label className="block font-bold text-gray-700 mb-1">Descrição da NC *</label>
-                        <textarea rows="3" value={rncClienteExtForm.descricao || ''} onChange={e => setRncClienteExtForm({...rncClienteExtForm, descricao: e.target.value})} placeholder="Descreva o problema..." className="w-full border border-gray-300 p-2 rounded-lg focus:ring-2 focus:ring-orange-400 outline-none resize-y"></textarea>
+                        <textarea rows="3" value={rncClienteExtForm.descricao || ''} onChange={e => setRncClienteExtForm({ ...rncClienteExtForm, descricao: e.target.value })} placeholder="Descreva o problema..." className="w-full border border-gray-300 p-2 rounded-lg focus:ring-2 focus:ring-orange-400 outline-none resize-y"></textarea>
                       </div>
-                      <button onClick={async () => { if (!rncClienteExtForm.nomeCliente || !rncClienteExtForm.produto || !rncClienteExtForm.lote) { setAppMessage('⚠️ Preencha os campos obrigatórios.'); setTimeout(()=>setAppMessage(null),3000); return; } await submitRncClienteExt(rncClienteExtForm); setRncClienteExtForm({ nomeCliente: '', produto: '', lote: '', validade: '', dataOcorrencia: '', descricao: '', quantidade: '', contato: '' }); }} className="w-full bg-orange-500 text-white font-bold py-2.5 rounded-lg hover:bg-orange-600 transition shadow-sm flex items-center justify-center gap-2"><Plus size={16}/> Registrar NC</button>
+                      <button onClick={async () => { if (!rncClienteExtForm.nomeCliente || !rncClienteExtForm.produto || !rncClienteExtForm.lote) { setAppMessage('⚠️ Preencha os campos obrigatórios.'); setTimeout(() => setAppMessage(null), 3000); return; } await submitRncClienteExt(rncClienteExtForm); setRncClienteExtForm({ nomeCliente: '', produto: '', lote: '', validade: '', dataOcorrencia: '', descricao: '', quantidade: '', contato: '' }); }} className="w-full bg-orange-500 text-white font-bold py-2.5 rounded-lg hover:bg-orange-600 transition shadow-sm flex items-center justify-center gap-2"><Plus size={16} /> Registrar NC</button>
                     </div>
                     <div className="mt-4 pt-4 border-t border-orange-100">
                       <p className="text-xs text-gray-500 font-bold mb-2">🔗 Link para clientes registrarem diretamente:</p>
@@ -3110,11 +3107,11 @@ const handleUpdatePermissions = async (uid, newIsAdmin, newCanApprove, newIsMana
                 <div className="flex-1">
                   <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
                     <div className="bg-orange-50 px-5 py-4 border-b border-orange-100 flex justify-between items-center">
-                      <h2 className="font-bold text-orange-800 flex items-center gap-2"><ShoppingBag size={18}/> Não Conformidades de Clientes <span className="text-orange-500 font-normal">({rncClientesExt.length} registros)</span></h2>
+                      <h2 className="font-bold text-orange-800 flex items-center gap-2"><ShoppingBag size={18} /> Não Conformidades de Clientes <span className="text-orange-500 font-normal">({rncClientesExt.length} registros)</span></h2>
                     </div>
                     <div className="divide-y divide-gray-100">
                       {rncClientesExt.length === 0 ? (
-                        <div className="text-center py-12 text-gray-400"><AlertCircle size={32} className="mx-auto mb-2 opacity-30"/><p>Nenhuma NC de cliente registrada ainda.</p></div>
+                        <div className="text-center py-12 text-gray-400"><AlertCircle size={32} className="mx-auto mb-2 opacity-30" /><p>Nenhuma NC de cliente registrada ainda.</p></div>
                       ) : rncClientesExt.map(rnc => (
                         <div key={rnc.id} className="p-4 hover:bg-gray-50 transition">
                           <div className="flex justify-between items-start gap-3 flex-wrap">
@@ -3132,7 +3129,7 @@ const handleUpdatePermissions = async (uid, newIsAdmin, newCanApprove, newIsMana
                               <select value={rnc.status || 'Pendente'} onChange={e => updateStatusRncCliente(rnc.id, e.target.value)} className="text-xs border border-gray-300 rounded-lg p-1.5 outline-none font-bold">
                                 <option>Pendente</option><option>Em andamento</option><option>Concluído</option>
                               </select>
-                              <button onClick={() => criarRelDeRncCliente(rnc)} className="bg-[#5C3A21] text-white text-xs font-bold py-1.5 px-3 rounded-lg hover:bg-[#4a2e1a] transition flex items-center gap-1 justify-center"><FileText size={12}/> Criar Relatório</button>
+                              <button onClick={() => criarRelDeRncCliente(rnc)} className="bg-[#5C3A21] text-white text-xs font-bold py-1.5 px-3 rounded-lg hover:bg-[#4a2e1a] transition flex items-center gap-1 justify-center"><FileText size={12} /> Criar Relatório</button>
                             </div>
                           </div>
                         </div>
@@ -3151,7 +3148,7 @@ const handleUpdatePermissions = async (uid, newIsAdmin, newCanApprove, newIsMana
                 {/* Formulário de nova NC Interna */}
                 <div className="md:w-80 shrink-0">
                   <div className="bg-white rounded-xl shadow-sm border border-blue-200 border-t-4 border-t-blue-600 p-5">
-                    <h2 className="font-black text-blue-700 text-lg mb-4 flex items-center gap-2"><Building2 size={20}/> Registrar NC Interna</h2>
+                    <h2 className="font-black text-blue-700 text-lg mb-4 flex items-center gap-2"><Building2 size={20} /> Registrar NC Interna</h2>
                     <div className="space-y-3 text-sm">
                       {[
                         { label: 'Setor / Área *', key: 'setor', placeholder: 'Ex: Produção, Embalagem...' },
@@ -3163,19 +3160,19 @@ const handleUpdatePermissions = async (uid, newIsAdmin, newCanApprove, newIsMana
                       ].map(f => (
                         <div key={f.key}>
                           <label className="block font-bold text-gray-700 mb-1">{f.label}</label>
-                          <input type="text" value={(rncClienteExtForm[f.key] !== undefined ? rncClienteExtForm[f.key] : '')} onChange={e => setRncClienteExtForm({...rncClienteExtForm, [f.key]: e.target.value})} placeholder={f.placeholder} className="w-full border border-gray-300 p-2 rounded-lg focus:ring-2 focus:ring-blue-400 outline-none" />
+                          <input type="text" value={(rncClienteExtForm[f.key] !== undefined ? rncClienteExtForm[f.key] : '')} onChange={e => setRncClienteExtForm({ ...rncClienteExtForm, [f.key]: e.target.value })} placeholder={f.placeholder} className="w-full border border-gray-300 p-2 rounded-lg focus:ring-2 focus:ring-blue-400 outline-none" />
                         </div>
                       ))}
                       <div>
                         <label className="block font-bold text-gray-700 mb-1">Descrição da NC *</label>
-                        <textarea rows="3" value={rncClienteExtForm.descricao || ''} onChange={e => setRncClienteExtForm({...rncClienteExtForm, descricao: e.target.value})} placeholder="Descreva o problema interno..." className="w-full border border-gray-300 p-2 rounded-lg focus:ring-2 focus:ring-blue-400 outline-none resize-y"></textarea>
+                        <textarea rows="3" value={rncClienteExtForm.descricao || ''} onChange={e => setRncClienteExtForm({ ...rncClienteExtForm, descricao: e.target.value })} placeholder="Descreva o problema interno..." className="w-full border border-gray-300 p-2 rounded-lg focus:ring-2 focus:ring-blue-400 outline-none resize-y"></textarea>
                       </div>
                       <button onClick={async () => {
                         const d = rncClienteExtForm;
-                        if (!d.setor || !d.produto) { setAppMessage('⚠️ Preencha setor e produto.'); setTimeout(()=>setAppMessage(null),3000); return; }
+                        if (!d.setor || !d.produto) { setAppMessage('⚠️ Preencha setor e produto.'); setTimeout(() => setAppMessage(null), 3000); return; }
                         await submitRncInterna({ setor: d.setor, produto: d.produto, lote: d.lote, quantidade: d.quantidade, dataOcorrencia: d.dataOcorrencia, horario: d.horario, descricao: d.descricao });
                         setRncClienteExtForm({ nomeCliente: '', produto: '', lote: '', validade: '', dataOcorrencia: '', descricao: '', quantidade: '', contato: '' });
-                      }} className="w-full bg-blue-600 text-white font-bold py-2.5 rounded-lg hover:bg-blue-700 transition shadow-sm flex items-center justify-center gap-2"><Plus size={16}/> Registrar NC Interna</button>
+                      }} className="w-full bg-blue-600 text-white font-bold py-2.5 rounded-lg hover:bg-blue-700 transition shadow-sm flex items-center justify-center gap-2"><Plus size={16} /> Registrar NC Interna</button>
                     </div>
                   </div>
                 </div>
@@ -3184,11 +3181,11 @@ const handleUpdatePermissions = async (uid, newIsAdmin, newCanApprove, newIsMana
                 <div className="flex-1">
                   <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
                     <div className="bg-blue-50 px-5 py-4 border-b border-blue-100 flex justify-between items-center">
-                      <h2 className="font-bold text-blue-800 flex items-center gap-2"><Building2 size={18}/> Não Conformidades Internas <span className="text-blue-500 font-normal">({rncInternas.length} registros)</span></h2>
+                      <h2 className="font-bold text-blue-800 flex items-center gap-2"><Building2 size={18} /> Não Conformidades Internas <span className="text-blue-500 font-normal">({rncInternas.length} registros)</span></h2>
                     </div>
                     <div className="divide-y divide-gray-100">
                       {rncInternas.length === 0 ? (
-                        <div className="text-center py-12 text-gray-400"><Building2 size={32} className="mx-auto mb-2 opacity-30"/><p>Nenhuma NC interna registrada ainda.</p></div>
+                        <div className="text-center py-12 text-gray-400"><Building2 size={32} className="mx-auto mb-2 opacity-30" /><p>Nenhuma NC interna registrada ainda.</p></div>
                       ) : rncInternas.map(rnc => (
                         <div key={rnc.id} className="p-4 hover:bg-gray-50 transition">
                           <div className="flex justify-between items-start gap-3 flex-wrap">
@@ -3205,7 +3202,7 @@ const handleUpdatePermissions = async (uid, newIsAdmin, newCanApprove, newIsMana
                               <select value={rnc.status || 'Pendente'} onChange={e => updateStatusRncInterna(rnc.id, e.target.value)} className="text-xs border border-gray-300 rounded-lg p-1.5 outline-none font-bold">
                                 <option>Pendente</option><option>Em andamento</option><option>Concluído</option>
                               </select>
-                              <button onClick={() => criarRelDeRncInterna(rnc)} className="bg-[#5C3A21] text-white text-xs font-bold py-1.5 px-3 rounded-lg hover:bg-[#4a2e1a] transition flex items-center gap-1 justify-center"><FileText size={12}/> Criar Relatório</button>
+                              <button onClick={() => criarRelDeRncInterna(rnc)} className="bg-[#5C3A21] text-white text-xs font-bold py-1.5 px-3 rounded-lg hover:bg-[#4a2e1a] transition flex items-center gap-1 justify-center"><FileText size={12} /> Criar Relatório</button>
                             </div>
                           </div>
                         </div>
@@ -3224,11 +3221,11 @@ const handleUpdatePermissions = async (uid, newIsAdmin, newCanApprove, newIsMana
                 {/* Formulário */}
                 <div className="md:w-80 shrink-0">
                   <div className="bg-white rounded-xl shadow-sm border border-purple-200 border-t-4 border-t-purple-600 p-5">
-                    <h2 className="font-black text-purple-700 text-lg mb-4 flex items-center gap-2"><Truck size={20}/> Nova Solicitação ao Fornecedor</h2>
+                    <h2 className="font-black text-purple-700 text-lg mb-4 flex items-center gap-2"><Truck size={20} /> Nova Solicitação ao Fornecedor</h2>
                     <div className="space-y-3 text-sm">
                       <div>
                         <label className="block font-bold text-gray-700 mb-1">Fornecedor *</label>
-                        <select value={solFornecedorForm.fornecedor} onChange={e => setSolFornecedorForm({...solFornecedorForm, fornecedor: e.target.value})} className="w-full border border-gray-300 p-2 rounded-lg focus:ring-2 focus:ring-purple-400 outline-none">
+                        <select value={solFornecedorForm.fornecedor} onChange={e => setSolFornecedorForm({ ...solFornecedorForm, fornecedor: e.target.value })} className="w-full border border-gray-300 p-2 rounded-lg focus:ring-2 focus:ring-purple-400 outline-none">
                           <option value="">Selecione...</option>
                           {fornecedores.map((f, i) => <option key={i} value={f}>{f}</option>)}
                         </select>
@@ -3242,24 +3239,24 @@ const handleUpdatePermissions = async (uid, newIsAdmin, newCanApprove, newIsMana
                       ].map(f => (
                         <div key={f.key}>
                           <label className="block font-bold text-gray-700 mb-1">{f.label}</label>
-                          <input type="text" value={solFornecedorForm[f.key] || ''} onChange={e => setSolFornecedorForm({...solFornecedorForm, [f.key]: e.target.value})} placeholder={f.placeholder} className="w-full border border-gray-300 p-2 rounded-lg focus:ring-2 focus:ring-purple-400 outline-none" />
+                          <input type="text" value={solFornecedorForm[f.key] || ''} onChange={e => setSolFornecedorForm({ ...solFornecedorForm, [f.key]: e.target.value })} placeholder={f.placeholder} className="w-full border border-gray-300 p-2 rounded-lg focus:ring-2 focus:ring-purple-400 outline-none" />
                         </div>
                       ))}
                       <div>
                         <label className="block font-bold text-gray-700 mb-1">Nível de Urgência</label>
-                        <select value={solFornecedorForm.urgencia} onChange={e => setSolFornecedorForm({...solFornecedorForm, urgencia: e.target.value})} className="w-full border border-gray-300 p-2 rounded-lg focus:ring-2 focus:ring-purple-400 outline-none font-bold">
+                        <select value={solFornecedorForm.urgencia} onChange={e => setSolFornecedorForm({ ...solFornecedorForm, urgencia: e.target.value })} className="w-full border border-gray-300 p-2 rounded-lg focus:ring-2 focus:ring-purple-400 outline-none font-bold">
                           <option value="Baixa">🟢 Baixa</option><option value="Média">🟡 Média</option><option value="Alta">🔴 Alta</option>
                         </select>
                       </div>
                       <div>
                         <label className="block font-bold text-gray-700 mb-1">Descrição / Motivo *</label>
-                        <textarea rows="3" value={solFornecedorForm.descricao || ''} onChange={e => setSolFornecedorForm({...solFornecedorForm, descricao: e.target.value})} placeholder="Descreva o que está sendo solicitado ao fornecedor..." className="w-full border border-gray-300 p-2 rounded-lg focus:ring-2 focus:ring-purple-400 outline-none resize-y"></textarea>
+                        <textarea rows="3" value={solFornecedorForm.descricao || ''} onChange={e => setSolFornecedorForm({ ...solFornecedorForm, descricao: e.target.value })} placeholder="Descreva o que está sendo solicitado ao fornecedor..." className="w-full border border-gray-300 p-2 rounded-lg focus:ring-2 focus:ring-purple-400 outline-none resize-y"></textarea>
                       </div>
                       <button onClick={async () => {
-                        if (!solFornecedorForm.fornecedor || !solFornecedorForm.produto || !solFornecedorForm.descricao) { setAppMessage('⚠️ Preencha fornecedor, produto e descrição.'); setTimeout(()=>setAppMessage(null),3000); return; }
+                        if (!solFornecedorForm.fornecedor || !solFornecedorForm.produto || !solFornecedorForm.descricao) { setAppMessage('⚠️ Preencha fornecedor, produto e descrição.'); setTimeout(() => setAppMessage(null), 3000); return; }
                         await submitSolFornecedor(solFornecedorForm);
                         setSolFornecedorForm({ fornecedor: '', produto: '', lote: '', nf: '', dataRecebimento: '', descricao: '', urgencia: 'Média', solicitante: '' });
-                      }} className="w-full bg-purple-600 text-white font-bold py-2.5 rounded-lg hover:bg-purple-700 transition shadow-sm flex items-center justify-center gap-2"><Plus size={16}/> Enviar Solicitação</button>
+                      }} className="w-full bg-purple-600 text-white font-bold py-2.5 rounded-lg hover:bg-purple-700 transition shadow-sm flex items-center justify-center gap-2"><Plus size={16} /> Enviar Solicitação</button>
                     </div>
                   </div>
                 </div>
@@ -3268,11 +3265,11 @@ const handleUpdatePermissions = async (uid, newIsAdmin, newCanApprove, newIsMana
                 <div className="flex-1">
                   <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
                     <div className="bg-purple-50 px-5 py-4 border-b border-purple-100">
-                      <h2 className="font-bold text-purple-800 flex items-center gap-2"><Truck size={18}/> Solicitações ao Fornecedor <span className="text-purple-500 font-normal">({solFornecedor.length} registros)</span></h2>
+                      <h2 className="font-bold text-purple-800 flex items-center gap-2"><Truck size={18} /> Solicitações ao Fornecedor <span className="text-purple-500 font-normal">({solFornecedor.length} registros)</span></h2>
                     </div>
                     <div className="divide-y divide-gray-100">
                       {solFornecedor.length === 0 ? (
-                        <div className="text-center py-12 text-gray-400"><Truck size={32} className="mx-auto mb-2 opacity-30"/><p>Nenhuma solicitação ao fornecedor ainda.</p></div>
+                        <div className="text-center py-12 text-gray-400"><Truck size={32} className="mx-auto mb-2 opacity-30" /><p>Nenhuma solicitação ao fornecedor ainda.</p></div>
                       ) : solFornecedor.map(sol => (
                         <div key={sol.id} className="p-4 hover:bg-gray-50 transition">
                           <div className="flex justify-between items-start gap-3 flex-wrap">
@@ -3290,7 +3287,7 @@ const handleUpdatePermissions = async (uid, newIsAdmin, newCanApprove, newIsMana
                               <select value={sol.status || 'Pendente'} onChange={e => updateStatusSolForn(sol.id, e.target.value)} className="text-xs border border-gray-300 rounded-lg p-1.5 outline-none font-bold">
                                 <option>Pendente</option><option>Em andamento</option><option>Atendido</option>
                               </select>
-                              <button onClick={() => { setFormData({ ...getEmptyForm(), tipoRelatorio: 'Problema com Fornecedor', fornecedor: sol.fornecedor || '', produto: sol.produto || '', lote: sol.lote || '', nf: sol.nf || '', dataRecebimento: sol.dataRecebimento || '', descricao: sol.descricao || '', ocorrencia: (sol.descricao || '').substring(0, 100) }); setEditingReportId(null); setView('form'); window.scrollTo(0,0); }} className="bg-[#5C3A21] text-white text-xs font-bold py-1.5 px-3 rounded-lg hover:bg-[#4a2e1a] transition flex items-center gap-1 justify-center"><FileText size={12}/> Criar Relatório</button>
+                              <button onClick={() => { setFormData({ ...getEmptyForm(), tipoRelatorio: 'Problema com Fornecedor', fornecedor: sol.fornecedor || '', produto: sol.produto || '', lote: sol.lote || '', nf: sol.nf || '', dataRecebimento: sol.dataRecebimento || '', descricao: sol.descricao || '', ocorrencia: (sol.descricao || '').substring(0, 100) }); setEditingReportId(null); setView('form'); window.scrollTo(0, 0); }} className="bg-[#5C3A21] text-white text-xs font-bold py-1.5 px-3 rounded-lg hover:bg-[#4a2e1a] transition flex items-center gap-1 justify-center"><FileText size={12} /> Criar Relatório</button>
                             </div>
                           </div>
                         </div>
@@ -3312,19 +3309,19 @@ const handleUpdatePermissions = async (uid, newIsAdmin, newCanApprove, newIsMana
     return (
       <div className="min-h-screen bg-[#f8f9fa] py-8 px-4 font-sans text-gray-800 relative">
         {appMessage && <div className="fixed top-4 right-4 z-[100] animate-fade-in-up"><div className="bg-white rounded-xl shadow-lg p-4 border-t-4 border-[#F4B41A] max-w-sm"><p className="text-sm font-medium text-gray-800">{appMessage}</p></div></div>}
-        
+
         {editingImageIndex !== null && (() => {
           const imgObj = formData.imagens && formData.imagens[editingImageIndex];
-          if(!imgObj) return null;
+          if (!imgObj) return null;
           const baseSrc = typeof imgObj === 'string' ? imgObj : imgObj.baseSrc;
           const initialShapes = typeof imgObj === 'string' ? [] : imgObj.shapes;
-          
+
           return (
-            <ImageAnnotator 
-              baseImageSrc={baseSrc} 
+            <ImageAnnotator
+              baseImageSrc={baseSrc}
               initialShapes={initialShapes}
-              onSave={updateAnnotatedImage} 
-              onCancel={() => setEditingImageIndex(null)} 
+              onSave={updateAnnotatedImage}
+              onCancel={() => setEditingImageIndex(null)}
             />
           );
         })()}
@@ -3338,13 +3335,13 @@ const handleUpdatePermissions = async (uid, newIsAdmin, newCanApprove, newIsMana
                   {editingReportId ? 'EDIÇÃO DE RNC' : 'SISTEMA DE EMISSÃO DE RNC'}
                 </h1>
                 <p className="text-sm font-semibold text-gray-500 uppercase tracking-wider">
-                  {editingReportId ? `Editando registro ${String(editingReportId).substring(0,6)}...` : `Operador Atual: ${userName}`}
+                  {editingReportId ? `Editando registro ${String(editingReportId).substring(0, 6)}...` : `Operador Atual: ${userName}`}
                 </p>
               </div>
             </div>
             <div className="flex gap-2">
               {editingReportId && (
-                 <button onClick={cancelEditing} className="flex items-center justify-center gap-1 bg-red-100 hover:bg-red-200 text-red-700 px-4 py-2 rounded-lg font-bold border border-red-200 transition">Cancelar Edição</button>
+                <button onClick={cancelEditing} className="flex items-center justify-center gap-1 bg-red-100 hover:bg-red-200 text-red-700 px-4 py-2 rounded-lg font-bold border border-red-200 transition">Cancelar Edição</button>
               )}
               <button onClick={() => { setView('dashboard'); window.scrollTo(0, 0); }} className="flex items-center justify-center gap-2 bg-gray-100 hover:bg-gray-200 text-gray-700 px-4 py-2 rounded-lg font-bold border border-gray-300 transition"><BarChart2 size={18} /> Painel de Registros</button>
             </div>
@@ -3396,32 +3393,32 @@ const handleUpdatePermissions = async (uid, newIsAdmin, newCanApprove, newIsMana
                   <h2 className="text-lg font-bold border-b-2 border-[#F4B41A] pb-2 text-[#5C3A21] mt-6">Dados do Produto</h2>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                     <div>
-                       <label className="block text-sm font-bold mb-1 text-gray-700 flex items-center gap-2">
-                         <Store size={16} className="text-[#5C3A21]" /> Clientes Afetados (Multipla Seleção)
-                       </label>
-                       <div className="flex flex-wrap items-center gap-2 mb-2 min-h-[32px]">
-                         {(!formData.lojasLocais || formData.lojasLocais.length === 0) && <span className="text-sm text-gray-400">Nenhum selecionado...</span>}
-                         {(formData.lojasLocais || []).map((loja, idx) => (
-                           <div key={idx} className="flex items-center gap-1 bg-indigo-50 border border-indigo-200 rounded-lg px-2 py-1">
-                             <span className="font-bold text-indigo-800 text-xs">{loja}</span>
-                             <button type="button" onClick={() => setFormData(p => ({ ...p, lojasLocais: p.lojasLocais.filter((_, i) => i !== idx) }))} className="text-indigo-400 hover:text-red-500 ml-1"><X size={14}/></button>
-                           </div>
-                         ))}
-                       </div>
-                       <ClienteSelect
-                         value={formData.lojasLocais || []}
-                         onChange={(novasLojas) => {
-                           if (Array.isArray(novasLojas)) {
-                               setFormData(prev => ({ ...prev, lojasLocais: novasLojas }));
-                           } else if (typeof novasLojas === 'string' && novasLojas !== '') {
-                               setFormData(prev => ({ ...prev, lojasLocais: [...(prev.lojasLocais || []), novasLojas] }));
-                           }
-                         }}
-                         clientes={clientes}
-                         onAddCliente={addCliente}
-                       />
+                      <label className="block text-sm font-bold mb-1 text-gray-700 flex items-center gap-2">
+                        <Store size={16} className="text-[#5C3A21]" /> Clientes Afetados (Multipla Seleção)
+                      </label>
+                      <div className="flex flex-wrap items-center gap-2 mb-2 min-h-[32px]">
+                        {(!formData.lojasLocais || formData.lojasLocais.length === 0) && <span className="text-sm text-gray-400">Nenhum selecionado...</span>}
+                        {(formData.lojasLocais || []).map((loja, idx) => (
+                          <div key={idx} className="flex items-center gap-1 bg-indigo-50 border border-indigo-200 rounded-lg px-2 py-1">
+                            <span className="font-bold text-indigo-800 text-xs">{loja}</span>
+                            <button type="button" onClick={() => setFormData(p => ({ ...p, lojasLocais: p.lojasLocais.filter((_, i) => i !== idx) }))} className="text-indigo-400 hover:text-red-500 ml-1"><X size={14} /></button>
+                          </div>
+                        ))}
+                      </div>
+                      <ClienteSelect
+                        value={formData.lojasLocais || []}
+                        onChange={(novasLojas) => {
+                          if (Array.isArray(novasLojas)) {
+                            setFormData(prev => ({ ...prev, lojasLocais: novasLojas }));
+                          } else if (typeof novasLojas === 'string' && novasLojas !== '') {
+                            setFormData(prev => ({ ...prev, lojasLocais: [...(prev.lojasLocais || []), novasLojas] }));
+                          }
+                        }}
+                        clientes={clientes}
+                        onAddCliente={addCliente}
+                      />
                     </div>
-                    
+
                     <div><label className="block text-sm font-bold mb-1 text-gray-700">Supervisor / Responsável</label><input type="text" maxLength={80} name="supervisor" value={formData.supervisor || ''} onChange={handleChange} placeholder="Ex: Rhadassa" className="w-full border border-gray-300 p-2.5 rounded focus:ring-2 focus:ring-[#F4B41A] outline-none shadow-sm" /></div>
                     <div><label className="block text-sm font-bold mb-1 text-gray-700">Produto ou Material</label><input type="text" maxLength={80} name="produto" value={formData.produto || ''} onChange={handleChange} placeholder={placeholders.produto} className="w-full border border-gray-300 p-2.5 rounded focus:ring-2 focus:ring-[#F4B41A] outline-none shadow-sm" /></div>
                     <div><label className="block text-sm font-bold mb-1 text-gray-700">Data de Fabricação</label><input type="text" maxLength={40} name="dataFabricacao" value={formData.dataFabricacao || ''} onChange={handleChange} placeholder="Ex: 14/08/25" className="w-full border border-gray-300 p-2.5 rounded focus:ring-2 focus:ring-[#F4B41A] outline-none shadow-sm" /></div>
@@ -3437,15 +3434,15 @@ const handleUpdatePermissions = async (uid, newIsAdmin, newCanApprove, newIsMana
                     <div className="mb-1"><label className="block text-sm font-bold text-gray-700">Descrição da Não Conformidade Apresentada</label></div>
                     <RichTextEditor value={formData.descricao || ''} onChange={(val) => setFormData(prev => ({ ...prev, descricao: val }))} placeholder={placeholders.descricao} />
                   </div>
-                  
+
                   <div>
-                     <label className="block text-sm font-bold mb-3 text-gray-700">Características do Produto</label>
-                     <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                       <div><label className="block text-xs font-bold mb-1 text-gray-500 uppercase">Sabor</label><input type="text" maxLength={40} name="sabor" value={formData.sabor || ''} onChange={handleChange} placeholder="Ex: Não informado" className="w-full border border-gray-300 p-2.5 rounded focus:ring-2 focus:ring-[#F4B41A] outline-none shadow-sm text-sm font-semibold" /></div>
-                       <div><label className="block text-xs font-bold mb-1 text-gray-500 uppercase">Odor</label><input type="text" maxLength={40} name="odor" value={formData.odor || ''} onChange={handleChange} placeholder="Ex: Não informado" className="w-full border border-gray-300 p-2.5 rounded focus:ring-2 focus:ring-[#F4B41A] outline-none shadow-sm text-sm font-semibold" /></div>
-                       <div><label className="block text-xs font-bold mb-1 text-gray-500 uppercase">Cor</label><input type="text" maxLength={40} name="cor" value={formData.cor || ''} onChange={handleChange} placeholder="Ex: Não informado" className="w-full border border-gray-300 p-2.5 rounded focus:ring-2 focus:ring-[#F4B41A] outline-none shadow-sm text-sm font-semibold" /></div>
-                       <div><label className="block text-xs font-bold mb-1 text-gray-500 uppercase">Temp. °C</label><input type="text" maxLength={40} name="temperatura" value={formData.temperatura || ''} onChange={handleChange} placeholder="Ex: Não informado" className="w-full border border-gray-300 p-2.5 rounded focus:ring-2 focus:ring-[#F4B41A] outline-none shadow-sm text-sm font-semibold" /></div>
-                     </div>
+                    <label className="block text-sm font-bold mb-3 text-gray-700">Características do Produto</label>
+                    <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                      <div><label className="block text-xs font-bold mb-1 text-gray-500 uppercase">Sabor</label><input type="text" maxLength={40} name="sabor" value={formData.sabor || ''} onChange={handleChange} placeholder="Ex: Não informado" className="w-full border border-gray-300 p-2.5 rounded focus:ring-2 focus:ring-[#F4B41A] outline-none shadow-sm text-sm font-semibold" /></div>
+                      <div><label className="block text-xs font-bold mb-1 text-gray-500 uppercase">Odor</label><input type="text" maxLength={40} name="odor" value={formData.odor || ''} onChange={handleChange} placeholder="Ex: Não informado" className="w-full border border-gray-300 p-2.5 rounded focus:ring-2 focus:ring-[#F4B41A] outline-none shadow-sm text-sm font-semibold" /></div>
+                      <div><label className="block text-xs font-bold mb-1 text-gray-500 uppercase">Cor</label><input type="text" maxLength={40} name="cor" value={formData.cor || ''} onChange={handleChange} placeholder="Ex: Não informado" className="w-full border border-gray-300 p-2.5 rounded focus:ring-2 focus:ring-[#F4B41A] outline-none shadow-sm text-sm font-semibold" /></div>
+                      <div><label className="block text-xs font-bold mb-1 text-gray-500 uppercase">Temp. °C</label><input type="text" maxLength={40} name="temperatura" value={formData.temperatura || ''} onChange={handleChange} placeholder="Ex: Não informado" className="w-full border border-gray-300 p-2.5 rounded focus:ring-2 focus:ring-[#F4B41A] outline-none shadow-sm text-sm font-semibold" /></div>
+                    </div>
                   </div>
                 </div>
 
@@ -3472,11 +3469,11 @@ const handleUpdatePermissions = async (uid, newIsAdmin, newCanApprove, newIsMana
                             </div>
                             <div className="absolute bottom-1 left-1 right-1 flex justify-between px-1 opacity-0 group-hover:opacity-100 transition">
                               {index > 0 ? (
-                                <button type="button" onClick={() => moveImage(index, -1)} className="bg-gray-800/80 text-white p-1 rounded hover:bg-gray-900 shadow" title="Mover para esquerda"><ChevronLeft size={16}/></button>
-                              ) : <div/>}
+                                <button type="button" onClick={() => moveImage(index, -1)} className="bg-gray-800/80 text-white p-1 rounded hover:bg-gray-900 shadow" title="Mover para esquerda"><ChevronLeft size={16} /></button>
+                              ) : <div />}
                               {index < formData.imagens.length - 1 ? (
-                                <button type="button" onClick={() => moveImage(index, 1)} className="bg-gray-800/80 text-white p-1 rounded hover:bg-gray-900 shadow" title="Mover para direita"><ChevronRight size={16}/></button>
-                              ) : <div/>}
+                                <button type="button" onClick={() => moveImage(index, 1)} className="bg-gray-800/80 text-white p-1 rounded hover:bg-gray-900 shadow" title="Mover para direita"><ChevronRight size={16} /></button>
+                              ) : <div />}
                             </div>
                           </div>
                         );
@@ -3487,15 +3484,15 @@ const handleUpdatePermissions = async (uid, newIsAdmin, newCanApprove, newIsMana
 
                 <div className="space-y-6">
                   <h2 className="text-lg font-bold border-b-2 border-[#F4B41A] pb-2 text-[#5C3A21] mt-6">Parecer Técnico</h2>
-                  
+
                   <div>
-                     <label className="block text-sm font-bold mb-2 text-gray-700">Status do Parecer</label>
-                     <select name="statusParecer" value={formData.statusParecer || ''} onChange={handleChange} className="w-full md:w-1/2 border border-gray-300 p-2.5 rounded focus:ring-2 focus:ring-[#F4B41A] outline-none shadow-sm font-bold text-gray-700">
-                        <option value="">Selecione uma opção...</option>
-                        <option value="PROCEDENTE">Procedente</option>
-                        <option value="NÃO PROCEDENTE">Não Procedente</option>
-                        <option value="NÃO APLICADO">Não Aplicado</option>
-                     </select>
+                    <label className="block text-sm font-bold mb-2 text-gray-700">Status do Parecer</label>
+                    <select name="statusParecer" value={formData.statusParecer || ''} onChange={handleChange} className="w-full md:w-1/2 border border-gray-300 p-2.5 rounded focus:ring-2 focus:ring-[#F4B41A] outline-none shadow-sm font-bold text-gray-700">
+                      <option value="">Selecione uma opção...</option>
+                      <option value="PROCEDENTE">Procedente</option>
+                      <option value="NÃO PROCEDENTE">Não Procedente</option>
+                      <option value="NÃO APLICADO">Não Aplicado</option>
+                    </select>
                   </div>
 
                   <div>
@@ -3569,11 +3566,11 @@ const handleUpdatePermissions = async (uid, newIsAdmin, newCanApprove, newIsMana
                             </div>
                             <div className="absolute bottom-1 left-1 right-1 flex justify-between px-1 opacity-0 group-hover:opacity-100 transition">
                               {index > 0 ? (
-                                <button type="button" onClick={() => moveImage(index, -1)} className="bg-gray-800/80 text-white p-1 rounded hover:bg-gray-900 shadow" title="Mover para esquerda"><ChevronLeft size={16}/></button>
-                              ) : <div/>}
+                                <button type="button" onClick={() => moveImage(index, -1)} className="bg-gray-800/80 text-white p-1 rounded hover:bg-gray-900 shadow" title="Mover para esquerda"><ChevronLeft size={16} /></button>
+                              ) : <div />}
                               {index < formData.imagens.length - 1 ? (
-                                <button type="button" onClick={() => moveImage(index, 1)} className="bg-gray-800/80 text-white p-1 rounded hover:bg-gray-900 shadow" title="Mover para direita"><ChevronRight size={16}/></button>
-                              ) : <div/>}
+                                <button type="button" onClick={() => moveImage(index, 1)} className="bg-gray-800/80 text-white p-1 rounded hover:bg-gray-900 shadow" title="Mover para direita"><ChevronRight size={16} /></button>
+                              ) : <div />}
                             </div>
                           </div>
                         );
@@ -3606,9 +3603,9 @@ const handleUpdatePermissions = async (uid, newIsAdmin, newCanApprove, newIsMana
           </div>
 
           <div className="bg-[#f8f9fa] p-6 border-t border-gray-200 flex justify-between items-center rounded-b-xl no-print">
-             {editingReportId ? (
-               <span className="font-bold text-[#5C3A21]">Editando {String(editingReportId).substring(0, 8)}...</span>
-             ) : <span />}
+            {editingReportId ? (
+              <span className="font-bold text-[#5C3A21]">Editando {String(editingReportId).substring(0, 8)}...</span>
+            ) : <span />}
             <button onClick={() => handleSaveReport('save_and_preview')} className="bg-[#5C3A21] hover:bg-[#4a2e1a] text-[#F4B41A] font-black py-4 px-10 rounded-lg shadow-lg transition flex items-center gap-3 text-lg uppercase tracking-wide"><FileText size={24} />VISUALIZAR DOCUMENTO</button>
           </div>
         </div>
@@ -3620,9 +3617,9 @@ const handleUpdatePermissions = async (uid, newIsAdmin, newCanApprove, newIsMana
   if (view === 'preview') {
     let tituloRelatorio = "RELATÓRIO DE OCORRÊNCIA PRODUTO";
     let tituloSecao1 = "1. INFORMAÇÕES GERAIS E RASTREABILIDADE"; let tituloSecao2 = "2. DESCRIÇÃO DA OCORRÊNCIA"; let tituloSecao3 = "3. CONSIDERAÇÕES FINAIS";
-    
+
     const tipoStr = String(formData.tipoRelatorio || '');
-    
+
     if (tipoStr === 'Relatório de Não Conformidade - Cliente') { tituloRelatorio = "RELATÓRIO DE DESVIO PADRÃO"; tituloSecao1 = "DADOS DA OCORRÊNCIA"; }
     if (tipoStr === 'Insumo ou Embalagem') tituloRelatorio = "RELATÓRIO DE OCORRÊNCIA INSUMO";
     if (tipoStr === 'Ocorrência Interna') tituloRelatorio = "RELATÓRIO INTERNO DE OCORRÊNCIA";
@@ -3642,7 +3639,7 @@ const handleUpdatePermissions = async (uid, newIsAdmin, newCanApprove, newIsMana
         <div id="relatorio-preview-conteudo" className="max-w-[210mm] min-h-[297mm] print:min-h-0 mx-auto bg-white shadow-2xl print:shadow-none print:w-full print:h-full print:p-0 print-no-padding text-black text-[15px] leading-relaxed relative flex flex-col">
           <div className="h-[12px] w-full bg-[#F4B41A] print-bg-yellow"></div>
           <div className="px-[12mm] py-[10mm] print:px-[8mm] print:py-[10mm] print-no-padding flex-1">
-            
+
             <div className="flex justify-between items-end border-b-2 border-gray-100 pb-4 mb-6 print:mb-4">
               <div>
                 {formData.logo ? <img src={formData.logo} alt="Logo IMAC" className="h-[50px] object-contain mb-1" /> : <h1 className="text-[38px] font-black text-[#5C3A21] tracking-tighter leading-none mb-1">IMAC</h1>}
@@ -3671,16 +3668,16 @@ const handleUpdatePermissions = async (uid, newIsAdmin, newCanApprove, newIsMana
 
                 <div className="mb-5 print:mb-3 w-full overflow-hidden break-inside-avoid">
                   <div className="border-l-4 border-[#F4B41A] print-border-yellow pl-2 mb-3 print:mb-2 bg-[#F4B41A]/10 print-bg-yellow-light py-1"><p className="font-bold uppercase text-[#5C3A21] text-[16px]">{tituloSecao2}</p></div>
-                  
+
                   <p className="font-bold text-[14px] ml-1 mb-1">DESCRIÇÃO DA NÃO CONFORMIDADE APRESENTADA:</p>
                   <div className="text-justify text-black ml-1 rich-text-content text-[14px] leading-relaxed break-words mb-4" dangerouslySetInnerHTML={{ __html: formData.descricao || '' }} />
 
                   <p className="font-bold text-[14px] ml-1 mb-2">CARACTERÍSTICAS DO PRODUTO:</p>
                   <div className="grid grid-cols-2 md:grid-cols-4 print:grid-cols-4 gap-4 ml-1 mb-2">
-                     <div className="border border-gray-200 p-2 rounded bg-gray-50 text-center"><span className="block text-[11px] font-bold text-gray-500 uppercase">Sabor</span><span className="text-[14px] font-semibold">{formData.sabor || 'Não informado'}</span></div>
-                     <div className="border border-gray-200 p-2 rounded bg-gray-50 text-center"><span className="block text-[11px] font-bold text-gray-500 uppercase">Odor</span><span className="text-[14px] font-semibold">{formData.odor || 'Não informado'}</span></div>
-                     <div className="border border-gray-200 p-2 rounded bg-gray-50 text-center"><span className="block text-[11px] font-bold text-gray-500 uppercase">Cor</span><span className="text-[14px] font-semibold">{formData.cor || 'Não informado'}</span></div>
-                     <div className="border border-gray-200 p-2 rounded bg-gray-50 text-center"><span className="block text-[11px] font-bold text-gray-500 uppercase">Temp. °C</span><span className="text-[14px] font-semibold">{formData.temperatura || 'Não informado'}</span></div>
+                    <div className="border border-gray-200 p-2 rounded bg-gray-50 text-center"><span className="block text-[11px] font-bold text-gray-500 uppercase">Sabor</span><span className="text-[14px] font-semibold">{formData.sabor || 'Não informado'}</span></div>
+                    <div className="border border-gray-200 p-2 rounded bg-gray-50 text-center"><span className="block text-[11px] font-bold text-gray-500 uppercase">Odor</span><span className="text-[14px] font-semibold">{formData.odor || 'Não informado'}</span></div>
+                    <div className="border border-gray-200 p-2 rounded bg-gray-50 text-center"><span className="block text-[11px] font-bold text-gray-500 uppercase">Cor</span><span className="text-[14px] font-semibold">{formData.cor || 'Não informado'}</span></div>
+                    <div className="border border-gray-200 p-2 rounded bg-gray-50 text-center"><span className="block text-[11px] font-bold text-gray-500 uppercase">Temp. °C</span><span className="text-[14px] font-semibold">{formData.temperatura || 'Não informado'}</span></div>
                   </div>
                 </div>
 
@@ -3698,26 +3695,26 @@ const handleUpdatePermissions = async (uid, newIsAdmin, newCanApprove, newIsMana
 
                 <div className="mb-5 print:mb-3 w-full overflow-hidden break-inside-avoid print:pt-4">
                   <div className="border-l-4 border-[#F4B41A] print-border-yellow pl-2 mb-3 print:mb-2 bg-[#F4B41A]/10 print-bg-yellow-light py-1"><p className="font-bold uppercase text-[#5C3A21] text-[16px]">{tituloSecao3}</p></div>
-                  
+
                   <div className="flex flex-wrap gap-x-6 gap-y-2 ml-1 mb-5">
-                     <p className="font-bold text-[14px] w-full md:w-auto print:w-auto">STATUS:</p>
-                     <p className="text-[14px] font-semibold">({formData.statusParecer === 'PROCEDENTE' ? 'X' : '  '}) PROCEDENTE</p>
-                     <p className="text-[14px] font-semibold">({formData.statusParecer === 'NÃO PROCEDENTE' ? 'X' : '  '}) NÃO PROCEDENTE</p>
-                     <p className="text-[14px] font-semibold">({formData.statusParecer === 'NÃO APLICADO' ? 'X' : '  '}) NÃO APLICADO</p>
+                    <p className="font-bold text-[14px] w-full md:w-auto print:w-auto">STATUS:</p>
+                    <p className="text-[14px] font-semibold">({formData.statusParecer === 'PROCEDENTE' ? 'X' : '  '}) PROCEDENTE</p>
+                    <p className="text-[14px] font-semibold">({formData.statusParecer === 'NÃO PROCEDENTE' ? 'X' : '  '}) NÃO PROCEDENTE</p>
+                    <p className="text-[14px] font-semibold">({formData.statusParecer === 'NÃO APLICADO' ? 'X' : '  '}) NÃO APLICADO</p>
                   </div>
 
                   <p className="font-bold text-[14px] ml-1 mb-1">DESCRITIVO DE INVESTIGAÇÃO:</p>
                   <div className="text-justify text-black ml-1 rich-text-content text-[14px] leading-relaxed break-words mb-5" dangerouslySetInnerHTML={{ __html: formData.consideracoes || '' }} />
 
                   <div className="mb-5">
-                     <p className="font-bold text-[14px] ml-1 mb-1">AÇÃO CORRETIVA:</p>
-                     <div className="text-justify text-black ml-1 rich-text-content text-[14px] leading-relaxed break-words" dangerouslySetInnerHTML={{ __html: formData.acaoCorretiva || '-' }} />
+                    <p className="font-bold text-[14px] ml-1 mb-1">AÇÃO CORRETIVA:</p>
+                    <div className="text-justify text-black ml-1 rich-text-content text-[14px] leading-relaxed break-words" dangerouslySetInnerHTML={{ __html: formData.acaoCorretiva || '-' }} />
                   </div>
 
                   {formData.conclusaoParecer && (
                     <div className="mb-8">
-                       <p className="font-bold text-[14px] ml-1 mb-1">CONCLUSÃO:</p>
-                       <div className="text-justify text-black ml-1 rich-text-content text-[14px] leading-relaxed break-words" dangerouslySetInnerHTML={{ __html: formData.conclusaoParecer || '-' }} />
+                      <p className="font-bold text-[14px] ml-1 mb-1">CONCLUSÃO:</p>
+                      <div className="text-justify text-black ml-1 rich-text-content text-[14px] leading-relaxed break-words" dangerouslySetInnerHTML={{ __html: formData.conclusaoParecer || '-' }} />
                     </div>
                   )}
 
@@ -3819,11 +3816,11 @@ export default class AppWithBoundary extends React.Component {
             <div className="bg-gray-100 p-4 rounded text-left overflow-auto text-xs text-red-600 mb-6 h-32 border border-gray-200">
               {this.state.error?.toString()}
             </div>
-            <button 
-              onClick={() => { 
-                localStorage.removeItem('imac_registros'); 
-                window.location.reload(); 
-              }} 
+            <button
+              onClick={() => {
+                localStorage.removeItem('imac_registros');
+                window.location.reload();
+              }}
               className="bg-red-600 text-white font-bold py-3 px-6 rounded-lg shadow-md hover:bg-red-700 transition"
             >
               Limpar Erros e Reiniciar
