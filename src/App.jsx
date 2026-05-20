@@ -1539,7 +1539,7 @@ function App() {
   const [rncInternas, setRncInternas] = useState([]);         // NCs internas
   const [solFornecedor, setSolFornecedor] = useState([]);     // Solicitações ao fornecedor
   const [solFornecedorForm, setSolFornecedorForm] = useState({ fornecedor: '', produto: '', lote: '', nf: '', dataRecebimento: '', descricao: '', urgencia: 'Média', solicitante: '' });
-  const [rncClienteExtForm, setRncClienteExtForm] = useState({ nomeCliente: '', produto: '', lote: '', validade: '', dataOcorrencia: '', descricao: '', quantidade: '', contato: '' });
+  const [rncClienteExtForm, setRncClienteExtForm] = useState({ nomeCliente: '', produto: '', lote: '', validade: '', dataOcorrencia: '', descricao: '', quantidade: '', contato: '', imagens: [] });
   const [showPublicClientForm, setShowPublicClientForm] = useState(false);
 
   const [dbError, setDbError] = useState(false);
@@ -2044,7 +2044,9 @@ function App() {
         ...solicitacaoForm,
         id: 'sol_' + Date.now(),
         dataCriacao: new Date().toISOString(),
-        status: 'Pendente'
+        status: 'Pendente',
+        lifecycleStatus: 'pendente_analise',
+        dataSolicitacao: new Date().toISOString()
       };
 
       setSolicitacoes(prev => {
@@ -2312,6 +2314,13 @@ function App() {
       avaliadorNome: userName
     };
 
+    if (newStatus === 'Liberado') {
+      payload.lifecycleStatus = 'liberado';
+      payload.dataLiberacao = new Date().toISOString();
+    } else if (newStatus === 'Não Liberado') {
+      payload.lifecycleStatus = 'correcao_solicitada';
+    }
+
     setRegistros(prev => {
       const updatedList = (prev || []).map(r => r && r.id === id ? { ...r, ...payload } : r);
       saveToLocalStorage('imac_registros', updatedList);
@@ -2360,6 +2369,11 @@ function App() {
       if (existingReport && typeof existingReport.enviado !== 'undefined') {
         payloadEdicao.enviado = existingReport.enviado;
       }
+      
+      if (action === 'send_evaluation') {
+        payloadEdicao.lifecycleStatus = 'aguardando_aprovacao';
+        payloadEdicao.dataEnvioAprovacao = new Date().toISOString();
+      }
 
       setRegistros(prev => {
         const updatedList = (prev || []).map(r => r && r.id === editingReportId ? { ...r, ...payloadEdicao } : r);
@@ -2377,6 +2391,14 @@ function App() {
     } else {
       const tempId = Date.now().toString();
       const novoRegistro = { ...registroData, id: tempId, dataCriacao: new Date().toISOString(), _isUnsynced: true };
+      
+      if (action === 'send_evaluation') {
+        novoRegistro.lifecycleStatus = 'aguardando_aprovacao';
+        novoRegistro.dataEnvioAprovacao = new Date().toISOString();
+      } else {
+        novoRegistro.lifecycleStatus = 'em_analise';
+      }
+
       currentId = tempId;
 
       setRegistros(prev => { const newList = [novoRegistro, ...(prev || [])]; saveToLocalStorage('imac_registros', newList); return newList; });
@@ -2404,6 +2426,21 @@ function App() {
   };
 
   const handlePrintAndSave = () => window.print();
+
+  const handleDownloadWord = () => {
+    const element = document.getElementById("relatorio-preview-conteudo");
+    if (!element) return;
+    const header = "<html xmlns:o='urn:schemas-microsoft-com:office:office' xmlns:w='urn:schemas-microsoft-com:office:word' xmlns='http://www.w3.org/TR/REC-html40'><head><meta charset='utf-8'><title>Relatorio</title></head><body>";
+    const footer = "</body></html>";
+    const sourceHTML = header + element.innerHTML + footer;
+    const source = 'data:application/vnd.ms-word;charset=utf-8,' + encodeURIComponent(sourceHTML);
+    const fileDownload = document.createElement("a");
+    document.body.appendChild(fileDownload);
+    fileDownload.href = source;
+    fileDownload.download = 'Relatorio_RNC.doc';
+    fileDownload.click();
+    document.body.removeChild(fileDownload);
+  };
 
   const confirmDeleteRegistro = (id) => {
     setRegistros(prev => {
@@ -2548,8 +2585,8 @@ function App() {
               </form>
             ) : welcomeMode === 'choice' ? (
               <div className="space-y-4 animate-fade-in-up">
-                <button onClick={() => setWelcomeMode('solicitar')} className="w-full bg-white border-2 border-[#F4B41A] text-[#5C3A21] font-bold py-4 px-4 rounded-xl shadow-sm hover:bg-[#F4B41A]/10 transition flex items-center justify-center gap-2">
-                  <FileText size={20} /> Solicitar Relatório (Público)
+                <button onClick={() => { setWelcomeMode('solicitar'); setSolicitacaoForm({ tipoRelatorio: 'Problema com Fornecedor', solicitante: '', urgencia: 'Média', produto: '', lote: '', nf: '', dataRecebimento: '', validade: '', dataFabricacao: '', descricao: '', imagens: [] }); }} className="w-full bg-white border-2 border-[#F4B41A] text-[#5C3A21] font-bold py-4 px-4 rounded-xl shadow-sm hover:bg-[#F4B41A]/10 transition flex items-center justify-center gap-2">
+                  <FileText size={20} /> Sou Solicitante (RNC Fornecedores)
                 </button>
                 <button onClick={() => setWelcomeMode('rnc-cliente-externo')} className="w-full bg-white border-2 border-orange-400 text-orange-700 font-bold py-4 px-4 rounded-xl shadow-sm hover:bg-orange-50 transition flex items-center justify-center gap-2">
                   <AlertCircle size={20} /> Registrar Não Conformidade (Cliente)
@@ -2561,98 +2598,57 @@ function App() {
             ) : welcomeMode === 'solicitar' ? (
               <form onSubmit={submitSolicitacao} className="space-y-4 text-left animate-fade-in-up text-sm max-h-[50vh] overflow-y-auto p-2">
 
-                {/* NOVO: Solicitante e Urgência */}
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                  <div>
-                    <label className="block font-bold text-gray-700 mb-1">Quem está solicitando?</label>
-                    <input type="text" required value={solicitacaoForm.solicitante} onChange={(e) => setSolicitacaoForm({ ...solicitacaoForm, solicitante: e.target.value })} placeholder="Seu nome / Setor" className="w-full border border-gray-300 p-2.5 rounded-lg focus:ring-2 focus:ring-[#F4B41A] outline-none" />
-                  </div>
-                  <div>
-                    <label className="block font-bold text-gray-700 mb-1">Nível de Urgência</label>
-                    <select required value={solicitacaoForm.urgencia} onChange={(e) => setSolicitacaoForm({ ...solicitacaoForm, urgencia: e.target.value })} className="w-full border border-gray-300 p-2.5 rounded-lg focus:ring-2 focus:ring-[#F4B41A] outline-none font-bold">
-                      <option value="Baixa">🟢 Baixa (Pode aguardar)</option>
-                      <option value="Média">🟡 Média (Atenção em breve)</option>
-                      <option value="Alta">🔴 Alta (Ação imediata)</option>
-                    </select>
-                  </div>
+                <div className="text-center mb-4 border-b border-[#F4B41A]/30 pb-2">
+                  <h3 className="text-lg font-black text-[#5C3A21] uppercase tracking-wider">Nova Solicitação ao Fornecedor</h3>
                 </div>
 
                 <div>
-                  <label className="block font-bold text-gray-700 mb-1">Tipo de Problema</label>
-                  <select required value={solicitacaoForm.tipoRelatorio} onChange={(e) => setSolicitacaoForm({ ...solicitacaoForm, tipoRelatorio: e.target.value })} className="w-full border border-gray-300 p-2.5 rounded-lg focus:ring-2 focus:ring-[#F4B41A] outline-none">
-                    <option value="Problema com Fornecedor">Problema com Fornecedor / Matéria-prima</option>
-                    <option value="Relatório de Não Conformidade - Cliente">Reclamação de Cliente / Loja</option>
-                    <option value="Ocorrência Interna">Problema Interno</option>
-                  </select>
+                  <label className="block font-bold text-gray-700 mb-1 flex items-center gap-1"><Truck size={14} className="text-[#5C3A21]"/> Fornecedor</label>
+                  <FornecedorSelect value={solicitacaoForm.fornecedor || ''} onChange={(f) => setSolicitacaoForm(prev => ({ ...prev, fornecedor: f, tipoRelatorio: 'Problema com Fornecedor' }))} fornecedores={fornecedores} onAddFornecedor={addFornecedor} />
                 </div>
+
                 <div>
-                  <label className="block font-bold text-gray-700 mb-1">Produto / Material Afetado</label>
-                  <input type="text" required value={solicitacaoForm.produto} onChange={(e) => setSolicitacaoForm({ ...solicitacaoForm, produto: e.target.value })} placeholder="Qual o produto?" className="w-full border border-gray-300 p-2.5 rounded-lg focus:ring-2 focus:ring-[#F4B41A] outline-none" />
+                  <label className="block font-bold text-gray-700 mb-1">Produto / Material</label>
+                  <input type="text" value={solicitacaoForm.produto || ''} onChange={(e) => setSolicitacaoForm({ ...solicitacaoForm, produto: e.target.value })} placeholder="Ex: Salsicha Aurora" className="w-full border border-gray-300 p-2.5 rounded-lg focus:ring-2 focus:ring-[#F4B41A] outline-none" />
                 </div>
-
-                {solicitacaoForm.tipoRelatorio === 'Relatório de Não Conformidade - Cliente' && (
-                  <div>
-                    <label className="block font-bold text-gray-700 mb-1">Loja / Cliente Afetado</label>
-                    <input type="text" required value={solicitacaoForm.lojaLocal || ''} onChange={(e) => setSolicitacaoForm({ ...solicitacaoForm, lojaLocal: e.target.value })} placeholder="Ex: Matriz, Loja 02..." className="w-full border border-gray-300 p-2.5 rounded-lg focus:ring-2 focus:ring-[#F4B41A] outline-none" />
-                  </div>
-                )}
-
-                {solicitacaoForm.tipoRelatorio === 'Problema com Fornecedor' && (
-                  <div>
-                    <label className="block font-bold text-gray-700 mb-1">Nome do Fornecedor</label>
-                    <input type="text" required value={solicitacaoForm.fornecedor || ''} onChange={(e) => setSolicitacaoForm({ ...solicitacaoForm, fornecedor: e.target.value })} placeholder="Ex: Aurora, Seara..." className="w-full border border-gray-300 p-2.5 rounded-lg focus:ring-2 focus:ring-[#F4B41A] outline-none" />
-                  </div>
-                )}
 
                 <div className="grid grid-cols-2 gap-3">
                   <div>
                     <label className="block font-bold text-gray-700 mb-1">Lote</label>
-                    <input type="text" required value={solicitacaoForm.lote} onChange={(e) => setSolicitacaoForm({ ...solicitacaoForm, lote: e.target.value })} placeholder="Obrigatório" className="w-full border border-gray-300 p-2.5 rounded-lg focus:ring-2 focus:ring-[#F4B41A] outline-none" />
+                    <input type="text" value={solicitacaoForm.lote || ''} onChange={(e) => setSolicitacaoForm({ ...solicitacaoForm, lote: e.target.value })} placeholder="Ex: 0426011411" className="w-full border border-gray-300 p-2.5 rounded-lg focus:ring-2 focus:ring-[#F4B41A] outline-none" />
                   </div>
 
                   <div>
-                    <label className="block font-bold text-gray-700 mb-1">Quantidade</label>
-                    <input type="text" required value={solicitacaoForm.quantidade || ''} onChange={(e) => setSolicitacaoForm({ ...solicitacaoForm, quantidade: e.target.value })} placeholder="Ex: 5 kg, 2 caixas" className="w-full border border-gray-300 p-2.5 rounded-lg focus:ring-2 focus:ring-[#F4B41A] outline-none" />
+                    <label className="block font-bold text-gray-700 mb-1">Nota Fiscal</label>
+                    <input type="text" value={solicitacaoForm.nf || ''} onChange={(e) => setSolicitacaoForm({ ...solicitacaoForm, nf: e.target.value })} placeholder="Nº da NF" className="w-full border border-gray-300 p-2.5 rounded-lg focus:ring-2 focus:ring-[#F4B41A] outline-none" />
                   </div>
-
-                  {(solicitacaoForm.tipoRelatorio === 'Problema com Fornecedor' || solicitacaoForm.tipoRelatorio === 'Relatório de Não Conformidade - Cliente' || solicitacaoForm.tipoRelatorio === 'Ocorrência Interna') && (
-                    <div>
-                      <label className="block font-bold text-gray-700 mb-1">Validade</label>
-                      <input type="text" required={solicitacaoForm.tipoRelatorio !== 'Ocorrência Interna'} value={solicitacaoForm.validade || ''} onChange={(e) => setSolicitacaoForm({ ...solicitacaoForm, validade: e.target.value })} placeholder="Ex: 10/12/2026" className="w-full border border-gray-300 p-2.5 rounded-lg focus:ring-2 focus:ring-[#F4B41A] outline-none" />
-                    </div>
-                  )}
-
-                  {solicitacaoForm.tipoRelatorio === 'Problema com Fornecedor' && (
-                    <>
-                      <div>
-                        <label className="block font-bold text-gray-700 mb-1">Nota Fiscal</label>
-                        <input type="text" required value={solicitacaoForm.nf || ''} onChange={(e) => setSolicitacaoForm({ ...solicitacaoForm, nf: e.target.value })} placeholder="Obrigatório" className="w-full border border-gray-300 p-2.5 rounded-lg focus:ring-2 focus:ring-[#F4B41A] outline-none" />
-                      </div>
-                      <div>
-                        <label className="block font-bold text-gray-700 mb-1">Recebimento</label>
-                        <input type="text" required value={solicitacaoForm.dataRecebimento || ''} onChange={(e) => setSolicitacaoForm({ ...solicitacaoForm, dataRecebimento: e.target.value })} placeholder="Ex: 10/05/2026" className="w-full border border-gray-300 p-2.5 rounded-lg focus:ring-2 focus:ring-[#F4B41A] outline-none" />
-                      </div>
-                    </>
-                  )}
-
-                  {solicitacaoForm.tipoRelatorio === 'Relatório de Não Conformidade - Cliente' && (
-                    <div>
-                      <label className="block font-bold text-gray-700 mb-1">Fabricação</label>
-                      <input type="text" required value={solicitacaoForm.dataFabricacao || ''} onChange={(e) => setSolicitacaoForm({ ...solicitacaoForm, dataFabricacao: e.target.value })} placeholder="Ex: 01/05/2026" className="w-full border border-gray-300 p-2.5 rounded-lg focus:ring-2 focus:ring-[#F4B41A] outline-none" />
-                    </div>
-                  )}
-
-                  {solicitacaoForm.tipoRelatorio === 'Ocorrência Interna' && (
-                    <div>
-                      <label className="block font-bold text-gray-700 mb-1">Ocorrência</label>
-                      <input type="text" required value={solicitacaoForm.dataOcorrencia || ''} onChange={(e) => setSolicitacaoForm({ ...solicitacaoForm, dataOcorrencia: e.target.value })} placeholder="Ex: 20/05/2026" className="w-full border border-gray-300 p-2.5 rounded-lg focus:ring-2 focus:ring-[#F4B41A] outline-none" />
-                    </div>
-                  )}
                 </div>
+
+                <div className="grid grid-cols-2 gap-3">
+                  <div>
+                    <label className="block font-bold text-gray-700 mb-1">Data de Recebimento</label>
+                    <input type="text" value={solicitacaoForm.dataRecebimento || ''} onChange={(e) => setSolicitacaoForm({ ...solicitacaoForm, dataRecebimento: e.target.value })} placeholder="Ex: 20/05/2026" className="w-full border border-gray-300 p-2.5 rounded-lg focus:ring-2 focus:ring-[#F4B41A] outline-none" />
+                  </div>
+                  <div>
+                    <label className="block font-bold text-gray-700 mb-1">Nível de Urgência</label>
+                    <select value={solicitacaoForm.urgencia || 'Média'} onChange={(e) => setSolicitacaoForm({ ...solicitacaoForm, urgencia: e.target.value })} className="w-full border border-gray-300 p-2.5 rounded-lg focus:ring-2 focus:ring-[#F4B41A] outline-none font-bold text-gray-700">
+                      <option value="Baixa">🟢 Baixa</option>
+                      <option value="Média">🟡 Média</option>
+                      <option value="Alta">🔴 Alta</option>
+                    </select>
+                  </div>
+                </div>
+                
                 <div>
-                  <label className="block font-bold text-gray-700 mb-1">Descreva o problema</label>
-                  <textarea required rows="3" value={solicitacaoForm.descricao} onChange={(e) => setSolicitacaoForm({ ...solicitacaoForm, descricao: e.target.value })} placeholder="Detalhe o que aconteceu..." className="w-full border border-gray-300 p-2.5 rounded-lg focus:ring-2 focus:ring-[#F4B41A] outline-none resize-y"></textarea>
+                  <label className="block font-bold text-gray-700 mb-1">Solicitado por</label>
+                  <input type="text" value={solicitacaoForm.solicitante || ''} onChange={(e) => setSolicitacaoForm({ ...solicitacaoForm, solicitante: e.target.value })} placeholder="Seu nome / Setor" className="w-full border border-gray-300 p-2.5 rounded-lg focus:ring-2 focus:ring-[#F4B41A] outline-none" />
                 </div>
+
+                <div>
+                  <label className="block font-bold text-gray-700 mb-1">Descrição / Motivo</label>
+                  <textarea rows="3" value={solicitacaoForm.descricao || ''} onChange={(e) => setSolicitacaoForm({ ...solicitacaoForm, descricao: e.target.value })} placeholder="Descreva o que está sendo solicitado ao fornecedor..." className="w-full border border-gray-300 p-2.5 rounded-lg focus:ring-2 focus:ring-[#F4B41A] outline-none resize-y"></textarea>
+                </div>
+                
                 <div className="bg-gray-50 border border-dashed border-gray-300 p-4 rounded-lg text-center cursor-pointer hover:bg-gray-100 transition">
                   <label className="cursor-pointer flex flex-col items-center justify-center">
                     <ImagePlus size={24} className="text-[#5C3A21] mb-2" />
@@ -2662,14 +2658,15 @@ function App() {
                       if (files.length === 0) return;
                       try {
                         const compressedImages = await Promise.all(files.map(f => compressImage(f, false)));
-                        setSolicitacaoForm(prev => ({ ...prev, imagens: [...prev.imagens, ...compressedImages] }));
+                        setSolicitacaoForm(prev => ({ ...prev, imagens: [...(prev.imagens || []), ...compressedImages] }));
                       } catch (err) { }
                     }} />
                   </label>
                 </div>
+
                 <div className="flex gap-2 pt-2">
                   <button type="button" onClick={() => setWelcomeMode('choice')} className="flex-1 bg-gray-200 text-gray-800 font-bold py-3 rounded-xl hover:bg-gray-300 transition">Voltar</button>
-                  <button type="submit" className="flex-1 bg-[#F4B41A] text-[#5C3A21] font-bold py-3 rounded-xl hover:bg-[#e0a210] transition shadow-md">Enviar</button>
+                  <button type="submit" className="flex-1 bg-purple-600 text-white font-bold py-3 rounded-xl hover:bg-purple-700 transition shadow-md flex items-center justify-center gap-2"><Plus size={18}/> Enviar Solicitação</button>
                 </div>
               </form>
             ) : welcomeMode === 'rnc-cliente-externo' ? (
@@ -2712,6 +2709,20 @@ function App() {
                 <div>
                   <label className="block font-bold text-gray-700 mb-1">Descrição da Não Conformidade *</label>
                   <textarea required rows="3" value={rncClienteExtForm.descricao} onChange={e => setRncClienteExtForm({ ...rncClienteExtForm, descricao: e.target.value })} placeholder="Descreva o problema encontrado no produto..." className="w-full border border-gray-300 p-2.5 rounded-lg focus:ring-2 focus:ring-orange-400 outline-none resize-y text-sm"></textarea>
+                </div>
+                <div className="bg-gray-50 border border-dashed border-gray-300 p-4 rounded-lg text-center cursor-pointer hover:bg-gray-100 transition">
+                  <label className="cursor-pointer flex flex-col items-center justify-center">
+                    <ImagePlus size={24} className="text-orange-500 mb-2" />
+                    <span className="font-bold text-sm text-orange-600">Anexar Fotos ({rncClienteExtForm.imagens?.length || 0})</span>
+                    <input type="file" multiple accept="image/*" className="hidden" onChange={async (e) => {
+                      const files = Array.from(e.target.files);
+                      if (files.length === 0) return;
+                      try {
+                        const compressedImages = await Promise.all(files.map(f => compressImage(f, false)));
+                        setRncClienteExtForm(prev => ({ ...prev, imagens: [...(prev.imagens || []), ...compressedImages] }));
+                      } catch (err) { }
+                    }} />
+                  </label>
                 </div>
                 <div className="flex gap-2 pt-2">
                   <button type="button" onClick={() => setWelcomeMode('choice')} className="flex-1 bg-gray-200 text-gray-800 font-bold py-3 rounded-xl hover:bg-gray-300 transition">Voltar</button>
@@ -2782,6 +2793,24 @@ function App() {
     const produtoBarData = Object.entries(produtoCounts).map(([label, value]) => ({ label, value })).sort((a, b) => b.value - a.value).slice(0, 5);
 
     const pendingRecords = (registros || []).filter(r => r.status === 'Pendente' || !r.status);
+
+    const totalRNCs = filteredRecords.length;
+    const totalInternas = filteredRecords.filter(r => r.tipoRelatorio === 'Ocorrência Interna').length;
+    const totalFornecedores = filteredRecords.filter(r => r.tipoRelatorio === 'Problema com Fornecedor').length;
+    const totalExternas = filteredRecords.filter(r => r.tipoRelatorio === 'Relatório de Não Conformidade - Cliente').length;
+    
+    let rncPorDia = 0;
+    if (totalRNCs > 0) {
+      const dates = filteredRecords.map(r => new Date(r.dataCriacao).getTime()).filter(t => !isNaN(t));
+      if (dates.length > 1) {
+        const minDate = Math.min(...dates);
+        const maxDate = Math.max(...dates);
+        const days = Math.max(1, (maxDate - minDate) / (1000 * 60 * 60 * 24));
+        rncPorDia = (totalRNCs / days).toFixed(1);
+      } else {
+        rncPorDia = totalRNCs;
+      }
+    }
 
     return (
       <div className="min-h-screen bg-[#f8f9fa] py-8 px-4 font-sans text-gray-800 print:bg-white print:py-0 print:px-0">
@@ -2871,13 +2900,14 @@ function App() {
           <div className="flex gap-1 bg-white p-2 rounded-xl shadow-sm border border-gray-200 mb-6 overflow-x-auto">
             {[
               { id: 'dashboard', label: 'Dashboard', icon: <Home size={16} />, color: 'text-[#5C3A21]', active: 'bg-[#5C3A21] text-white' },
+              { id: 'minhas-atividades', label: 'Minhas Atividades', icon: <Bell size={16} />, color: 'text-red-700', active: 'bg-red-600 text-white', badge: registros.filter(r => appUser?.canApprove ? r.lifecycleStatus === 'aguardando_aprovacao' : (r.lifecycleStatus === 'pendente_analise' || r.lifecycleStatus === 'correcao_solicitada')).length },
               { id: 'rnc-cliente', label: 'RNC Cliente', icon: <ShoppingBag size={16} />, color: 'text-orange-700', active: 'bg-orange-500 text-white', badge: rncClientesExt.filter(r => r.status === 'Pendente').length },
               { id: 'rnc-interna', label: 'NC Interna', icon: <Building2 size={16} />, color: 'text-blue-700', active: 'bg-blue-600 text-white', badge: rncInternas.filter(r => r.status === 'Pendente').length },
               { id: 'sol-fornecedor', label: 'Sol. Fornecedor', icon: <Truck size={16} />, color: 'text-purple-700', active: 'bg-purple-600 text-white', badge: solFornecedor.filter(r => r.status === 'Pendente').length },
             ].map(tab => (
               <button key={tab.id} onClick={() => setActiveModule(tab.id)} className={`relative flex items-center gap-2 px-4 py-2.5 rounded-lg font-bold text-sm transition whitespace-nowrap ${activeModule === tab.id ? tab.active : 'hover:bg-gray-100 text-gray-600'}`}>
                 {tab.icon} {tab.label}
-                {tab.badge > 0 && <span className="absolute -top-1 -right-1 bg-red-500 text-white text-[10px] font-black w-4 h-4 rounded-full flex items-center justify-center">{tab.badge}</span>}
+                {tab.badge > 0 && <span className="absolute -top-1 -right-1 bg-red-500 text-white text-[10px] font-black w-4 h-4 rounded-full flex items-center justify-center shadow-sm">{tab.badge}</span>}
               </button>
             ))}
           </div>
@@ -2885,6 +2915,30 @@ function App() {
           {/* ===================== MÓDULO: DASHBOARD ===================== */}
           {activeModule === 'dashboard' && (<>
             <div className="mb-6"><DashboardFilters onFilterChange={setDashboardFilters} fornecedores={fornecedores} /></div>
+
+            {/* PAINEL DE INDICADORES (POWER BI STYLE) */}
+            <div className="grid grid-cols-2 md:grid-cols-5 gap-4 mb-6 animate-fade-in-up">
+              <div className="bg-white p-4 rounded-xl shadow-sm border-l-4 border-[#5C3A21] flex flex-col justify-center">
+                <span className="text-gray-500 text-xs font-bold uppercase mb-1">Total RNCs</span>
+                <span className="text-2xl font-black text-[#5C3A21]">{totalRNCs}</span>
+              </div>
+              <div className="bg-white p-4 rounded-xl shadow-sm border-l-4 border-blue-500 flex flex-col justify-center">
+                <span className="text-gray-500 text-xs font-bold uppercase mb-1">Internas</span>
+                <span className="text-2xl font-black text-blue-600">{totalInternas}</span>
+              </div>
+              <div className="bg-white p-4 rounded-xl shadow-sm border-l-4 border-orange-500 flex flex-col justify-center">
+                <span className="text-gray-500 text-xs font-bold uppercase mb-1">Clientes</span>
+                <span className="text-2xl font-black text-orange-600">{totalExternas}</span>
+              </div>
+              <div className="bg-white p-4 rounded-xl shadow-sm border-l-4 border-red-500 flex flex-col justify-center">
+                <span className="text-gray-500 text-xs font-bold uppercase mb-1">Fornecedores</span>
+                <span className="text-2xl font-black text-red-600">{totalFornecedores}</span>
+              </div>
+              <div className="bg-white p-4 rounded-xl shadow-sm border-l-4 border-green-500 flex flex-col justify-center">
+                <span className="text-gray-500 text-xs font-bold uppercase mb-1">RNCs / Dia</span>
+                <span className="text-2xl font-black text-green-600">{rncPorDia}</span>
+              </div>
+            </div>
 
             {solicitacoes.filter(s => s.status === 'Pendente').length > 0 && (
               <div className="mb-6 bg-blue-50 border-l-4 border-blue-500 p-4 rounded-r-xl shadow-sm animate-fade-in-up">
@@ -3037,6 +3091,57 @@ function App() {
             </div>
             <div className="text-center mt-8 text-xs text-gray-400 no-print">Desenvolvido por: Cristiamberg</div>
           </>)} {/* fim activeModule === dashboard */}
+
+          {/* ===================== MÓDULO: MINHAS ATIVIDADES ===================== */}
+          {activeModule === 'minhas-atividades' && (() => {
+            const minhasAtividades = (registros || []).filter(r => appUser?.canApprove ? r.lifecycleStatus === 'aguardando_aprovacao' : (r.lifecycleStatus === 'pendente_analise' || r.lifecycleStatus === 'correcao_solicitada'));
+            return (
+              <div className="bg-white rounded-xl shadow-sm overflow-hidden border border-gray-200 animate-fade-in-up">
+                <div className="bg-red-50 px-6 py-4 border-b border-red-200 flex justify-between items-center">
+                  <h2 className="font-bold text-red-800 flex items-center gap-2"><Bell size={20} /> Suas Pendências ({minhasAtividades.length})</h2>
+                </div>
+                <div className="overflow-x-auto">
+                  <table className="w-full text-left text-sm">
+                    <thead className="bg-gray-50 text-gray-500"><tr><th className="px-4 py-3 font-bold">Data</th><th className="px-4 py-3 font-bold">Tipo</th><th className="px-4 py-3 font-bold">Produto</th><th className="px-4 py-3 font-bold">Autor</th><th className="px-4 py-3 font-bold">Status Atual</th><th className="px-4 py-3 font-bold">SLA (Dias)</th><th className="px-4 py-3 font-bold text-center">Ações</th></tr></thead>
+                    <tbody className="divide-y divide-gray-100">
+                      {minhasAtividades.length === 0 ? <tr><td colSpan="7" className="text-center py-8 text-gray-400">Nenhuma pendência para você no momento. 🎉</td></tr> :
+                        minhasAtividades.map(reg => {
+                          const dtBase = reg.dataEnvioAprovacao || reg.dataCriacao || new Date().toISOString();
+                          const diasPendentes = Math.max(0, Math.floor((new Date() - new Date(dtBase)) / (1000 * 60 * 60 * 24)));
+                          return (
+                            <tr key={reg.id || Math.random()} className="hover:bg-red-50 transition">
+                              <td className="px-4 py-3 whitespace-nowrap text-xs">{safeDate(reg.dataCriacao)}</td>
+                              <td className="px-4 py-3"><span className="bg-gray-200 text-gray-800 px-2 py-1 rounded-full text-xs font-bold whitespace-nowrap">{reg.tipoRelatorio === 'Relatório de Não Conformidade - Cliente' ? 'Cliente' : (reg.tipoRelatorio || 'Desconhecido')}</span></td>
+                              <td className="px-4 py-3 font-medium text-gray-800 max-w-[150px] truncate" title={reg.produto || ''}>{reg.produto || ''}</td>
+                              <td className="px-4 py-3 text-gray-500 max-w-[120px] truncate text-xs" title={reg.autorNome || ''}>{typeof reg.autorNome === 'string' ? reg.autorNome.split(' ')[0] : 'Desconhecido'}</td>
+                              <td className="px-4 py-3">
+                                <span className={`px-2 py-1 rounded-md text-[11px] font-bold whitespace-nowrap border tracking-wide uppercase ${reg.lifecycleStatus === 'aguardando_aprovacao' ? 'bg-blue-50 text-blue-700 border-blue-200' : 'bg-red-50 text-red-700 border-red-200'}`}>
+                                  {reg.lifecycleStatus === 'aguardando_aprovacao' ? 'Aguardando Avaliação' : reg.lifecycleStatus === 'correcao_solicitada' ? 'Correção Solicitada' : 'Pendente Análise'}
+                                </span>
+                              </td>
+                              <td className="px-4 py-3">
+                                <span className={`font-bold ${diasPendentes > 3 ? 'text-red-600' : diasPendentes > 1 ? 'text-yellow-600' : 'text-green-600'}`}>{diasPendentes} dia(s)</span>
+                              </td>
+                              <td className="px-4 py-3 text-center">
+                                <div className="flex items-center justify-center gap-1">
+                                  {appUser?.canApprove ? (
+                                    <button onClick={() => setEvaluatingRegistro(reg)} className="text-white bg-purple-600 hover:bg-purple-700 px-3 py-1.5 rounded-lg transition text-xs font-bold shadow flex items-center gap-1" title="Avaliar"><CheckCircle size={14} /> Avaliar</button>
+                                  ) : (
+                                    <button onClick={() => startEditingReport(reg)} className="text-white bg-yellow-600 hover:bg-yellow-700 px-3 py-1.5 rounded-lg transition text-xs font-bold shadow flex items-center gap-1" title="Responder"><Edit3 size={14} /> Tratar</button>
+                                  )}
+                                  <button onClick={() => { startEditingReport(reg); setView('preview'); }} className="text-blue-600 hover:text-blue-800 bg-blue-50 hover:bg-blue-100 p-1.5 rounded-lg transition" title="Visualizar Documento"><Eye size={16} /></button>
+                                </div>
+                              </td>
+                            </tr>
+                          );
+                        })
+                      }
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            );
+          })()}
 
           {/* ===================== MÓDULO: RNC CLIENTE ===================== */}
           {activeModule === 'rnc-cliente' && (
@@ -3574,11 +3679,19 @@ function App() {
             )}
           </div>
 
-          <div className="bg-[#f8f9fa] p-6 border-t border-gray-200 flex justify-between items-center rounded-b-xl no-print">
+          <div className="bg-[#f8f9fa] p-6 border-t border-gray-200 flex flex-col md:flex-row md:justify-between items-center gap-4 rounded-b-xl no-print">
             {editingReportId ? (
               <span className="font-bold text-[#5C3A21]">Editando {String(editingReportId).substring(0, 8)}...</span>
             ) : <span />}
-            <button onClick={() => handleSaveReport('save_and_preview')} className="bg-[#5C3A21] hover:bg-[#4a2e1a] text-[#F4B41A] font-black py-4 px-10 rounded-lg shadow-lg transition flex items-center gap-3 text-lg uppercase tracking-wide"><FileText size={24} />VISUALIZAR DOCUMENTO</button>
+            
+            <div className="flex flex-wrap gap-2 justify-end w-full md:w-auto">
+              <button onClick={() => handleSaveReport('save_and_preview')} className="bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-3 px-6 rounded-lg shadow-sm transition flex items-center gap-2">
+                <FileText size={20} /> Salvar Rascunho
+              </button>
+              <button onClick={() => handleSaveReport('send_evaluation')} className="bg-[#5C3A21] hover:bg-[#4a2e1a] text-[#F4B41A] font-black py-3 px-6 rounded-lg shadow-lg transition flex items-center gap-2 uppercase tracking-wide">
+                <Check size={20} /> Enviar para Avaliação
+              </button>
+            </div>
           </div>
         </div>
         <div className="text-center mt-6 text-xs text-gray-400 no-print">Desenvolvido por: Cristiamberg</div>
@@ -3604,6 +3717,7 @@ function App() {
           <div className="flex flex-wrap gap-3">
             <button onClick={() => shareViaWhatsApp(formData)} className="flex items-center gap-2 px-4 py-2 bg-green-500 text-white rounded font-bold shadow hover:bg-green-600 transition"><MessageCircle size={18} /> WhatsApp</button>
             <button onClick={() => { setFormData(getEmptyForm()); setEditingReportId(null); setView('dashboard'); window.scrollTo(0, 0); }} className="flex items-center gap-2 px-5 py-2 bg-gray-300 text-gray-800 rounded hover:bg-gray-400 font-bold shadow transition"><ClipboardList size={18} /> Painel de Registros</button>
+            <button onClick={handleDownloadWord} className="flex items-center gap-2 px-6 py-2 bg-[#2b579a] text-white rounded hover:bg-[#1e3c6b] font-black shadow-md transition"><FileText size={18} /> Baixar Word</button>
             <button onClick={handlePrintAndSave} className="flex items-center gap-2 px-6 py-2 bg-[#5C3A21] text-[#F4B41A] rounded hover:bg-[#4a2e1a] font-black shadow-md transition"><Printer size={18} /> Imprimir / PDF</button>
           </div>
         </div>
