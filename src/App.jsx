@@ -2730,7 +2730,7 @@ function App() {
                 </div>
               </form>
             ) : (
-<form> {/* A TAG FALTANDO ENTRA AQUI */}
+              <form onSubmit={handleEmailLogin}>
                 <div>
                   <label className="block text-sm font-bold text-gray-700 mb-1">E-mail corporativo</label>
                   <input type="email" required value={loginEmail} onChange={(e) => setLoginEmail(e.target.value)} placeholder="Digite seu e-mail" className="w-full border border-gray-300 p-3 rounded-lg focus:ring-2 focus:ring-[#F4B41A] outline-none" />
