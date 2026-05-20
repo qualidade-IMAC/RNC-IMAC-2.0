@@ -170,34 +170,6 @@ const SendHorizonal = (p) => <SvgIcon {...p}><path d="M3 8L10.89 15.9a2 2 0 002.
 const ExternalLink = (p) => <SvgIcon {...p}><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6M15 3h6v6M10 14L21 3" /></SvgIcon>;
 const Home = (p) => <SvgIcon {...p}><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z" /><polyline points="9 22 9 12 15 12 15 22" /></SvgIcon>;
 
-return new Promise((resolve, reject) => {
-  const reader = new FileReader();
-  reader.readAsDataURL(file);
-  reader.onload = (event) => {
-    const img = new Image();
-    img.src = event.target.result;
-    img.onload = () => {
-      const canvas = document.createElement('canvas');
-      const MAX_WIDTH = isLogo ? 400 : 800;
-      const MAX_HEIGHT = isLogo ? 400 : 800;
-      let width = img.width;
-      let height = img.height;
-
-      if (width > height) {
-        if (width > MAX_WIDTH) { height *= MAX_WIDTH / width; width = MAX_WIDTH; }
-      } else {
-        if (height > MAX_HEIGHT) { width *= MAX_HEIGHT / height; height = MAX_HEIGHT; }
-      }
-      canvas.width = width;
-      canvas.height = height;
-      const ctx = canvas.getContext('2d');
-      ctx.drawImage(img, 0, 0, width, height);
-      resolve(canvas.toDataURL('image/jpeg', 0.6));
-    };
-  };
-  reader.onerror = error => reject(error);
-});
-
 const RichTextEditor = ({ value, onChange, placeholder }) => {
   const editorRef = useRef(null);
 
