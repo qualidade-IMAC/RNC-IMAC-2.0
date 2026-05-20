@@ -1650,12 +1650,12 @@ function App() {
       return;
     }
 
+    if (!db || !user) return;
+
     const timeout = setTimeout(() => {
       setCheckingDirectory(false);
       setDbSyncError(true);
     }, 12000);
-
-    if (!db || !user) return;
 
     const unsubscribeUsers = onSnapshot(collection(db, 'artifacts', appId, 'public', 'data', 'users_directory'),
       (snapshot) => {
