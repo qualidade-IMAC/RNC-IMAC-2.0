@@ -2951,8 +2951,8 @@ function App() {
     }
 
     return (
-      {/* BACKGROUND COM PADRÃO DE SEMENTES/TRIGO (PÃO FRANCÊS) */}
       <div className="min-h-screen bg-[#DFA40A] py-8 px-4 font-sans text-gray-800 print:bg-white print:py-0 print:px-0" style={{ backgroundImage: 'radial-gradient(circle at 10px 10px, rgba(92, 58, 33, 0.05) 2px, transparent 0), radial-gradient(circle at 25px 25px, rgba(92, 58, 33, 0.04) 2px, transparent 0)', backgroundSize: '30px 30px' }}>
+        {/* BACKGROUND COM PADRÃO DE SEMENTES/TRIGO (PÃO FRANCÊS) */}
         {registroToView && <RelatorioViewModal registro={registroToView} onClose={() => setRegistroToView(null)} />}
         {evaluatingRegistro && <StatusModal registro={evaluatingRegistro} onClose={() => setEvaluatingRegistro(null)} onSave={handleUpdateStatus} avaliadorAtual={userName} canApprove={canApprove} />}
 
