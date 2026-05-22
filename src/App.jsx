@@ -3927,7 +3927,6 @@ function App() {
         </div>
 
         <div id="relatorio-preview-conteudo" className="max-w-[210mm] min-h-[297mm] print:min-h-0 mx-auto bg-white shadow-2xl print:shadow-none print:w-full print:h-full print:p-0 print-no-padding text-black text-[15px] leading-relaxed relative flex flex-col">
-{ ... }
           <div className="h-[12px] w-full bg-[#F4B41A] print-bg-yellow"></div>
           <div className="px-[12mm] py-[10mm] print:px-[8mm] print:py-[10mm] print-no-padding flex-1">
 
