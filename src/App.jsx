@@ -106,6 +106,37 @@ const shareViaEmail = (registro) => {
   window.open(`mailto:?subject=${subject}&body=${text}`, '_blank');
 };
 
+const compressImage = (file, isLogo = false) => {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = (event) => {
+      const img = new Image();
+      img.src = event.target.result;
+      img.onload = () => {
+        const canvas = document.createElement('canvas');
+        let width = img.width;
+        let height = img.height;
+        const maxDim = isLogo ? 300 : 1200;
+        
+        if (width > height) {
+          if (width > maxDim) { height *= maxDim / width; width = maxDim; }
+        } else {
+          if (height > maxDim) { width *= maxDim / height; height = maxDim; }
+        }
+        
+        canvas.width = width;
+        canvas.height = height;
+        const ctx = canvas.getContext('2d');
+        ctx.drawImage(img, 0, 0, width, height);
+        resolve(canvas.toDataURL(file.type || 'image/jpeg', 0.7));
+      };
+      img.onerror = (error) => reject(error);
+    };
+    reader.onerror = (error) => reject(error);
+  });
+};
+
 const getPendingDays = (dateString) => {
   if (!dateString) return 0;
   const diffTime = Math.abs(new Date() - new Date(dateString));
@@ -171,6 +202,7 @@ const ClipboardCheck = (p) => <SvgIcon {...p}><path d="M16 4h2a2 2 0 012 2v14a2 
 const SendHorizonal = (p) => <SvgIcon {...p}><path d="M3 8L10.89 15.9a2 2 0 002.83 0L21 8M3 8l9 5 9-5M3 8v10a2 2 0 002 2h14a2 2 0 002-2V8" /></SvgIcon>;
 const ExternalLink = (p) => <SvgIcon {...p}><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6M15 3h6v6M10 14L21 3" /></SvgIcon>;
 const Home = (p) => <SvgIcon {...p}><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z" /><polyline points="9 22 9 12 15 12 15 22" /></SvgIcon>;
+const Grid = (p) => <SvgIcon {...p}><rect x="3" y="3" width="18" height="18" rx="2" ry="2" /><line x1="3" y1="9" x2="21" y2="9" /><line x1="9" y1="3" x2="9" y2="21" /></SvgIcon>;
 
 const RichTextEditor = ({ value, onChange, placeholder }) => {
   const editorRef = useRef(null);
@@ -198,6 +230,41 @@ const RichTextEditor = ({ value, onChange, placeholder }) => {
     }
   };
 
+  const handlePaste = async (e) => {
+    const items = e.clipboardData?.items;
+    if (!items) return;
+
+    let hasImage = false;
+    for (let i = 0; i < items.length; i++) {
+      if (items[i].type.indexOf('image') !== -1) {
+        hasImage = true;
+        e.preventDefault();
+        const file = items[i].getAsFile();
+        if (file) {
+          try {
+            const compressed = await compressImage(file, false);
+            // Native browsers usually support resize natively if contentEditable=true
+            const imgHTML = `<img src="${compressed}" style="max-width: 100%; cursor: pointer;" />`;
+            execCommand('insertHTML', imgHTML);
+          } catch (err) { console.error("Erro colando imagem", err); }
+        }
+      }
+    }
+    // Let default text paste happen if no image
+  };
+
+  const insertTable = () => {
+    const tableHTML = `
+      <table border="1" style="width:100%; border-collapse: collapse; margin-top: 10px; margin-bottom: 10px; border: 1px solid #ddd;">
+        <tbody>
+          <tr><td style="border: 1px solid #ccc; padding: 8px; min-width: 50px;"><br></td><td style="border: 1px solid #ccc; padding: 8px; min-width: 50px;"><br></td><td style="border: 1px solid #ccc; padding: 8px; min-width: 50px;"><br></td></tr>
+          <tr><td style="border: 1px solid #ccc; padding: 8px; min-width: 50px;"><br></td><td style="border: 1px solid #ccc; padding: 8px; min-width: 50px;"><br></td><td style="border: 1px solid #ccc; padding: 8px; min-width: 50px;"><br></td></tr>
+        </tbody>
+      </table><p><br></p>
+    `;
+    execCommand('insertHTML', tableHTML);
+  };
+
   return (
     <div className="w-full relative">
       <div className="w-full border border-gray-300 rounded focus-within:ring-2 focus-within:ring-[#F4B41A] shadow-sm bg-white overflow-hidden flex flex-col">
@@ -206,6 +273,10 @@ const RichTextEditor = ({ value, onChange, placeholder }) => {
             <button type="button" onClick={(e) => { e.preventDefault(); execCommand('bold'); }} className="p-1.5 hover:bg-gray-200 text-gray-700 rounded transition" title="Negrito"><BoldIcon size={18} /></button>
             <button type="button" onClick={(e) => { e.preventDefault(); execCommand('italic'); }} className="p-1.5 hover:bg-gray-200 text-gray-700 rounded transition" title="Itálico"><ItalicIcon size={18} /></button>
             <button type="button" onClick={(e) => { e.preventDefault(); execCommand('underline'); }} className="p-1.5 hover:bg-gray-200 text-gray-700 rounded transition" title="Sublinhado"><UnderlineIcon size={18} /></button>
+          </div>
+
+          <div className="flex gap-1 border-r border-gray-300 pr-2">
+            <button type="button" onClick={(e) => { e.preventDefault(); insertTable(); }} className="p-1.5 hover:bg-gray-200 text-gray-700 rounded transition flex items-center gap-1 text-xs font-bold" title="Inserir Tabela"><Grid size={18} /> Tabela</button>
           </div>
 
           <div className="flex items-center gap-1 border-r border-gray-300 pr-2">
@@ -241,6 +312,7 @@ const RichTextEditor = ({ value, onChange, placeholder }) => {
           contentEditable
           onInput={handleInput}
           onBlur={handleInput}
+          onPaste={handlePaste}
           className="p-3 min-h-[100px] outline-none cursor-text rich-text-content"
           data-placeholder={placeholder}
         />
@@ -2883,7 +2955,7 @@ function App() {
     }
 
     return (
-      <div className="min-h-screen bg-[#f8f9fa] py-8 px-4 font-sans text-gray-800 print:bg-white print:py-0 print:px-0">
+      <div className="min-h-screen bg-[#DFA40A] py-8 px-4 font-sans text-gray-800 print:bg-white print:py-0 print:px-0">
         {registroToView && <RelatorioViewModal registro={registroToView} onClose={() => setRegistroToView(null)} />}
         {evaluatingRegistro && <StatusModal registro={evaluatingRegistro} onClose={() => setEvaluatingRegistro(null)} onSave={handleUpdateStatus} avaliadorAtual={userName} canApprove={canApprove} />}
 
@@ -2950,8 +3022,8 @@ function App() {
           <div className="flex flex-col mb-8 gap-4 bg-transparent animate-fade-in-up">
             <div className="flex items-center gap-3">
               <div>
-                <h1 className="text-3xl font-bold text-gray-900 tracking-tight">Seja bem vindo, {userName} 👋</h1>
-                <p className="text-gray-500 font-medium text-sm mt-1">O que você deseja fazer hoje?</p>
+                <h1 className="text-3xl font-bold text-[#5C3A21] tracking-tight">Seja bem vindo, {userName} 👋</h1>
+                <p className="text-[#5C3A21]/80 font-medium text-sm mt-1">O que você deseja fazer hoje?</p>
               </div>
             </div>
 
@@ -2959,30 +3031,30 @@ function App() {
             <div className="flex flex-col md:flex-row gap-3 items-center justify-between mt-2">
               <div className="relative w-full md:w-[400px]">
                 <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" size={18} />
-                <input type="text" value={globalSearchTerm || ''} onChange={(e) => setGlobalSearchTerm(e.target.value)} placeholder="Pesquisar..." className="w-full bg-white border border-gray-100 shadow-sm rounded-2xl py-3 pl-12 pr-4 focus:ring-2 focus:ring-blue-500 outline-none text-sm transition-all" />
+                <input type="text" value={globalSearchTerm || ''} onChange={(e) => setGlobalSearchTerm(e.target.value)} placeholder="Pesquisar..." className="w-full bg-white/90 border border-transparent shadow-sm rounded-2xl py-3 pl-12 pr-4 focus:ring-2 focus:ring-[#5C3A21] outline-none text-sm transition-all" />
               </div>
               <div className="flex flex-wrap gap-2 w-full md:w-auto">
-                <button onClick={() => { setFormData(getEmptyForm()); setEditingReportId(null); setView('form'); window.scrollTo(0, 0); }} className="bg-blue-600 text-white px-5 py-2.5 rounded-2xl font-semibold hover:bg-blue-700 transition-all flex items-center gap-2 shadow-sm"><Plus size={18} /> Novo Relatório</button>
-                {isAdmin && <button onClick={() => setIsUsersModalOpen(true)} className="bg-white text-gray-700 px-4 py-2.5 rounded-2xl font-semibold hover:bg-gray-50 transition-all shadow-sm border border-gray-100"><Users size={16} /></button>}
-                <button onClick={() => setFornecedoresModalOpen(true)} className="bg-white text-gray-700 px-4 py-2.5 rounded-2xl font-semibold hover:bg-gray-50 transition-all shadow-sm border border-gray-100" title="Fornecedores"><Truck size={16} /></button>
-                <button onClick={() => setClientesModalOpen(true)} className="bg-white text-gray-700 px-4 py-2.5 rounded-2xl font-semibold hover:bg-gray-50 transition-all shadow-sm border border-gray-100" title="Clientes"><ShoppingBag size={16} /></button>
-                <button onClick={exportToCSV} className="bg-white text-gray-700 px-4 py-2.5 rounded-2xl font-semibold hover:bg-gray-50 transition-all shadow-sm border border-gray-100" title="Exportar CSV"><Download size={16} /></button>
-                <button onClick={() => setIsProfileModalOpen(true)} className="bg-white text-gray-700 px-4 py-2.5 rounded-2xl font-semibold hover:bg-gray-50 transition-all shadow-sm border border-gray-100" title="Meu Perfil"><User size={16} /></button>
-                <button onClick={handleLogout} className="bg-red-50 text-red-600 px-4 py-2.5 rounded-2xl font-semibold hover:bg-red-100 transition-all border border-red-100" title="Sair"><LogOut size={16} /></button>
+                <button onClick={() => { setFormData(getEmptyForm()); setEditingReportId(null); setView('form'); window.scrollTo(0, 0); }} className="bg-[#5C3A21] text-white px-5 py-2.5 rounded-2xl font-semibold hover:bg-[#4A2E1A] transition-all flex items-center gap-2 shadow-sm"><Plus size={18} /> Novo Relatório</button>
+                {isAdmin && <button onClick={() => setIsUsersModalOpen(true)} className="bg-white/90 text-[#5C3A21] px-4 py-2.5 rounded-2xl font-semibold hover:bg-white transition-all shadow-sm border border-transparent"><Users size={16} /></button>}
+                <button onClick={() => setFornecedoresModalOpen(true)} className="bg-white/90 text-[#5C3A21] px-4 py-2.5 rounded-2xl font-semibold hover:bg-white transition-all shadow-sm border border-transparent" title="Fornecedores"><Truck size={16} /></button>
+                <button onClick={() => setClientesModalOpen(true)} className="bg-white/90 text-[#5C3A21] px-4 py-2.5 rounded-2xl font-semibold hover:bg-white transition-all shadow-sm border border-transparent" title="Clientes"><ShoppingBag size={16} /></button>
+                <button onClick={exportToCSV} className="bg-white/90 text-[#5C3A21] px-4 py-2.5 rounded-2xl font-semibold hover:bg-white transition-all shadow-sm border border-transparent" title="Exportar CSV"><Download size={16} /></button>
+                <button onClick={() => setIsProfileModalOpen(true)} className="bg-white/90 text-[#5C3A21] px-4 py-2.5 rounded-2xl font-semibold hover:bg-white transition-all shadow-sm border border-transparent" title="Meu Perfil"><User size={16} /></button>
+                <button onClick={handleLogout} className="bg-red-50 text-red-600 px-4 py-2.5 rounded-2xl font-semibold hover:bg-red-100 transition-all shadow-sm border border-red-100" title="Sair"><LogOut size={16} /></button>
               </div>
             </div>
           </div>
 
           {/* Barra de navegação dos módulos */}
-          <div className="flex gap-1 bg-white p-2 rounded-xl shadow-sm border border-gray-200 mb-6 overflow-x-auto">
+          <div className="flex gap-1 bg-white p-2 rounded-xl shadow-md border border-[#DFA40A]/20 mb-6 overflow-x-auto">
             {[
               { id: 'dashboard', label: 'Dashboard', icon: <Home size={16} />, color: 'text-[#5C3A21]', active: 'bg-[#5C3A21] text-white' },
-              { id: 'minhas-atividades', label: 'Minhas Atividades', icon: <Bell size={16} />, color: 'text-red-700', active: 'bg-red-600 text-white', badge: registros.filter(r => appUser?.canApprove ? r.lifecycleStatus === 'aguardando_aprovacao' : (r.lifecycleStatus === 'pendente_analise' || r.lifecycleStatus === 'correcao_solicitada')).length },
-              { id: 'rnc-cliente', label: 'RNC Cliente', icon: <ShoppingBag size={16} />, color: 'text-orange-700', active: 'bg-orange-500 text-white', badge: rncClientesExt.filter(r => r.status === 'Pendente').length },
-              { id: 'rnc-interna', label: 'NC Interna', icon: <Building2 size={16} />, color: 'text-blue-700', active: 'bg-blue-600 text-white', badge: rncInternas.filter(r => r.status === 'Pendente').length },
-              { id: 'sol-fornecedor', label: 'RNC Fornecedores', icon: <Truck size={16} />, color: 'text-purple-700', active: 'bg-purple-600 text-white', badge: solFornecedor.filter(r => r.status === 'Pendente').length },
+              { id: 'minhas-atividades', label: 'Minhas Atividades', icon: <Bell size={16} />, color: 'text-[#5C3A21]', active: 'bg-[#5C3A21] text-white', badge: registros.filter(r => appUser?.canApprove ? r.lifecycleStatus === 'aguardando_aprovacao' : (r.lifecycleStatus === 'pendente_analise' || r.lifecycleStatus === 'correcao_solicitada')).length },
+              { id: 'rnc-cliente', label: 'RNC Cliente', icon: <ShoppingBag size={16} />, color: 'text-[#5C3A21]', active: 'bg-[#5C3A21] text-white', badge: rncClientesExt.filter(r => r.status === 'Pendente').length },
+              { id: 'rnc-interna', label: 'NC Interna', icon: <Building2 size={16} />, color: 'text-[#5C3A21]', active: 'bg-[#5C3A21] text-white', badge: rncInternas.filter(r => r.status === 'Pendente').length },
+              { id: 'sol-fornecedor', label: 'RNC Fornecedores', icon: <Truck size={16} />, color: 'text-[#5C3A21]', active: 'bg-[#5C3A21] text-white', badge: solFornecedor.filter(r => r.status === 'Pendente').length },
             ].map(tab => (
-              <button key={tab.id} onClick={() => setActiveModule(tab.id)} className={`relative flex items-center gap-2 px-4 py-2.5 rounded-lg font-bold text-sm transition whitespace-nowrap ${activeModule === tab.id ? tab.active : 'hover:bg-gray-100 text-gray-600'}`}>
+              <button key={tab.id} onClick={() => setActiveModule(tab.id)} className={`relative flex items-center gap-2 px-4 py-2.5 rounded-lg font-bold text-sm transition whitespace-nowrap ${activeModule === tab.id ? tab.active : 'hover:bg-gray-100 text-[#5C3A21]/70'}`}>
                 {tab.icon} {tab.label}
                 {tab.badge > 0 && <span className="absolute -top-1 -right-1 bg-red-500 text-white text-[10px] font-black w-4 h-4 rounded-full flex items-center justify-center shadow-sm">{tab.badge}</span>}
               </button>
@@ -3486,7 +3558,7 @@ function App() {
 
   if (view === 'form') {
     return (
-      <div className="min-h-screen bg-[#f8f9fa] py-8 px-4 font-sans text-gray-800 relative">
+      <div className="min-h-screen bg-[#DFA40A] py-8 px-4 font-sans text-gray-800 relative">
         {appMessage && <div className="fixed top-4 right-4 z-[100] animate-fade-in-up"><div className="bg-white rounded-xl shadow-lg p-4 border-t-4 border-[#F4B41A] max-w-sm"><p className="text-sm font-medium text-gray-800">{appMessage}</p></div></div>}
 
         {editingImageIndex !== null && (() => {
@@ -3837,9 +3909,9 @@ function App() {
 
     const tipoStr = String(formData.tipoRelatorio || '');
 
-    if (tipoStr === 'Relatório de Não Conformidade - Cliente') { tituloRelatorio = "RELATÓRIO DE DESVIO PADRÃO"; tituloSecao1 = "DADOS DA OCORRÊNCIA"; }
+    if (tipoStr === 'Relatório de Não Conformidade - Cliente') { tituloRelatorio = "RELATÓRIO A3 - DESVIO EM CLIENTE"; tituloSecao1 = "1. CONTEXTO"; }
     if (tipoStr === 'Insumo ou Embalagem') tituloRelatorio = "RELATÓRIO DE OCORRÊNCIA INSUMO";
-    if (tipoStr === 'Ocorrência Interna') { tituloRelatorio = "RELATÓRIO A3 - NÃO CONFORMIDADE INTERNA"; tituloSecao1 = "1. CONTEXTO E INFORMAÇÕES"; tituloSecao2 = "2. ANÁLISE DE CAUSA RAIZ"; }
+    if (tipoStr === 'Ocorrência Interna') { tituloRelatorio = "RELATÓRIO A3 - NÃO CONFORMIDADE INTERNA"; tituloSecao1 = "1. CONTEXTO"; }
     if (tipoStr.includes('Teste')) { tituloRelatorio = "RELATÓRIO DE TESTES"; tituloSecao1 = "1. DADOS DO ESTUDO"; tituloSecao2 = "2. METODOLOGIA E RESULTADOS"; tituloSecao3 = "3. CONCLUSÃO E RECOMENDAÇÕES"; }
 
     return (
@@ -3855,6 +3927,7 @@ function App() {
         </div>
 
         <div id="relatorio-preview-conteudo" className="max-w-[210mm] min-h-[297mm] print:min-h-0 mx-auto bg-white shadow-2xl print:shadow-none print:w-full print:h-full print:p-0 print-no-padding text-black text-[15px] leading-relaxed relative flex flex-col">
+{ ... }
           <div className="h-[12px] w-full bg-[#F4B41A] print-bg-yellow"></div>
           <div className="px-[12mm] py-[10mm] print:px-[8mm] print:py-[10mm] print-no-padding flex-1">
 
@@ -3869,83 +3942,158 @@ function App() {
               </div>
             </div>
 
-            {tipoStr === 'Relatório de Não Conformidade - Cliente' ? (
-              <>
-                <div className="mb-5 print:mb-3 break-inside-avoid">
-                  <div className="border-l-4 border-[#F4B41A] print-border-yellow pl-2 mb-3 print:mb-2 bg-[#F4B41A]/10 print-bg-yellow-light py-1"><p className="font-bold uppercase text-[#5C3A21] text-[16px]">{tituloSecao1}</p></div>
-                  <div className="grid grid-cols-2 print:grid-cols-2 gap-x-8 gap-y-3 print:gap-x-12 print:gap-y-2 ml-1">
-                    <p className="text-[14px]"><strong>CLIENTE(S):</strong> {(formData.lojasLocais && formData.lojasLocais.length > 0) ? formData.lojasLocais.join(', ') : (formData.lojaLocal || 'Não informado')}</p>
-                    <p className="text-[14px]"><strong>SUPERVISOR:</strong> {formData.supervisor}</p>
-                    <p className="text-[14px]"><strong>PRODUTO:</strong> {formData.produto}</p>
-                    <p className="text-[14px]"><strong>LOTE:</strong> {formData.lote}</p>
-                    <p className="text-[14px]"><strong>DATA DE FABRICAÇÃO:</strong> {formData.dataFabricacao}</p>
-                    <p className="text-[14px]"><strong>DATA VALIDADE:</strong> {formData.validade}</p>
-                    <p className="text-[14px] col-span-2"><strong>QUANTIDADE NÃO CONFORME:</strong> {formData.quantidade}</p>
+            {(tipoStr === 'Relatório de Não Conformidade - Cliente' || tipoStr === 'Ocorrência Interna') ? (
+              <div className="w-full flex flex-col font-sans">
+                {/* Header A3 */}
+                <div className="flex w-full mb-3 border-2 border-[#1B365D] overflow-hidden rounded-t-lg">
+                  <div className="bg-[#1B365D] text-white flex-1 p-2 flex items-center justify-center">
+                    <h1 className="text-2xl font-black tracking-widest">{tituloRelatorio}</h1>
                   </div>
-                </div>
-
-                <div className="mb-5 print:mb-3 w-full overflow-hidden break-inside-avoid">
-                  <div className="border-l-4 border-[#F4B41A] print-border-yellow pl-2 mb-3 print:mb-2 bg-[#F4B41A]/10 print-bg-yellow-light py-1"><p className="font-bold uppercase text-[#5C3A21] text-[16px]">{tituloSecao2}</p></div>
-
-                  <p className="font-bold text-[14px] ml-1 mb-1">DESCRIÇÃO DA NÃO CONFORMIDADE APRESENTADA:</p>
-                  <div className="text-justify text-black ml-1 rich-text-content text-[14px] leading-relaxed break-words mb-4" dangerouslySetInnerHTML={{ __html: formData.descricao || '' }} />
-
-                  <p className="font-bold text-[14px] ml-1 mb-2">CARACTERÍSTICAS DO PRODUTO:</p>
-                  <div className="grid grid-cols-2 md:grid-cols-4 print:grid-cols-4 gap-4 ml-1 mb-2">
-                    <div className="border border-gray-200 p-2 rounded bg-gray-50 text-center"><span className="block text-[11px] font-bold text-gray-500 uppercase">Sabor</span><span className="text-[14px] font-semibold">{formData.sabor || 'Não informado'}</span></div>
-                    <div className="border border-gray-200 p-2 rounded bg-gray-50 text-center"><span className="block text-[11px] font-bold text-gray-500 uppercase">Odor</span><span className="text-[14px] font-semibold">{formData.odor || 'Não informado'}</span></div>
-                    <div className="border border-gray-200 p-2 rounded bg-gray-50 text-center"><span className="block text-[11px] font-bold text-gray-500 uppercase">Cor</span><span className="text-[14px] font-semibold">{formData.cor || 'Não informado'}</span></div>
-                    <div className="border border-gray-200 p-2 rounded bg-gray-50 text-center"><span className="block text-[11px] font-bold text-gray-500 uppercase">Temp. °C</span><span className="text-[14px] font-semibold">{formData.temperatura || 'Não informado'}</span></div>
-                  </div>
-                </div>
-
-                {Array.isArray(formData.imagens) && formData.imagens.length > 0 && (
-                  <div className="mb-6 mt-6 print:mt-4">
-                    <p className="font-bold text-[14px] ml-1 mb-2 uppercase">Registro Fotográfico:</p>
-                    <div className={`grid gap-4 ${formData.imagens.length === 1 ? 'grid-cols-1' : 'grid-cols-2 print:grid-cols-2'}`}>
-                      {formData.imagens.map((img, index) => {
-                        const src = typeof img === 'string' ? img : img?.displaySrc;
-                        return <img key={index} src={src} alt={`Evidência ${index + 1}`} className="w-full h-auto max-h-[800px] object-contain border border-gray-300 shadow-sm rounded break-inside-avoid bg-white p-1" />;
-                      })}
+                  <div className="bg-white px-6 py-1 flex items-center justify-center border-l-2 border-[#1B365D]">
+                    <div className="text-center">
+                      <div className="w-12 h-12 rounded-full border-4 border-[#F4B41A] flex items-center justify-center text-[#1B365D] font-black text-sm relative">
+                        <span className="absolute top-1 left-2">P</span><span className="absolute top-1 right-2">D</span>
+                        <span className="absolute bottom-1 right-2">C</span><span className="absolute bottom-1 left-2">A</span>
+                        <div className="w-full h-0.5 bg-gray-200 absolute top-1/2 -translate-y-1/2"></div>
+                        <div className="h-full w-0.5 bg-gray-200 absolute left-1/2 -translate-x-1/2"></div>
+                      </div>
                     </div>
+                  </div>
+                </div>
+
+                {/* SubHeader */}
+                <div className="flex border-b-2 border-gray-300 pb-2 mb-4 text-[12px] gap-4 font-bold text-gray-700">
+                  <div className="flex-1">TEMA: <span className="font-normal">{formData.produto || 'Ocorrência/Desvio'}</span></div>
+                  <div>RESPONSÁVEL: <span className="font-normal">{formData.supervisor || formData.setor || 'Não informado'}</span></div>
+                  <div>DATA: <span className="font-normal">{formData.dataRelatorio}</span></div>
+                </div>
+
+                {/* Body A3 - Two Columns */}
+                <div className="grid grid-cols-2 gap-4">
+                  {/* LEFT COLUMN */}
+                  <div className="flex flex-col gap-4">
+                    {/* 1. CONTEXTO */}
+                    <div className="border border-gray-300 rounded shadow-sm overflow-hidden">
+                      <div className="bg-gray-100 border-b border-gray-300 px-2 py-1 font-bold text-[#1B365D] flex gap-2"><span className="bg-[#1B365D] text-white rounded-full w-5 h-5 flex items-center justify-center text-xs">1</span> CONTEXTO</div>
+                      <div className="p-2 text-[12px] bg-white">
+                        <div className="grid grid-cols-2 gap-x-4 gap-y-1">
+                          {tipoStr === 'Relatório de Não Conformidade - Cliente' ? (
+                            <>
+                              <p><strong>Cliente:</strong> {(formData.lojasLocais && formData.lojasLocais.length > 0) ? formData.lojasLocais.join(', ') : (formData.lojaLocal || '-')}</p>
+                              <p><strong>Lote:</strong> {formData.lote}</p>
+                              <p><strong>Data Fab.:</strong> {formData.dataFabricacao}</p>
+                              <p><strong>Validade:</strong> {formData.validade}</p>
+                              <p className="col-span-2"><strong>Qtd. NC:</strong> {formData.quantidade}</p>
+                            </>
+                          ) : (
+                            <>
+                              <p><strong>Setor:</strong> {formData.setor || '-'}</p>
+                              <p><strong>Lote:</strong> {formData.lote || '-'}</p>
+                              <p><strong>Data Ocor.:</strong> {formData.dataOcorrencia || '-'}</p>
+                              <p><strong>Qtd. Afetada:</strong> {formData.quantidade || '-'}</p>
+                              {formData.custoEstimado && <p className="col-span-2 text-red-600 font-bold"><strong>COPQ:</strong> {formData.custoEstimado}</p>}
+                            </>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* 2. CONDIÇÕES ATUAIS */}
+                    <div className="border border-gray-300 rounded shadow-sm overflow-hidden flex-1">
+                      <div className="bg-gray-100 border-b border-gray-300 px-2 py-1 font-bold text-[#1B365D] flex gap-2"><span className="bg-[#1B365D] text-white rounded-full w-5 h-5 flex items-center justify-center text-xs">2</span> CONDIÇÕES ATUAIS (PROBLEMA)</div>
+                      <div className="p-2 text-[12px] bg-white h-full">
+                        <div className="rich-text-content leading-relaxed" dangerouslySetInnerHTML={{ __html: formData.descricao || '' }} />
+                        {tipoStr === 'Relatório de Não Conformidade - Cliente' && (
+                          <div className="grid grid-cols-4 gap-1 mt-2 text-[10px] text-center border-t pt-2">
+                            <div><strong>Sabor:</strong> {formData.sabor}</div>
+                            <div><strong>Odor:</strong> {formData.odor}</div>
+                            <div><strong>Cor:</strong> {formData.cor}</div>
+                            <div><strong>Temp:</strong> {formData.temperatura}</div>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+
+                    {/* 3. OBJETIVOS E METAS */}
+                    <div className="border border-gray-300 rounded shadow-sm overflow-hidden min-h-[100px]">
+                      <div className="bg-gray-100 border-b border-gray-300 px-2 py-1 font-bold text-[#1B365D] flex gap-2"><span className="bg-[#1B365D] text-white rounded-full w-5 h-5 flex items-center justify-center text-xs">3</span> OBJETIVOS / METAS DE MELHORIA</div>
+                      <div className="p-2 text-[12px] bg-white h-full">
+                        <div className="rich-text-content" dangerouslySetInnerHTML={{ __html: formData.metasMelhoria || formData.acaoCorretiva || '' }} />
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* RIGHT COLUMN */}
+                  <div className="flex flex-col gap-4">
+                    {/* 4. ANÁLISE */}
+                    <div className="border border-gray-300 rounded shadow-sm overflow-hidden min-h-[160px]">
+                      <div className="bg-gray-100 border-b border-gray-300 px-2 py-1 font-bold text-[#1B365D] flex gap-2"><span className="bg-[#1B365D] text-white rounded-full w-5 h-5 flex items-center justify-center text-xs">4</span> ANÁLISE DE CAUSA RAIZ (ISHIKAWA/5 PORQUÊS)</div>
+                      <div className="p-2 text-[12px] bg-white h-full">
+                         <div className="rich-text-content" dangerouslySetInnerHTML={{ __html: formData.causaRaiz || formData.consideracoes || '' }} />
+                      </div>
+                    </div>
+
+                    {/* 5. PLANO DE AÇÃO */}
+                    <div className="border border-gray-300 rounded shadow-sm overflow-hidden flex-1">
+                      <div className="bg-gray-100 border-b border-gray-300 px-2 py-1 font-bold text-[#1B365D] flex gap-2"><span className="bg-[#1B365D] text-white rounded-full w-5 h-5 flex items-center justify-center text-xs">5</span> PLANO DE AÇÃO (5W2H)</div>
+                      <div className="p-2 text-[12px] bg-white h-full overflow-x-auto">
+                        {formData.planoAcao ? (
+                           <div className="rich-text-content" dangerouslySetInnerHTML={{ __html: formData.planoAcao }} />
+                        ) : (
+                          <table className="w-full text-[10px] border-collapse border border-gray-300 text-center">
+                            <thead className="bg-gray-50">
+                              <tr>
+                                <th className="border border-gray-300 p-1">O QUÊ?</th>
+                                <th className="border border-gray-300 p-1">QUEM?</th>
+                                <th className="border border-gray-300 p-1">QUANDO?</th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              <tr><td className="border border-gray-300 p-2"></td><td className="border border-gray-300 p-2"></td><td className="border border-gray-300 p-2"></td></tr>
+                              <tr><td className="border border-gray-300 p-2"></td><td className="border border-gray-300 p-2"></td><td className="border border-gray-300 p-2"></td></tr>
+                            </tbody>
+                          </table>
+                        )}
+                      </div>
+                    </div>
+
+                    {/* 6. ACOMPANHAMENTO */}
+                    <div className="border border-gray-300 rounded shadow-sm overflow-hidden min-h-[100px]">
+                      <div className="bg-gray-100 border-b border-gray-300 px-2 py-1 font-bold text-[#1B365D] flex gap-2"><span className="bg-[#1B365D] text-white rounded-full w-5 h-5 flex items-center justify-center text-xs">6</span> ACOMPANHAMENTO / VERIFICAÇÃO</div>
+                      <div className="p-2 text-[12px] bg-white h-full">
+                         <p><strong>Status Parecer:</strong> {formData.statusParecer || 'Pendente'}</p>
+                         <p><strong>Aprovação:</strong> {formData.conclusaoParecer ? 'Concluído' : 'Aberto'}</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* IMAGENS / EVIDÊNCIAS (Full Width at bottom) */}
+                {Array.isArray(formData.imagens) && formData.imagens.length > 0 && (
+                  <div className="mt-4 border border-gray-300 rounded shadow-sm overflow-hidden break-inside-avoid">
+                     <div className="bg-gray-100 border-b border-gray-300 px-2 py-1 font-bold text-[#1B365D]">EVIDÊNCIAS FOTOGRÁFICAS</div>
+                     <div className="p-2 bg-white">
+                        <div className={`grid gap-4 ${formData.imagens.length === 1 ? 'grid-cols-1' : 'grid-cols-2 print:grid-cols-2'}`}>
+                          {formData.imagens.map((img, index) => {
+                            const src = typeof img === 'string' ? img : img?.displaySrc;
+                            return <img key={index} src={src} alt={`Evidência ${index + 1}`} className="w-full h-auto max-h-[400px] object-contain border border-gray-300 shadow-sm rounded bg-white p-1" />;
+                          })}
+                        </div>
+                     </div>
                   </div>
                 )}
-
-                <div className="mb-5 print:mb-3 w-full overflow-hidden break-inside-avoid print:pt-4">
-                  <div className="border-l-4 border-[#F4B41A] print-border-yellow pl-2 mb-3 print:mb-2 bg-[#F4B41A]/10 print-bg-yellow-light py-1"><p className="font-bold uppercase text-[#5C3A21] text-[16px]">{tituloSecao3}</p></div>
-
-                  <div className="flex flex-wrap gap-x-6 gap-y-2 ml-1 mb-5">
-                    <p className="font-bold text-[14px] w-full md:w-auto print:w-auto">STATUS:</p>
-                    <p className="text-[14px] font-semibold">({formData.statusParecer === 'PROCEDENTE' ? 'X' : '  '}) PROCEDENTE</p>
-                    <p className="text-[14px] font-semibold">({formData.statusParecer === 'NÃO PROCEDENTE' ? 'X' : '  '}) NÃO PROCEDENTE</p>
-                    <p className="text-[14px] font-semibold">({formData.statusParecer === 'NÃO APLICADO' ? 'X' : '  '}) NÃO APLICADO</p>
-                  </div>
-
-                  <p className="font-bold text-[14px] ml-1 mb-1">DESCRITIVO DE INVESTIGAÇÃO:</p>
-                  <div className="text-justify text-black ml-1 rich-text-content text-[14px] leading-relaxed break-words mb-5" dangerouslySetInnerHTML={{ __html: formData.consideracoes || '' }} />
-
-                  <div className="mb-5">
-                    <p className="font-bold text-[14px] ml-1 mb-1">AÇÃO CORRETIVA:</p>
-                    <div className="text-justify text-black ml-1 rich-text-content text-[14px] leading-relaxed break-words" dangerouslySetInnerHTML={{ __html: formData.acaoCorretiva || '-' }} />
-                  </div>
-
-                  {formData.conclusaoParecer && (
-                    <div className="mb-8">
-                      <p className="font-bold text-[14px] ml-1 mb-1">CONCLUSÃO:</p>
-                      <div className="text-justify text-black ml-1 rich-text-content text-[14px] leading-relaxed break-words" dangerouslySetInnerHTML={{ __html: formData.conclusaoParecer || '-' }} />
+                
+                {/* ASSINATURAS */}
+                <div className="grid grid-cols-1 md:grid-cols-2 print:grid-cols-2 gap-x-8 gap-y-6 text-[12px] mt-6 mb-4 break-inside-avoid text-center">
+                  {(Array.isArray(formData.assinaturas) ? formData.assinaturas : []).filter(Boolean).map((assinatura, index) => (
+                    <div key={index} className={(formData.assinaturas || []).length % 2 !== 0 && index === (formData.assinaturas || []).length - 1 ? "md:col-span-2 print:col-span-2" : ""}>
+                      <div className="w-48 mx-auto border-b border-black mb-1"></div>
+                      <p className="font-bold uppercase">{assinatura?.nome}</p>
+                      <p className="text-gray-600">{assinatura?.cargo}</p>
                     </div>
-                  )}
-
-                  <div className="grid grid-cols-1 md:grid-cols-2 print:grid-cols-2 gap-x-8 gap-y-6 text-[14px] mt-6 mb-4 print:mt-3 print:mb-2 break-inside-avoid print-grid-signatures">
-                    {(Array.isArray(formData.assinaturas) ? formData.assinaturas : []).filter(Boolean).map((assinatura, index) => (
-                      <div key={index} className={(formData.assinaturas || []).length % 2 !== 0 && index === (formData.assinaturas || []).length - 1 ? "md:col-span-2 print:col-span-2" : ""}>
-                        <p className="font-bold uppercase">Responsável: {assinatura?.nome}</p>
-                        <p className="leading-snug whitespace-pre-line text-gray-600">{assinatura?.cargo}</p>
-                      </div>
-                    ))}
-                  </div>
+                  ))}
                 </div>
-              </>
+              </div>
             ) : tipoStr === 'Ocorrência Interna' ? (
               <>
                 <div className="mb-5 print:mb-3 break-inside-avoid">
