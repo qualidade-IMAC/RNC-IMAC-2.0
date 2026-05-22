@@ -1651,6 +1651,7 @@ function App() {
     dataRelatorio: new Date().toLocaleDateString('pt-BR'),
     dataOcorrencia: '', produto: '', ocorrencia: '', lote: '', quantidade: '', validade: '',
     dataRecebimento: '', nf: '', horarioEmbalamento: '', descricao: '', consideracoes: '',
+    custoEstimado: '', causaRaiz: '', planoAcao: '', metasMelhoria: '',
     lojasLocais: [], dataFabricacao: '', supervisor: '', sabor: '', odor: '', cor: '', temperatura: '', statusParecer: '', acaoCorretiva: '', conclusaoParecer: '',
     localData: `Aquiraz, ${new Date().toLocaleDateString('pt-BR', { day: '2-digit', month: 'long', year: 'numeric' })}.`,
     imagens: [], fornecedor: '', assinaturas: [...defaultAssinaturas]
@@ -2326,6 +2327,10 @@ function App() {
       conclusaoParecer: registro.conclusaoParecer || '',
       descricao: registro.descricao || '',
       consideracoes: registro.consideracoes || '',
+      custoEstimado: registro.custoEstimado || '',
+      causaRaiz: registro.causaRaiz || '',
+      planoAcao: registro.planoAcao || '',
+      metasMelhoria: registro.metasMelhoria || '',
       localData: registro.localData || (registro.dataCriacao ? `Aquiraz, ${safeDate(registro.dataCriacao)}.` : ''),
       imagens: Array.isArray(registro.imagens) ? registro.imagens : [],
       fornecedor: registro.fornecedor || '',
@@ -2415,6 +2420,7 @@ function App() {
       lojasLocais: formData.lojasLocais || [], dataFabricacao: formData.dataFabricacao || '', supervisor: formData.supervisor || '',
       sabor: formData.sabor || '', odor: formData.odor || '', cor: formData.cor || '', temperatura: formData.temperatura || '',
       statusParecer: formData.statusParecer || '', acaoCorretiva: formData.acaoCorretiva || '', conclusaoParecer: formData.conclusaoParecer || '',
+      custoEstimado: formData.custoEstimado || '', causaRaiz: formData.causaRaiz || '', planoAcao: formData.planoAcao || '', metasMelhoria: formData.metasMelhoria || '',
       imagens: Array.isArray(formData.imagens) ? formData.imagens : [],
       assinaturas: Array.isArray(formData.assinaturas) ? formData.assinaturas : [],
       logo: formData.logo || null, localData: formData.localData || '',
@@ -3708,12 +3714,42 @@ function App() {
                     </div>
                     <RichTextEditor value={formData.descricao || ''} onChange={(val) => setFormData(prev => ({ ...prev, descricao: val }))} placeholder={placeholders.descricao} />
                   </div>
-                  <div>
-                    <div className="mb-1">
-                      <label className="block text-sm font-bold text-gray-700">3. Considerações Finais</label>
+                  
+                  {formData.tipoRelatorio === 'Ocorrência Interna' && (
+                    <div className="space-y-6 bg-blue-50/50 p-4 rounded-xl border border-blue-100">
+                      <h3 className="font-black text-blue-800 text-md flex items-center gap-2"><FileText size={18} /> Campos Específicos: Relatório A3</h3>
+                      
+                      <div>
+                        <label className="block text-sm font-bold mb-1 text-gray-700">Custo Estimado da Falha / COPQ (R$)</label>
+                        <input type="text" maxLength={40} name="custoEstimado" value={formData.custoEstimado || ''} onChange={handleChange} placeholder="Ex: R$ 450,00" className="w-full md:w-1/3 border border-gray-300 p-2.5 rounded focus:ring-2 focus:ring-blue-400 outline-none shadow-sm font-semibold text-red-600" />
+                        <p className="text-[10px] text-gray-500 mt-1">Cost of Poor Quality: Estime o impacto financeiro (retrabalho, perda de material, tempo parado).</p>
+                      </div>
+
+                      <div>
+                        <div className="mb-1"><label className="block text-sm font-bold text-gray-700">Análise de Causa Raiz (5 Porquês / Ishikawa)</label></div>
+                        <RichTextEditor value={formData.causaRaiz || ''} onChange={(val) => setFormData(prev => ({ ...prev, causaRaiz: val }))} placeholder="Ex: 1. Por que ocorreu? Porque a seladora falhou. 2. Por que falhou? Porque a resistência rompeu..." />
+                      </div>
+
+                      <div>
+                        <div className="mb-1"><label className="block text-sm font-bold text-gray-700">Plano de Ação (Contramedidas / 5W2H)</label></div>
+                        <RichTextEditor value={formData.planoAcao || ''} onChange={(val) => setFormData(prev => ({ ...prev, planoAcao: val }))} placeholder="Ex: Quem, O Que, Quando, Onde, Por que e Como faremos para evitar que aconteça de novo?" />
+                      </div>
+
+                      <div>
+                        <div className="mb-1"><label className="block text-sm font-bold text-gray-700">Metas de Melhoria (Opcional)</label></div>
+                        <RichTextEditor value={formData.metasMelhoria || ''} onChange={(val) => setFormData(prev => ({ ...prev, metasMelhoria: val }))} placeholder="Ex: Reduzir a incidência desta falha em 50% até o próximo trimestre." />
+                      </div>
                     </div>
-                    <RichTextEditor value={formData.consideracoes || ''} onChange={(val) => setFormData(prev => ({ ...prev, consideracoes: val }))} placeholder={placeholders.consideracoes} />
-                  </div>
+                  )}
+
+                  {formData.tipoRelatorio !== 'Ocorrência Interna' && (
+                    <div>
+                      <div className="mb-1">
+                        <label className="block text-sm font-bold text-gray-700">3. Considerações Finais</label>
+                      </div>
+                      <RichTextEditor value={formData.consideracoes || ''} onChange={(val) => setFormData(prev => ({ ...prev, consideracoes: val }))} placeholder={placeholders.consideracoes} />
+                    </div>
+                  )}
                 </div>
 
                 <div className="space-y-4">
@@ -3803,7 +3839,7 @@ function App() {
 
     if (tipoStr === 'Relatório de Não Conformidade - Cliente') { tituloRelatorio = "RELATÓRIO DE DESVIO PADRÃO"; tituloSecao1 = "DADOS DA OCORRÊNCIA"; }
     if (tipoStr === 'Insumo ou Embalagem') tituloRelatorio = "RELATÓRIO DE OCORRÊNCIA INSUMO";
-    if (tipoStr === 'Ocorrência Interna') tituloRelatorio = "RELATÓRIO INTERNO DE OCORRÊNCIA";
+    if (tipoStr === 'Ocorrência Interna') { tituloRelatorio = "RELATÓRIO A3 - NÃO CONFORMIDADE INTERNA"; tituloSecao1 = "1. CONTEXTO E INFORMAÇÕES"; tituloSecao2 = "2. ANÁLISE DE CAUSA RAIZ"; }
     if (tipoStr.includes('Teste')) { tituloRelatorio = "RELATÓRIO DE TESTES"; tituloSecao1 = "1. DADOS DO ESTUDO"; tituloSecao2 = "2. METODOLOGIA E RESULTADOS"; tituloSecao3 = "3. CONCLUSÃO E RECOMENDAÇÕES"; }
 
     return (
@@ -3905,6 +3941,78 @@ function App() {
                       <div key={index} className={(formData.assinaturas || []).length % 2 !== 0 && index === (formData.assinaturas || []).length - 1 ? "md:col-span-2 print:col-span-2" : ""}>
                         <p className="font-bold uppercase">Responsável: {assinatura?.nome}</p>
                         <p className="leading-snug whitespace-pre-line text-gray-600">{assinatura?.cargo}</p>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </>
+            ) : tipoStr === 'Ocorrência Interna' ? (
+              <>
+                <div className="mb-5 print:mb-3 break-inside-avoid">
+                  <div className="border-l-4 border-[#F4B41A] print-border-yellow pl-2 mb-3 print:mb-2 bg-[#F4B41A]/10 print-bg-yellow-light py-1"><p className="font-bold uppercase text-[#5C3A21] text-[16px]">{tituloSecao1}</p></div>
+                  <div className="grid grid-cols-1 md:grid-cols-2 print:grid-cols-2 gap-x-8 gap-y-3 print:gap-x-12 print:gap-y-2 ml-1">
+                    <p><strong>Setor / Área:</strong> {formData.setor || 'Não informado'}</p>
+                    <p><strong>Produto / Material:</strong> {formData.produto}</p>
+                    {formData.lote && <p><strong>Lote:</strong> {formData.lote}</p>}
+                    {formData.quantidade && <p><strong>Quantidade Afetada:</strong> {formData.quantidade}</p>}
+                    {formData.dataOcorrencia && <p><strong>Data da ocorrência:</strong> {formData.dataOcorrencia}</p>}
+                    {formData.horario && <p><strong>Horário / Turno:</strong> {formData.horario}</p>}
+                    {formData.custoEstimado && <p className="text-red-700 font-bold col-span-2"><strong>COPQ (Custo Estimado):</strong> {formData.custoEstimado}</p>}
+                    <div className="col-span-2 mt-2">
+                      <p><strong>Descrição do Problema:</strong></p>
+                      <div className="text-justify text-black rich-text-content break-words" dangerouslySetInnerHTML={{ __html: formData.descricao || '' }} />
+                    </div>
+                  </div>
+                </div>
+
+                {formData.causaRaiz && (
+                  <div className="mb-5 print:mb-3 w-full overflow-hidden break-inside-avoid">
+                    <div className="border-l-4 border-[#F4B41A] print-border-yellow pl-2 mb-2 print:mb-1.5"><p className="font-bold uppercase text-[#5C3A21]">{tituloSecao2}</p></div>
+                    <div className="text-justify text-black ml-1 rich-text-content break-words border border-gray-200 p-3 bg-gray-50 rounded" dangerouslySetInnerHTML={{ __html: formData.causaRaiz || '' }} />
+                  </div>
+                )}
+
+                {formData.planoAcao && (
+                  <div className="mb-5 print:mb-3 w-full overflow-hidden break-inside-avoid">
+                    <div className="border-l-4 border-[#F4B41A] print-border-yellow pl-2 mb-2 print:mb-1.5"><p className="font-bold uppercase text-[#5C3A21]">3. PLANO DE AÇÃO (5W2H)</p></div>
+                    <div className="text-justify text-black ml-1 rich-text-content break-words border border-gray-200 p-3 bg-gray-50 rounded" dangerouslySetInnerHTML={{ __html: formData.planoAcao || '' }} />
+                  </div>
+                )}
+
+                {formData.metasMelhoria && (
+                  <div className="mb-5 print:mb-3 w-full overflow-hidden break-inside-avoid">
+                    <div className="border-l-4 border-[#F4B41A] print-border-yellow pl-2 mb-2 print:mb-1.5"><p className="font-bold uppercase text-[#5C3A21]">4. METAS DE MELHORIA</p></div>
+                    <div className="text-justify text-black ml-1 rich-text-content break-words border border-gray-200 p-3 bg-blue-50 rounded" dangerouslySetInnerHTML={{ __html: formData.metasMelhoria || '' }} />
+                  </div>
+                )}
+
+                {Array.isArray(formData.imagens) && formData.imagens.length > 0 && (
+                  <div className="mb-6 mt-6 print:mt-4">
+                    <div className="bg-[#F4B41A] text-black text-center py-1.5 mb-3 print-bg-yellow break-inside-avoid"><p className="text-[15px] font-bold">Seguem registros fotográficos</p></div>
+                    <div className={`grid gap-4 ${formData.imagens.length === 1 ? 'grid-cols-1' : 'grid-cols-2 print:grid-cols-2'}`}>
+                      {formData.imagens.map((img, index) => {
+                        const src = typeof img === 'string' ? img : img?.displaySrc;
+                        return <img key={index} src={src} alt={`Evidência ${index + 1}`} className="w-full h-auto max-h-[800px] object-contain border border-gray-300 shadow-sm rounded break-inside-avoid bg-white p-1" />;
+                      })}
+                    </div>
+                  </div>
+                )}
+
+                <div className="print:pt-4 break-inside-avoid">
+                  {formData.consideracoes && (
+                    <div className="mb-8">
+                      <div className="border-l-4 border-[#F4B41A] print-border-yellow pl-2 mb-2 print:mb-1.5"><p className="font-bold uppercase text-[#5C3A21]">5. ACOMPANHAMENTO E VERIFICAÇÃO</p></div>
+                      <div className="text-justify text-black ml-1 rich-text-content break-words" dangerouslySetInnerHTML={{ __html: formData.consideracoes || '' }} />
+                    </div>
+                  )}
+
+                  <div className="grid grid-cols-1 md:grid-cols-2 print:grid-cols-2 gap-x-8 gap-y-6 text-[14px] mt-8 mb-4 print:mt-6 print:mb-4 break-inside-avoid print-grid-signatures">
+                    {(Array.isArray(formData.assinaturas) ? formData.assinaturas : []).filter(Boolean).map((assinatura, index) => (
+                      <div key={index} className={(formData.assinaturas || []).length % 2 !== 0 && index === (formData.assinaturas || []).length - 1 ? "md:col-span-2 print:col-span-2" : ""}>
+                        <div className="border-t border-black pt-1 mt-8 w-3/4 print:w-4/5 mx-auto text-center">
+                          <p className="font-bold uppercase">{assinatura?.nome}</p>
+                          <p className="leading-snug whitespace-pre-line text-gray-600">{assinatura?.cargo}</p>
+                        </div>
                       </div>
                     ))}
                   </div>
