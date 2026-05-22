@@ -164,6 +164,7 @@ const Lock = (p) => <SvgIcon {...p}><rect x="3" y="11" width="18" height="11" rx
 const User = (p) => <SvgIcon {...p}><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></SvgIcon>;
 const Key = (p) => <SvgIcon {...p}><path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3m-3.5 3.5L19 4" /></SvgIcon>;
 const Bell = (p) => <SvgIcon {...p}><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" /><path d="M13.73 21a2 2 0 0 1-3.46 0" /></SvgIcon>;
+const Search = (p) => <SvgIcon {...p}><circle cx="11" cy="11" r="8" /><line x1="21" y1="21" x2="16.65" y2="16.65" /></SvgIcon>;
 const Settings = (p) => <SvgIcon {...p}><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.5a2 2 0 0 1-1 1.72l-.15.1a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0-.73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z" /><circle cx="12" cy="12" r="3" /></SvgIcon>;
 const Building2 = (p) => <SvgIcon {...p}><path d="M6 22V4a2 2 0 012-2h8a2 2 0 012 2v18M2 22h20M10 6h4M10 10h4M10 14h4M10 18h4" /></SvgIcon>;
 const ClipboardCheck = (p) => <SvgIcon {...p}><path d="M16 4h2a2 2 0 012 2v14a2 2 0 01-2 2H6a2 2 0 01-2-2V6a2 2 0 012-2h2M15 2H9a1 1 0 00-1 1v2a1 1 0 001 1h6a1 1 0 001-1V3a1 1 0 00-1-1z" /><path d="M9 12l2 2 4-4" /></SvgIcon>;
@@ -1521,6 +1522,65 @@ const RelatorioViewModal = ({ registro, onClose }) => {
     </div>
   );
 };
+
+const CalendarGuide = ({ data, onDateSelect }) => {
+  const [currentDate, setCurrentDate] = useState(new Date());
+  
+  const getDaysInMonth = (year, month) => new Date(year, month + 1, 0).getDate();
+  const getFirstDayOfMonth = (year, month) => new Date(year, month, 1).getDay();
+
+  const year = currentDate.getFullYear();
+  const month = currentDate.getMonth();
+  const daysInMonth = getDaysInMonth(year, month);
+  const firstDay = getFirstDayOfMonth(year, month);
+
+  const days = [];
+  for (let i = 0; i < firstDay; i++) days.push(null);
+  for (let i = 1; i <= daysInMonth; i++) days.push(i);
+
+  // Mapear datas com ocorrências
+  const occurrences = data.reduce((acc, item) => {
+    if (!item.dataCriacao) return acc;
+    const dateStr = new Date(item.dataCriacao).toISOString().split('T')[0];
+    acc[dateStr] = (acc[dateStr] || 0) + 1;
+    return acc;
+  }, {});
+
+  const prevMonth = () => setCurrentDate(new Date(year, month - 1, 1));
+  const nextMonth = () => setCurrentDate(new Date(year, month + 1, 1));
+
+  const monthNames = ["Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"];
+
+  return (
+    <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-5 w-full">
+      <div className="flex justify-between items-center mb-4">
+        <h3 className="font-bold text-gray-800">{monthNames[month]} {year}</h3>
+        <div className="flex gap-2">
+          <button onClick={prevMonth} className="p-1 rounded-full hover:bg-gray-100 text-gray-500"><ChevronLeft size={20} /></button>
+          <button onClick={nextMonth} className="p-1 rounded-full hover:bg-gray-100 text-gray-500"><ChevronRight size={20} /></button>
+        </div>
+      </div>
+      <div className="grid grid-cols-7 gap-1 text-center text-xs font-bold text-gray-400 mb-2">
+        {['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb'].map(d => <div key={d}>{d}</div>)}
+      </div>
+      <div className="grid grid-cols-7 gap-1">
+        {days.map((d, i) => {
+          if (!d) return <div key={`empty-${i}`} className="p-2"></div>;
+          const dateStr = new Date(year, month, d).toISOString().split('T')[0];
+          const count = occurrences[dateStr];
+          const isToday = new Date().toISOString().split('T')[0] === dateStr;
+          return (
+            <button key={d} onClick={() => onDateSelect && onDateSelect(dateStr)} className={`relative p-2 rounded-xl text-sm font-semibold transition-all hover:bg-gray-100 ${isToday ? 'bg-blue-50 text-blue-600' : 'text-gray-700'}`}>
+              {d}
+              {count > 0 && <span className="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full"></span>}
+            </button>
+          );
+        })}
+      </div>
+    </div>
+  );
+};
+
 function App() {
   const [view, setView] = useState('loading');
   const [authLoading, setAuthLoading] = useState(true);
@@ -1551,6 +1611,9 @@ function App() {
   const [user, setUser] = useState(null);
   const [dashboardFilters, setDashboardFilters] = useState({ periodo: 'mes_atual', fornecedor: '', tipo: '', status: '' });
   const [visibleHistoryCount, setVisibleHistoryCount] = useState(20);
+  const [globalSearchTerm, setGlobalSearchTerm] = useState('');
+  const [historySearchTerm, setHistorySearchTerm] = useState('');
+  const [selectedInternaDate, setSelectedInternaDate] = useState(null);
   // Users Directory & Custom App Auth
   const [usersDirectory, setUsersDirectory] = useState([]);
   const [checkingDirectory, setCheckingDirectory] = useState(true);
@@ -2877,23 +2940,30 @@ function App() {
 
         <div className={`max-w-7xl mx-auto ${registroToView ? 'no-print' : ''}`}>
 
-          {/* Header principal */}
-          <div className="flex flex-col md:flex-row md:justify-between md:items-start mb-4 gap-4 bg-white p-4 rounded-xl shadow-sm border border-gray-200">
-            <div className="flex items-center gap-4">
-              <div className="bg-[#F4B41A] p-3 rounded-xl shadow-sm hidden md:block"><BarChart2 size={32} className="text-[#5C3A21]" /></div>
+          {/* Header principal - iOS Minimalist */}
+          <div className="flex flex-col mb-8 gap-4 bg-transparent animate-fade-in-up">
+            <div className="flex items-center gap-3">
               <div>
-                <h1 className="text-2xl font-black text-[#5C3A21]">Sistema RNC — IMAC</h1>
-                <p className="text-gray-500 font-medium">Olá, <span className="text-[#5C3A21] font-bold">{userName}</span> ({userRole})</p>
+                <h1 className="text-3xl font-bold text-gray-900 tracking-tight">Seja bem vindo, {userName} 👋</h1>
+                <p className="text-gray-500 font-medium text-sm mt-1">O que você deseja fazer hoje?</p>
               </div>
             </div>
-            <div className="flex flex-wrap gap-2">
-              <button onClick={() => { setFormData(getEmptyForm()); setEditingReportId(null); setView('form'); window.scrollTo(0, 0); }} className="bg-[#5C3A21] text-white px-5 py-2.5 rounded-lg font-bold hover:bg-[#4a2e1a] transition flex items-center gap-2"><Plus size={18} /> Novo Relatório</button>
-              {isAdmin && <button onClick={() => setIsUsersModalOpen(true)} className="bg-purple-50 text-purple-700 px-4 py-2.5 rounded-lg font-bold hover:bg-purple-100 transition flex items-center gap-2 text-sm border border-purple-200"><Users size={16} /><span className="hidden md:inline">Usuários</span></button>}
-              <button onClick={() => setFornecedoresModalOpen(true)} className="bg-blue-50 text-blue-700 px-4 py-2.5 rounded-lg font-bold hover:bg-blue-100 transition flex items-center gap-2 text-sm border border-blue-200"><Truck size={16} /><span className="hidden md:inline">Fornecedores</span></button>
-              <button onClick={() => setClientesModalOpen(true)} className="bg-indigo-50 text-indigo-700 px-4 py-2.5 rounded-lg font-bold hover:bg-indigo-100 transition flex items-center gap-2 text-sm border border-indigo-200"><ShoppingBag size={16} /><span className="hidden md:inline">Clientes</span></button>
-              <button onClick={exportToCSV} className="bg-green-600 text-white px-4 py-2.5 rounded-lg font-bold hover:bg-green-700 transition flex items-center gap-2 text-sm"><Download size={16} /></button>
-              <button onClick={() => setIsProfileModalOpen(true)} className="bg-gray-100 text-gray-700 px-4 py-2.5 rounded-lg font-bold hover:bg-gray-200 transition flex items-center gap-2 text-sm border border-gray-300"><User size={16} /></button>
-              <button onClick={handleLogout} className="bg-red-50 text-red-600 px-4 py-2.5 rounded-lg font-bold hover:bg-red-100 transition flex items-center gap-2 text-sm border border-red-200"><LogOut size={16} /></button>
+
+            {/* Global Search & Actions */}
+            <div className="flex flex-col md:flex-row gap-3 items-center justify-between mt-2">
+              <div className="relative w-full md:w-[400px]">
+                <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" size={18} />
+                <input type="text" value={globalSearchTerm || ''} onChange={(e) => setGlobalSearchTerm(e.target.value)} placeholder="Pesquisar..." className="w-full bg-white border border-gray-100 shadow-sm rounded-2xl py-3 pl-12 pr-4 focus:ring-2 focus:ring-blue-500 outline-none text-sm transition-all" />
+              </div>
+              <div className="flex flex-wrap gap-2 w-full md:w-auto">
+                <button onClick={() => { setFormData(getEmptyForm()); setEditingReportId(null); setView('form'); window.scrollTo(0, 0); }} className="bg-blue-600 text-white px-5 py-2.5 rounded-2xl font-semibold hover:bg-blue-700 transition-all flex items-center gap-2 shadow-sm"><Plus size={18} /> Novo Relatório</button>
+                {isAdmin && <button onClick={() => setIsUsersModalOpen(true)} className="bg-white text-gray-700 px-4 py-2.5 rounded-2xl font-semibold hover:bg-gray-50 transition-all shadow-sm border border-gray-100"><Users size={16} /></button>}
+                <button onClick={() => setFornecedoresModalOpen(true)} className="bg-white text-gray-700 px-4 py-2.5 rounded-2xl font-semibold hover:bg-gray-50 transition-all shadow-sm border border-gray-100" title="Fornecedores"><Truck size={16} /></button>
+                <button onClick={() => setClientesModalOpen(true)} className="bg-white text-gray-700 px-4 py-2.5 rounded-2xl font-semibold hover:bg-gray-50 transition-all shadow-sm border border-gray-100" title="Clientes"><ShoppingBag size={16} /></button>
+                <button onClick={exportToCSV} className="bg-white text-gray-700 px-4 py-2.5 rounded-2xl font-semibold hover:bg-gray-50 transition-all shadow-sm border border-gray-100" title="Exportar CSV"><Download size={16} /></button>
+                <button onClick={() => setIsProfileModalOpen(true)} className="bg-white text-gray-700 px-4 py-2.5 rounded-2xl font-semibold hover:bg-gray-50 transition-all shadow-sm border border-gray-100" title="Meu Perfil"><User size={16} /></button>
+                <button onClick={handleLogout} className="bg-red-50 text-red-600 px-4 py-2.5 rounded-2xl font-semibold hover:bg-red-100 transition-all border border-red-100" title="Sair"><LogOut size={16} /></button>
+              </div>
             </div>
           </div>
 
@@ -2904,7 +2974,7 @@ function App() {
               { id: 'minhas-atividades', label: 'Minhas Atividades', icon: <Bell size={16} />, color: 'text-red-700', active: 'bg-red-600 text-white', badge: registros.filter(r => appUser?.canApprove ? r.lifecycleStatus === 'aguardando_aprovacao' : (r.lifecycleStatus === 'pendente_analise' || r.lifecycleStatus === 'correcao_solicitada')).length },
               { id: 'rnc-cliente', label: 'RNC Cliente', icon: <ShoppingBag size={16} />, color: 'text-orange-700', active: 'bg-orange-500 text-white', badge: rncClientesExt.filter(r => r.status === 'Pendente').length },
               { id: 'rnc-interna', label: 'NC Interna', icon: <Building2 size={16} />, color: 'text-blue-700', active: 'bg-blue-600 text-white', badge: rncInternas.filter(r => r.status === 'Pendente').length },
-              { id: 'sol-fornecedor', label: 'Sol. Fornecedor', icon: <Truck size={16} />, color: 'text-purple-700', active: 'bg-purple-600 text-white', badge: solFornecedor.filter(r => r.status === 'Pendente').length },
+              { id: 'sol-fornecedor', label: 'RNC Fornecedores', icon: <Truck size={16} />, color: 'text-purple-700', active: 'bg-purple-600 text-white', badge: solFornecedor.filter(r => r.status === 'Pendente').length },
             ].map(tab => (
               <button key={tab.id} onClick={() => setActiveModule(tab.id)} className={`relative flex items-center gap-2 px-4 py-2.5 rounded-lg font-bold text-sm transition whitespace-nowrap ${activeModule === tab.id ? tab.active : 'hover:bg-gray-100 text-gray-600'}`}>
                 {tab.icon} {tab.label}
@@ -3020,37 +3090,40 @@ function App() {
             )}
 
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
-              <div className="bg-white p-5 rounded-xl shadow-sm border-t-4 border-[#5C3A21]"><p className="text-xs font-bold text-gray-500 uppercase">Total no Período</p><p className="text-3xl font-black text-[#5C3A21] mt-1">{filteredRecords.length}</p></div>
-              <div className="bg-white p-5 rounded-xl shadow-sm border-t-4 border-[#EF4444]"><p className="text-xs font-bold text-gray-500 uppercase">Fornecedores</p><p className="text-3xl font-black text-[#5C3A21] mt-1">{Object.keys(fornecedorCounts).length}</p></div>
-              <div className="bg-white p-5 rounded-xl shadow-sm border-t-4 border-[#F4B41A]"><p className="text-xs font-bold text-gray-500 uppercase">Tipos</p><p className="text-3xl font-black text-[#5C3A21] mt-1">{pieData.length}</p></div>
-              <div className="bg-white p-5 rounded-xl shadow-sm border-t-4 border-[#22C55E]"><p className="text-xs font-bold text-gray-500 uppercase">Período</p><p className="text-sm font-black text-[#5C3A21] mt-1">{dashboardFilters.periodo.replace('_', ' ').toUpperCase()}</p></div>
+              <div className="bg-white p-5 rounded-2xl shadow-sm border border-gray-100"><p className="text-xs font-bold text-gray-400 uppercase">Total no Período</p><p className="text-3xl font-black text-[#5C3A21] mt-1">{filteredRecords.length}</p></div>
+              <div className="bg-white p-5 rounded-2xl shadow-sm border border-gray-100"><p className="text-xs font-bold text-gray-400 uppercase">Fornecedores</p><p className="text-3xl font-black text-[#5C3A21] mt-1">{Object.keys(fornecedorCounts).length}</p></div>
+              <div className="bg-white p-5 rounded-2xl shadow-sm border border-gray-100"><p className="text-xs font-bold text-gray-400 uppercase">Tipos</p><p className="text-3xl font-black text-[#5C3A21] mt-1">{pieData.length}</p></div>
+              <div className="bg-white p-5 rounded-2xl shadow-sm border border-gray-100"><p className="text-xs font-bold text-gray-400 uppercase">Período</p><p className="text-sm font-black text-[#5C3A21] mt-1">{dashboardFilters.periodo.replace('_', ' ').toUpperCase()}</p></div>
             </div>
 
+            {/* Simplificado: Apenas 1 linha de gráficos principais */}
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
               {pieData.length > 0 && <PieChartComponent data={pieData} title="Distribuição por Tipo" />}
               {tipoBarras.some(t => t.value > 0) && <BarChart data={tipoBarras} title="Ocorrências por Tipo" />}
             </div>
 
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
-              {pieStatusData.length > 0 && <PieChartComponent data={pieStatusData} title="Status dos Relatórios" />}
-              {produtoBarData.length > 0 && <BarChart data={produtoBarData} title="Top 5 Produtos Problemáticos" color="#8B5CF6" />}
-            </div>
-
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
-              {barData.length > 0 && <BarChart data={barData} title="Top 10 Fornecedores" color="#EF4444" />}
-              {clienteBarData.length > 0 && <BarChart data={clienteBarData} title="Top 10 Clientes" color="#4F46E5" />}
-            </div>
-
-            <div className="bg-white rounded-xl shadow-sm overflow-hidden border border-gray-200">
-              <div className="bg-gray-50 px-6 py-4 border-b border-gray-200 flex justify-between items-center">
-                <h2 className="font-bold text-gray-700">Histórico de Emissões <span className="text-gray-400 font-normal ml-2">({filteredRecords.length} registros)</span></h2>
+            <div className="bg-white rounded-2xl shadow-sm overflow-hidden border border-gray-100">
+              <div className="bg-white px-6 py-4 border-b border-gray-100 flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4">
+                <h2 className="font-bold text-gray-900 text-lg">Histórico de Emissões <span className="text-gray-400 font-normal ml-2 text-sm">({filteredRecords.length} registros)</span></h2>
+                <div className="relative">
+                  <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={16} />
+                  <input type="text" value={historySearchTerm || ''} onChange={e => setHistorySearchTerm(e.target.value)} placeholder="Buscar neste histórico..." className="w-full sm:w-64 bg-gray-50 border border-gray-200 rounded-xl py-2 pl-9 pr-4 focus:ring-2 focus:ring-blue-500 outline-none text-sm transition-all" />
+                </div>
               </div>
               <div className="overflow-x-auto">
                 <table className="w-full text-left text-sm">
                   <thead className="bg-gray-50 text-gray-500"><tr><th className="px-4 py-3 font-bold">Data</th><th className="px-4 py-3 font-bold">Tipo</th><th className="px-4 py-3 font-bold">Produto</th><th className="px-4 py-3 font-bold">Autor</th><th className="px-4 py-3 font-bold">Ocorrência</th><th className="px-4 py-3 font-bold">Status</th><th className="px-4 py-3 font-bold text-center">Ações</th></tr></thead>
                   <tbody className="divide-y divide-gray-100">
                     {filteredRecords.length === 0 ? <tr><td colSpan="7" className="text-center py-8 text-gray-400">Nenhum registro encontrado.</td></tr> :
-                      filteredRecords.map(reg => (
+                      filteredRecords.filter(reg => {
+                        const term = historySearchTerm.toLowerCase();
+                        if (!term) return true;
+                        return (reg.produto || '').toLowerCase().includes(term) ||
+                               (reg.ocorrencia || '').toLowerCase().includes(term) ||
+                               (reg.autorNome || '').toLowerCase().includes(term) ||
+                               (reg.tipoRelatorio || '').toLowerCase().includes(term) ||
+                               (reg.fornecedor || '').toLowerCase().includes(term);
+                      }).map(reg => (
                         <tr key={reg.id || Math.random()} className="hover:bg-gray-50 transition">
                           <td className="px-4 py-3 whitespace-nowrap text-xs">{safeDate(reg.dataCriacao)}</td>
                           <td className="px-4 py-3"><span className="bg-gray-200 text-gray-800 px-2 py-1 rounded-full text-xs font-bold whitespace-nowrap">{reg.tipoRelatorio === 'Relatório de Não Conformidade - Cliente' ? 'Cliente' : (reg.tipoRelatorio || 'Desconhecido')}</span></td>
@@ -3224,7 +3297,7 @@ function App() {
             <div className="animate-fade-in-up">
               <div className="flex flex-col md:flex-row gap-4">
                 {/* Formulário de nova NC Interna */}
-                <div className="md:w-80 shrink-0">
+                <div className="md:w-80 shrink-0 flex flex-col gap-4">
                   <div className="bg-white rounded-xl shadow-sm border border-blue-200 border-t-4 border-t-blue-600 p-5">
                     <h2 className="font-black text-blue-700 text-lg mb-4 flex items-center gap-2"><Building2 size={20} /> Registrar NC Interna</h2>
                     <div className="space-y-3 text-sm">
@@ -3253,38 +3326,60 @@ function App() {
                       }} className="w-full bg-blue-600 text-white font-bold py-2.5 rounded-lg hover:bg-blue-700 transition shadow-sm flex items-center justify-center gap-2"><Plus size={16} /> Registrar NC Interna</button>
                     </div>
                   </div>
+                  
+                  {/* Calendário de Guia */}
+                  <CalendarGuide data={rncInternas} onDateSelect={(date) => setSelectedInternaDate(selectedInternaDate === date ? null : date)} />
                 </div>
 
                 {/* Lista de NCs Internas */}
                 <div className="flex-1">
                   <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
-                    <div className="bg-blue-50 px-5 py-4 border-b border-blue-100 flex justify-between items-center">
-                      <h2 className="font-bold text-blue-800 flex items-center gap-2"><Building2 size={18} /> Não Conformidades Internas <span className="text-blue-500 font-normal">({rncInternas.length} registros)</span></h2>
+                    <div className="bg-blue-50 px-5 py-4 border-b border-blue-100 flex justify-between items-center flex-wrap gap-2">
+                      <h2 className="font-bold text-blue-800 flex items-center gap-2">
+                        <Building2 size={18} /> Não Conformidades Internas 
+                        <span className="text-blue-500 font-normal">
+                          ({selectedInternaDate ? rncInternas.filter(r => r.dataCriacao && r.dataCriacao.startsWith(selectedInternaDate)).length : rncInternas.length} registros)
+                        </span>
+                      </h2>
+                      {selectedInternaDate && (
+                        <span className="bg-blue-600 text-white text-xs font-bold px-3 py-1 rounded-full flex items-center gap-2 shadow-sm">
+                          Data: {selectedInternaDate.split('-').reverse().join('/')}
+                          <button onClick={() => setSelectedInternaDate(null)} className="hover:text-red-200"><X size={12} /></button>
+                        </span>
+                      )}
                     </div>
                     <div className="divide-y divide-gray-100">
                       {rncInternas.length === 0 ? (
                         <div className="text-center py-12 text-gray-400"><Building2 size={32} className="mx-auto mb-2 opacity-30" /><p>Nenhuma NC interna registrada ainda.</p></div>
-                      ) : rncInternas.map(rnc => (
-                        <div key={rnc.id} className="p-4 hover:bg-gray-50 transition">
-                          <div className="flex justify-between items-start gap-3 flex-wrap">
-                            <div className="flex-1 min-w-0">
-                              <div className="flex items-center gap-2 flex-wrap mb-1">
-                                <span className="font-black text-gray-800">{rnc.setor || 'Setor'}</span>
-                                <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full border ${rnc.status === 'Concluído' ? 'bg-green-50 text-green-700 border-green-200' : rnc.status === 'Em andamento' ? 'bg-blue-50 text-blue-700 border-blue-200' : 'bg-yellow-50 text-yellow-700 border-yellow-200'}`}>{rnc.status || 'Pendente'}</span>
+                      ) : (() => {
+                          const filtradas = selectedInternaDate 
+                            ? rncInternas.filter(r => r.dataCriacao && r.dataCriacao.startsWith(selectedInternaDate))
+                            : rncInternas;
+                          
+                          if (filtradas.length === 0) return <div className="text-center py-12 text-gray-400"><p>Nenhuma NC para a data selecionada.</p></div>;
+
+                          return filtradas.map(rnc => (
+                            <div key={rnc.id} className="p-4 hover:bg-gray-50 transition">
+                              <div className="flex justify-between items-start gap-3 flex-wrap">
+                                <div className="flex-1 min-w-0">
+                                  <div className="flex items-center gap-2 flex-wrap mb-1">
+                                    <span className="font-black text-gray-800">{rnc.setor || 'Setor'}</span>
+                                    <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full border ${rnc.status === 'Concluído' ? 'bg-green-50 text-green-700 border-green-200' : rnc.status === 'Em andamento' ? 'bg-blue-50 text-blue-700 border-blue-200' : 'bg-yellow-50 text-yellow-700 border-yellow-200'}`}>{rnc.status || 'Pendente'}</span>
+                                  </div>
+                                  <p className="text-sm font-semibold text-gray-700">{rnc.produto} {rnc.lote ? `— Lote: ${rnc.lote}` : ''}</p>
+                                  <p className="text-xs text-gray-500 mt-0.5 line-clamp-2">{rnc.descricao}</p>
+                                  <p className="text-[10px] text-gray-400 mt-1">{safeDate(rnc.dataCriacao)} — Registrado por: {rnc.autorNome || 'Sistema'}</p>
+                                </div>
+                                <div className="flex flex-col gap-1.5 shrink-0">
+                                  <select value={rnc.status || 'Pendente'} onChange={e => updateStatusRncInterna(rnc.id, e.target.value)} className="text-xs border border-gray-300 rounded-lg p-1.5 outline-none font-bold">
+                                    <option>Pendente</option><option>Em andamento</option><option>Concluído</option>
+                                  </select>
+                                  <button onClick={() => criarRelDeRncInterna(rnc)} className="bg-[#5C3A21] text-white text-xs font-bold py-1.5 px-3 rounded-lg hover:bg-[#4a2e1a] transition flex items-center gap-1 justify-center"><FileText size={12} /> Criar Relatório</button>
+                                </div>
                               </div>
-                              <p className="text-sm font-semibold text-gray-700">{rnc.produto} {rnc.lote ? `— Lote: ${rnc.lote}` : ''}</p>
-                              <p className="text-xs text-gray-500 mt-0.5 line-clamp-2">{rnc.descricao}</p>
-                              <p className="text-[10px] text-gray-400 mt-1">{safeDate(rnc.dataCriacao)} — Registrado por: {rnc.autorNome || 'Sistema'}</p>
                             </div>
-                            <div className="flex flex-col gap-1.5 shrink-0">
-                              <select value={rnc.status || 'Pendente'} onChange={e => updateStatusRncInterna(rnc.id, e.target.value)} className="text-xs border border-gray-300 rounded-lg p-1.5 outline-none font-bold">
-                                <option>Pendente</option><option>Em andamento</option><option>Concluído</option>
-                              </select>
-                              <button onClick={() => criarRelDeRncInterna(rnc)} className="bg-[#5C3A21] text-white text-xs font-bold py-1.5 px-3 rounded-lg hover:bg-[#4a2e1a] transition flex items-center gap-1 justify-center"><FileText size={12} /> Criar Relatório</button>
-                            </div>
-                          </div>
-                        </div>
-                      ))}
+                          ));
+                      })()}
                     </div>
                   </div>
                 </div>
