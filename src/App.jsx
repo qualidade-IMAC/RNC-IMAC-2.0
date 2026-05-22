@@ -2664,9 +2664,12 @@ function App() {
       <div className="min-h-screen bg-gray-100 flex items-center justify-center p-4 relative overflow-hidden">
         <div className="absolute inset-0 opacity-10 pointer-events-none" style={{ backgroundImage: 'radial-gradient(#5C3A21 1px, transparent 1px)', backgroundSize: '20px 20px' }}></div>
         {appMessage && <div className="fixed top-4 right-4 z-[100] animate-fade-in-up"><div className="bg-white rounded-xl shadow-lg p-4 border-t-4 border-[#F4B41A] max-w-sm"><p className="text-sm font-medium text-gray-800">{appMessage}</p></div></div>}
-
-              </div>
-            )}
+        <div className="max-w-md w-full bg-white rounded-2xl shadow-2xl overflow-hidden relative z-10 border-t-[8px] border-[#5C3A21] animate-fade-in-up">
+          <div className="bg-gray-50 p-8 text-center border-b border-gray-100">
+            <img src="/logo.png" alt="IMAC" className="max-h-20 object-contain mx-auto mb-4" onError={(e) => { e.target.style.display = 'none'; e.target.nextSibling.style.display = 'block'; }} />
+            <div className="w-20 h-20 bg-white rounded-full items-center justify-center mx-auto mb-4 shadow-md border border-gray-200 hidden">
+              <h1 className="text-3xl font-black text-[#5C3A21]">IMAC</h1>
+            </div>
             <h2 className="text-2xl font-black text-gray-800">Controle de Qualidade</h2>
             {welcomeMode === 'login' && <p className="text-gray-500 mt-2 text-sm flex items-center justify-center gap-1"><Lock size={14} /> Acesso Restrito Corporativo</p>}
             {welcomeMode === 'solicitar' && <p className="text-gray-500 mt-2 text-sm">Solicitação de Relatório de Não Conformidade</p>}
