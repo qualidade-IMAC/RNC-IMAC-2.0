@@ -243,8 +243,8 @@ const RichTextEditor = ({ value, onChange, placeholder }) => {
         if (file) {
           try {
             const compressed = await compressImage(file, false);
-            // Native browsers usually support resize natively if contentEditable=true
-            const imgHTML = `<img src="${compressed}" style="max-width: 100%; cursor: pointer;" />`;
+            // O hack do span com resize:both e overflow:hidden permite redimensionar a imagem pelo canto inferior direito no Chrome!
+            const imgHTML = `<span style="display:inline-block; resize:both; overflow:hidden; border: 1px dashed #ccc; padding: 2px; max-width: 100%;"><img src="${compressed}" style="width:100%; height:100%; object-fit:contain; display:block; pointer-events:none;" /></span><br/>`;
             execCommand('insertHTML', imgHTML);
           } catch (err) { console.error("Erro colando imagem", err); }
         }
@@ -255,12 +255,14 @@ const RichTextEditor = ({ value, onChange, placeholder }) => {
 
   const insertTable = () => {
     const tableHTML = `
-      <table border="1" style="width:100%; border-collapse: collapse; margin-top: 10px; margin-bottom: 10px; border: 1px solid #ddd;">
-        <tbody>
-          <tr><td style="border: 1px solid #ccc; padding: 8px; min-width: 50px;"><br></td><td style="border: 1px solid #ccc; padding: 8px; min-width: 50px;"><br></td><td style="border: 1px solid #ccc; padding: 8px; min-width: 50px;"><br></td></tr>
-          <tr><td style="border: 1px solid #ccc; padding: 8px; min-width: 50px;"><br></td><td style="border: 1px solid #ccc; padding: 8px; min-width: 50px;"><br></td><td style="border: 1px solid #ccc; padding: 8px; min-width: 50px;"><br></td></tr>
-        </tbody>
-      </table><p><br></p>
+      <div style="display:inline-block; resize:both; overflow:hidden; border: 1px dashed transparent; min-width: 100px; min-height: 50px; width: 100%; padding: 4px;">
+        <table border="1" style="width:100%; height:100%; border-collapse: collapse; border: 1px solid #ddd;">
+          <tbody>
+            <tr><td style="border: 1px solid #ccc; padding: 8px; min-width: 50px;"><br></td><td style="border: 1px solid #ccc; padding: 8px; min-width: 50px;"><br></td><td style="border: 1px solid #ccc; padding: 8px; min-width: 50px;"><br></td></tr>
+            <tr><td style="border: 1px solid #ccc; padding: 8px; min-width: 50px;"><br></td><td style="border: 1px solid #ccc; padding: 8px; min-width: 50px;"><br></td><td style="border: 1px solid #ccc; padding: 8px; min-width: 50px;"><br></td></tr>
+          </tbody>
+        </table>
+      </div><p><br></p>
     `;
     execCommand('insertHTML', tableHTML);
   };
@@ -2659,19 +2661,10 @@ function App() {
     const isOfflineEmpty = usersDirectory.length === 0 && dbSyncError;
 
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4 relative overflow-hidden">
+      <div className="min-h-screen bg-gray-100 flex items-center justify-center p-4 relative overflow-hidden">
+        <div className="absolute inset-0 opacity-10 pointer-events-none" style={{ backgroundImage: 'radial-gradient(#5C3A21 1px, transparent 1px)', backgroundSize: '20px 20px' }}></div>
         {appMessage && <div className="fixed top-4 right-4 z-[100] animate-fade-in-up"><div className="bg-white rounded-xl shadow-lg p-4 border-t-4 border-[#F4B41A] max-w-sm"><p className="text-sm font-medium text-gray-800">{appMessage}</p></div></div>}
 
-        <div className="absolute top-[-10%] left-[-10%] w-96 h-96 bg-[#F4B41A] opacity-20 rounded-full mix-blend-multiply filter blur-3xl animate-pulse-soft"></div>
-        <div className="absolute bottom-[-10%] right-[-10%] w-96 h-96 bg-[#5C3A21] opacity-10 rounded-full mix-blend-multiply filter blur-3xl animate-pulse-soft" style={{ animationDelay: '1s' }}></div>
-
-        <div className="max-w-md w-full bg-white rounded-2xl shadow-2xl overflow-hidden relative z-10 border-t-[8px] border-[#5C3A21] animate-fade-in-up">
-          <div className="bg-gray-50 p-8 text-center border-b border-gray-100">
-            {localStorage.getItem('imac_logo_oficial') ? (
-              <img src={localStorage.getItem('imac_logo_oficial')} alt="IMAC" className="max-h-20 object-contain mx-auto mb-4" />
-            ) : (
-              <div className="w-20 h-20 bg-white rounded-full flex items-center justify-center mx-auto mb-4 shadow-md border border-gray-200">
-                <h1 className="text-3xl font-black text-[#5C3A21]">IMAC</h1>
               </div>
             )}
             <h2 className="text-2xl font-black text-gray-800">Controle de Qualidade</h2>
@@ -2897,7 +2890,7 @@ function App() {
 
   if (view === 'dashboard') {
     const filteredRecords = getFilteredRecords();
-    const countsPorTipo = { 'Problema com Fornecedor': 0, 'Insumo ou Embalagem': 0, 'Ocorrência Interna': 0, 'Teste de Produto': 0, 'Teste de Equipamento': 0 };
+    const countsPorTipo = { 'Problema com Fornecedor': 0, 'Relatório de Não Conformidade - Cliente': 0, 'Insumo ou Embalagem': 0, 'Ocorrência Interna': 0, 'Teste de Produto': 0, 'Teste de Equipamento': 0 };
     const fornecedorCounts = {};
     const clienteCounts = {};
     const produtoCounts = {};
@@ -2926,7 +2919,7 @@ function App() {
 
     const pieData = Object.entries(countsPorTipo).filter(([_, v]) => v > 0).map(([label, value]) => ({ label, value }));
     const barData = Object.entries(fornecedorCounts).map(([label, value]) => ({ label, value })).sort((a, b) => b.value - a.value).slice(0, 10);
-    const tipoBarras = Object.entries(countsPorTipo).map(([nome, valor]) => ({ label: nome, value: valor, color: nome.includes('Fornecedor') ? '#EF4444' : nome.includes('Insumo') ? '#F59E0B' : nome.includes('Interna') ? '#3B82F6' : nome.includes('Produto') ? '#22C55E' : '#8B5CF6' }));
+    const tipoBarras = Object.entries(countsPorTipo).map(([nome, valor]) => ({ label: nome, value: valor, color: nome.includes('Fornecedor') ? '#EF4444' : nome.includes('Cliente') ? '#F97316' : nome.includes('Insumo') ? '#F59E0B' : nome.includes('Interna') ? '#3B82F6' : nome.includes('Produto') ? '#22C55E' : '#8B5CF6' }));
 
     const pieStatusData = Object.entries(statusCounts).filter(([_, v]) => v > 0).map(([label, value]) => ({
       label, value, color: label === 'Liberado' ? '#22C55E' : label === 'Não Liberado' ? '#EF4444' : '#F59E0B'
@@ -2955,7 +2948,8 @@ function App() {
     }
 
     return (
-      <div className="min-h-screen bg-[#DFA40A] py-8 px-4 font-sans text-gray-800 print:bg-white print:py-0 print:px-0">
+      {/* BACKGROUND COM PADRÃO DE SEMENTES/TRIGO (PÃO FRANCÊS) */}
+      <div className="min-h-screen bg-[#DFA40A] py-8 px-4 font-sans text-gray-800 print:bg-white print:py-0 print:px-0" style={{ backgroundImage: 'radial-gradient(circle at 10px 10px, rgba(92, 58, 33, 0.05) 2px, transparent 0), radial-gradient(circle at 25px 25px, rgba(92, 58, 33, 0.04) 2px, transparent 0)', backgroundSize: '30px 30px' }}>
         {registroToView && <RelatorioViewModal registro={registroToView} onClose={() => setRegistroToView(null)} />}
         {evaluatingRegistro && <StatusModal registro={evaluatingRegistro} onClose={() => setEvaluatingRegistro(null)} onSave={handleUpdateStatus} avaliadorAtual={userName} canApprove={canApprove} />}
 
@@ -3018,12 +3012,12 @@ function App() {
 
         <div className={`max-w-7xl mx-auto ${registroToView ? 'no-print' : ''}`}>
 
-          {/* Header principal - iOS Minimalist */}
-          <div className="flex flex-col mb-8 gap-4 bg-transparent animate-fade-in-up">
+          {/* Header principal - iOS Minimalist com Destaque */}
+          <div className="flex flex-col mb-8 gap-4 bg-white/40 p-6 rounded-2xl shadow-sm border border-white/60 animate-fade-in-up">
             <div className="flex items-center gap-3">
               <div>
-                <h1 className="text-3xl font-bold text-[#5C3A21] tracking-tight">Seja bem vindo, {userName} 👋</h1>
-                <p className="text-[#5C3A21]/80 font-medium text-sm mt-1">O que você deseja fazer hoje?</p>
+                <h1 className="text-3xl font-black text-[#5C3A21] tracking-tight drop-shadow-sm">Seja bem vindo, {userName} 👋</h1>
+                <p className="text-[#5C3A21] font-bold text-sm mt-1">O que você deseja fazer hoje?</p>
               </div>
             </div>
 
@@ -3558,7 +3552,7 @@ function App() {
 
   if (view === 'form') {
     return (
-      <div className="min-h-screen bg-[#DFA40A] py-8 px-4 font-sans text-gray-800 relative">
+      <div className="min-h-screen bg-[#DFA40A] py-8 px-4 font-sans text-gray-800 relative" style={{ backgroundImage: 'radial-gradient(circle at 10px 10px, rgba(92, 58, 33, 0.05) 2px, transparent 0), radial-gradient(circle at 25px 25px, rgba(92, 58, 33, 0.04) 2px, transparent 0)', backgroundSize: '30px 30px' }}>
         {appMessage && <div className="fixed top-4 right-4 z-[100] animate-fade-in-up"><div className="bg-white rounded-xl shadow-lg p-4 border-t-4 border-[#F4B41A] max-w-sm"><p className="text-sm font-medium text-gray-800">{appMessage}</p></div></div>}
 
         {editingImageIndex !== null && (() => {
@@ -3787,7 +3781,7 @@ function App() {
                     <RichTextEditor value={formData.descricao || ''} onChange={(val) => setFormData(prev => ({ ...prev, descricao: val }))} placeholder={placeholders.descricao} />
                   </div>
                   
-                  {formData.tipoRelatorio === 'Ocorrência Interna' && (
+                  {(formData.tipoRelatorio === 'Ocorrência Interna' || formData.tipoRelatorio === 'Relatório de Não Conformidade - Cliente') && (
                     <div className="space-y-6 bg-blue-50/50 p-4 rounded-xl border border-blue-100">
                       <h3 className="font-black text-blue-800 text-md flex items-center gap-2"><FileText size={18} /> Campos Específicos: Relatório A3</h3>
                       
@@ -3930,29 +3924,115 @@ function App() {
           <div className="h-[12px] w-full bg-[#F4B41A] print-bg-yellow"></div>
           <div className="px-[12mm] py-[10mm] print:px-[8mm] print:py-[10mm] print-no-padding flex-1">
 
-            <div className="flex justify-between items-end border-b-2 border-gray-100 pb-4 mb-6 print:mb-4">
-              <div>
-                {formData.logo ? <img src={formData.logo} alt="Logo IMAC" className="h-[50px] object-contain mb-1" /> : <h1 className="text-[38px] font-black text-[#5C3A21] tracking-tighter leading-none mb-1">IMAC</h1>}
-                <p className="font-bold text-black text-[14px]">Controle de Qualidade</p>
+            {tipoStr === 'Relatório de Não Conformidade - Cliente' && (
+              <div className="mb-6 pb-6 border-b-2 border-dashed border-gray-300 print:break-after-page print:border-none print:pb-0 print:mb-0">
+                <div className="flex justify-between items-end border-b-2 border-gray-100 pb-4 mb-6 print:mb-4">
+                  <div>
+                    <img src="/logo.png" alt="Logo IMAC" className="h-[50px] object-contain mb-1" onError={(e) => { e.target.style.display = 'none'; e.target.nextSibling.style.display = 'block'; }} />
+                    <h1 className="text-[38px] font-black text-[#5C3A21] tracking-tighter leading-none mb-1 hidden">IMAC</h1>
+                    <p className="font-bold text-black text-[14px]">Controle de Qualidade</p>
+                  </div>
+                  <div className="text-right">
+                    <p className="font-bold uppercase tracking-wide text-[16px] text-[#5C3A21]">RELATÓRIO DE DESVIO PADRÃO</p>
+                    <p className="font-bold text-[14px] text-gray-500 mt-1">Emissão: {formData.dataRelatorio}</p>
+                  </div>
+                </div>
+
+                <div className="mb-5 print:mb-3 break-inside-avoid">
+                  <div className="border-l-4 border-[#F4B41A] print-border-yellow pl-2 mb-3 print:mb-2 bg-[#F4B41A]/10 print-bg-yellow-light py-1"><p className="font-bold uppercase text-[#5C3A21] text-[16px]">DADOS DA OCORRÊNCIA</p></div>
+                  <div className="grid grid-cols-2 print:grid-cols-2 gap-x-8 gap-y-3 print:gap-x-12 print:gap-y-2 ml-1">
+                    <p className="text-[14px]"><strong>CLIENTE(S):</strong> {(formData.lojasLocais && formData.lojasLocais.length > 0) ? formData.lojasLocais.join(', ') : (formData.lojaLocal || 'Não informado')}</p>
+                    <p className="text-[14px]"><strong>SUPERVISOR:</strong> {formData.supervisor}</p>
+                    <p className="text-[14px]"><strong>PRODUTO:</strong> {formData.produto}</p>
+                    <p className="text-[14px]"><strong>LOTE:</strong> {formData.lote}</p>
+                    <p className="text-[14px]"><strong>DATA DE FABRICAÇÃO:</strong> {formData.dataFabricacao}</p>
+                    <p className="text-[14px]"><strong>DATA VALIDADE:</strong> {formData.validade}</p>
+                    <p className="text-[14px] col-span-2"><strong>QUANTIDADE NÃO CONFORME:</strong> {formData.quantidade}</p>
+                  </div>
+                </div>
+
+                <div className="mb-5 print:mb-3 w-full overflow-hidden break-inside-avoid">
+                  <div className="border-l-4 border-[#F4B41A] print-border-yellow pl-2 mb-3 print:mb-2 bg-[#F4B41A]/10 print-bg-yellow-light py-1"><p className="font-bold uppercase text-[#5C3A21] text-[16px]">2. DESCRIÇÃO DA OCORRÊNCIA</p></div>
+                  <p className="font-bold text-[14px] ml-1 mb-1">DESCRIÇÃO DA NÃO CONFORMIDADE APRESENTADA:</p>
+                  <div className="text-justify text-black ml-1 rich-text-content text-[14px] leading-relaxed break-words mb-4" dangerouslySetInnerHTML={{ __html: formData.descricao || '' }} />
+
+                  <p className="font-bold text-[14px] ml-1 mb-2">CARACTERÍSTICAS DO PRODUTO:</p>
+                  <div className="grid grid-cols-2 md:grid-cols-4 print:grid-cols-4 gap-4 ml-1 mb-2">
+                    <div className="border border-gray-200 p-2 rounded bg-gray-50 text-center"><span className="block text-[11px] font-bold text-gray-500 uppercase">Sabor</span><span className="text-[14px] font-semibold">{formData.sabor || 'Não informado'}</span></div>
+                    <div className="border border-gray-200 p-2 rounded bg-gray-50 text-center"><span className="block text-[11px] font-bold text-gray-500 uppercase">Odor</span><span className="text-[14px] font-semibold">{formData.odor || 'Não informado'}</span></div>
+                    <div className="border border-gray-200 p-2 rounded bg-gray-50 text-center"><span className="block text-[11px] font-bold text-gray-500 uppercase">Cor</span><span className="text-[14px] font-semibold">{formData.cor || 'Não informado'}</span></div>
+                    <div className="border border-gray-200 p-2 rounded bg-gray-50 text-center"><span className="block text-[11px] font-bold text-gray-500 uppercase">Temp. °C</span><span className="text-[14px] font-semibold">{formData.temperatura || 'Não informado'}</span></div>
+                  </div>
+                </div>
+
+                {Array.isArray(formData.imagens) && formData.imagens.length > 0 && (
+                  <div className="mb-6 mt-6 print:mt-4">
+                    <p className="font-bold text-[14px] ml-1 mb-2 uppercase">Registro Fotográfico:</p>
+                    <div className={`grid gap-4 ${formData.imagens.length === 1 ? 'grid-cols-1' : 'grid-cols-2 print:grid-cols-2'}`}>
+                      {formData.imagens.map((img, index) => {
+                        const src = typeof img === 'string' ? img : img?.displaySrc;
+                        return <img key={index} src={src} alt={`Evidência ${index + 1}`} className="w-full h-auto max-h-[800px] object-contain border border-gray-300 shadow-sm rounded break-inside-avoid bg-white p-1" />;
+                      })}
+                    </div>
+                  </div>
+                )}
+
+                <div className="mb-5 print:mb-3 w-full overflow-hidden break-inside-avoid print:pt-4">
+                  <div className="border-l-4 border-[#F4B41A] print-border-yellow pl-2 mb-3 print:mb-2 bg-[#F4B41A]/10 print-bg-yellow-light py-1"><p className="font-bold uppercase text-[#5C3A21] text-[16px]">3. CONSIDERAÇÕES FINAIS</p></div>
+                  <div className="flex flex-wrap gap-x-6 gap-y-2 ml-1 mb-5">
+                    <p className="font-bold text-[14px] w-full md:w-auto print:w-auto">STATUS:</p>
+                    <p className="text-[14px] font-semibold">({formData.statusParecer === 'PROCEDENTE' ? 'X' : '  '}) PROCEDENTE</p>
+                    <p className="text-[14px] font-semibold">({formData.statusParecer === 'NÃO PROCEDENTE' ? 'X' : '  '}) NÃO PROCEDENTE</p>
+                    <p className="text-[14px] font-semibold">({formData.statusParecer === 'NÃO APLICADO' ? 'X' : '  '}) NÃO APLICADO</p>
+                  </div>
+                  <p className="font-bold text-[14px] ml-1 mb-1">DESCRITIVO DE INVESTIGAÇÃO:</p>
+                  <div className="text-justify text-black ml-1 rich-text-content text-[14px] leading-relaxed break-words mb-5" dangerouslySetInnerHTML={{ __html: formData.consideracoes || '' }} />
+                  {formData.conclusaoParecer && (
+                    <div className="mb-8">
+                      <p className="font-bold text-[14px] ml-1 mb-1">CONCLUSÃO:</p>
+                      <div className="text-justify text-black ml-1 rich-text-content text-[14px] leading-relaxed break-words" dangerouslySetInnerHTML={{ __html: formData.conclusaoParecer || '-' }} />
+                    </div>
+                  )}
+                  <div className="grid grid-cols-1 md:grid-cols-2 print:grid-cols-2 gap-x-8 gap-y-6 text-[14px] mt-6 mb-4 print:mt-3 print:mb-2 break-inside-avoid print-grid-signatures">
+                    {(Array.isArray(formData.assinaturas) ? formData.assinaturas : []).filter(Boolean).map((assinatura, index) => (
+                      <div key={index} className={(formData.assinaturas || []).length % 2 !== 0 && index === (formData.assinaturas || []).length - 1 ? "md:col-span-2 print:col-span-2" : ""}>
+                        <p className="font-bold uppercase">Responsável: {assinatura?.nome}</p>
+                        <p className="leading-snug whitespace-pre-line text-gray-600">{assinatura?.cargo}</p>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+                <div className="no-print w-full text-center py-4 bg-gray-100 font-bold text-gray-500 rounded-lg">Abaixo: ANEXO A3 (Inicia em nova página na impressão)</div>
               </div>
-              <div className="text-right">
-                <p className="font-bold uppercase tracking-wide text-[16px] text-[#5C3A21]">{tituloRelatorio}</p>
-                <p className="font-bold text-[14px] text-gray-500 mt-1">Emissão: {formData.dataRelatorio}</p>
+            )}
+
+            {/* CABEÇALHO DO A3 (Se for apenas interna, ou o inicio da pagina anexa) */}
+            {(tipoStr === 'Ocorrência Interna') && (
+              <div className="flex justify-between items-end border-b-2 border-gray-100 pb-4 mb-6 print:mb-4">
+                <div>
+                  <img src="/logo.png" alt="Logo IMAC" className="h-[50px] object-contain mb-1" onError={(e) => { e.target.style.display = 'none'; e.target.nextSibling.style.display = 'block'; }} />
+                  <h1 className="text-[38px] font-black text-[#5C3A21] tracking-tighter leading-none mb-1 hidden">IMAC</h1>
+                  <p className="font-bold text-black text-[14px]">Controle de Qualidade</p>
+                </div>
+                <div className="text-right">
+                  <p className="font-bold uppercase tracking-wide text-[16px] text-[#5C3A21]">{tituloRelatorio}</p>
+                  <p className="font-bold text-[14px] text-gray-500 mt-1">Emissão: {formData.dataRelatorio}</p>
+                </div>
               </div>
-            </div>
+            )}
 
             {(tipoStr === 'Relatório de Não Conformidade - Cliente' || tipoStr === 'Ocorrência Interna') ? (
-              <div className="w-full flex flex-col font-sans">
+              <div className="w-full flex flex-col font-sans relative">
                 {/* Header A3 */}
-                <div className="flex w-full mb-3 border-2 border-[#1B365D] overflow-hidden rounded-t-lg">
+                <div className="flex w-full mb-3 border-2 border-[#1B365D] overflow-hidden rounded-t-lg bg-white relative">
                   <div className="bg-[#1B365D] text-white flex-1 p-2 flex items-center justify-center">
                     <h1 className="text-2xl font-black tracking-widest">{tituloRelatorio}</h1>
                   </div>
                   <div className="bg-white px-6 py-1 flex items-center justify-center border-l-2 border-[#1B365D]">
                     <div className="text-center">
                       <div className="w-12 h-12 rounded-full border-4 border-[#F4B41A] flex items-center justify-center text-[#1B365D] font-black text-sm relative">
-                        <span className="absolute top-1 left-2">P</span><span className="absolute top-1 right-2">D</span>
-                        <span className="absolute bottom-1 right-2">C</span><span className="absolute bottom-1 left-2">A</span>
+                        <span className="absolute top-1 left-2 text-blue-600">P</span><span className="absolute top-1 right-2 text-red-600">D</span>
+                        <span className="absolute bottom-1 right-2 text-green-600">C</span><span className="absolute bottom-1 left-2 text-yellow-600">A</span>
                         <div className="w-full h-0.5 bg-gray-200 absolute top-1/2 -translate-y-1/2"></div>
                         <div className="h-full w-0.5 bg-gray-200 absolute left-1/2 -translate-x-1/2"></div>
                       </div>
