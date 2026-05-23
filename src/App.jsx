@@ -2778,7 +2778,9 @@ function App() {
         {appMessage && <div className="fixed top-4 right-4 z-[100] animate-fade-in-up"><div className="bg-white rounded-xl shadow-lg p-4 border-t-4 border-[#F4B41A] max-w-sm"><p className="text-sm font-medium text-gray-800">{appMessage}</p></div></div>}
         <div className="max-w-md w-full bg-white rounded-2xl shadow-2xl overflow-hidden relative z-10 border-t-[8px] border-[#5C3A21] animate-fade-in-up">
           <div className="bg-gray-50 p-8 text-center border-b border-gray-100">
-            <img src={logoImg} alt="IMAC" className="max-h-20 object-contain mx-auto mb-4" onError={(e) => { e.target.style.display = 'none'; e.target.nextSibling.style.display = 'block'; }} />
+            <div className="bg-white p-3 rounded-2xl shadow-sm border border-gray-100 mx-auto mb-4 inline-block">
+              <img src={logoImg} alt="IMAC" className="max-h-16 object-contain" onError={(e) => { e.target.style.display = 'none'; e.target.nextSibling.style.display = 'block'; }} />
+            </div>
             <div className="w-20 h-20 bg-white rounded-full items-center justify-center mx-auto mb-4 shadow-md border border-gray-200 hidden">
               <h1 className="text-3xl font-black text-[#5C3A21]">IMAC</h1>
             </div>
@@ -3171,7 +3173,9 @@ function App() {
           {/* Header principal - iOS Minimalist com Destaque */}
           <div className="flex flex-col mb-8 gap-4 bg-white/40 p-6 rounded-2xl shadow-sm border border-white/60 animate-fade-in-up">
             <div className="flex items-center gap-3">
-              <img src={logoImg} alt="IMAC" className="h-[50px] object-contain mr-2" onError={(e) => { e.target.style.display = 'none'; }} />
+              <div className="bg-white p-2 rounded-xl shadow-sm border border-gray-100 mr-2 flex shrink-0">
+                <img src={logoImg} alt="IMAC" className="h-[45px] object-contain" onError={(e) => { e.target.parentElement.style.display = 'none'; }} />
+              </div>
               <div>
                 <h1 className="text-3xl font-black text-[#5C3A21] tracking-tight drop-shadow-sm">Seja bem vindo, {userName} 👋</h1>
                 <p className="text-[#5C3A21] font-bold text-sm mt-1">O que você deseja fazer hoje?</p>
