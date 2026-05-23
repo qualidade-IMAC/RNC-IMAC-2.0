@@ -4347,13 +4347,13 @@ function App() {
             {(tipoStr === 'Relatório de Não Conformidade - Cliente' || tipoStr === 'Ocorrência Interna') ? (
               <div className="w-full flex flex-col font-sans relative">
                 {/* Header A3 */}
-                <div className="flex w-full mb-3 border-2 border-[#1B365D] overflow-hidden rounded-t-lg bg-white relative">
-                  <div className="bg-[#1B365D] text-white flex-1 p-2 flex items-center justify-center">
+                <div className="flex w-full mb-3 border-2 border-[#5C3A21] overflow-hidden rounded-t-lg bg-white relative">
+                  <div className="bg-[#5C3A21] text-white flex-1 p-2 flex items-center justify-center">
                     <h1 className="text-2xl font-black tracking-widest">{tituloRelatorio}</h1>
                   </div>
-                  <div className="bg-white px-6 py-1 flex items-center justify-center border-l-2 border-[#1B365D]">
+                  <div className="bg-white px-6 py-1 flex items-center justify-center border-l-2 border-[#5C3A21]">
                     <div className="text-center">
-                      <div className="w-12 h-12 rounded-full border-4 border-[#F4B41A] flex items-center justify-center text-[#1B365D] font-black text-sm relative">
+                      <div className="w-12 h-12 rounded-full border-4 border-[#F4B41A] flex items-center justify-center text-[#5C3A21] font-black text-sm relative">
                         <span className="absolute top-1 left-2 text-blue-600">P</span><span className="absolute top-1 right-2 text-red-600">D</span>
                         <span className="absolute bottom-1 right-2 text-green-600">C</span><span className="absolute bottom-1 left-2 text-yellow-600">A</span>
                         <div className="w-full h-0.5 bg-gray-200 absolute top-1/2 -translate-y-1/2"></div>
@@ -4376,7 +4376,7 @@ function App() {
                   <div className="flex flex-col gap-4">
                     {/* 1. CONTEXTO */}
                     <div className="border border-gray-300 rounded shadow-sm overflow-hidden">
-                      <div className="bg-gray-100 border-b border-gray-300 px-2 py-1 font-bold text-[#1B365D] flex gap-2"><span className="bg-[#1B365D] text-white rounded-full w-5 h-5 flex items-center justify-center text-xs">1</span> CONTEXTO</div>
+                      <div className="bg-[#FDF8F5] border-b border-gray-300 px-2 py-1 font-bold text-[#5C3A21] flex gap-2"><span className="bg-[#5C3A21] text-white rounded-full w-5 h-5 flex items-center justify-center text-xs">1</span> CONTEXTO</div>
                       <div className="p-2 text-[12px] bg-white">
                         <div className="grid grid-cols-2 gap-x-4 gap-y-1">
                           {tipoStr === 'Relatório de Não Conformidade - Cliente' ? (
@@ -4402,7 +4402,7 @@ function App() {
 
                     {/* 2. CONDIÇÕES ATUAIS */}
                     <div className="border border-gray-300 rounded shadow-sm overflow-hidden flex-1">
-                      <div className="bg-gray-100 border-b border-gray-300 px-2 py-1 font-bold text-[#1B365D] flex gap-2"><span className="bg-[#1B365D] text-white rounded-full w-5 h-5 flex items-center justify-center text-xs">2</span> CONDIÇÕES ATUAIS (PROBLEMA)</div>
+                      <div className="bg-[#FDF8F5] border-b border-gray-300 px-2 py-1 font-bold text-[#5C3A21] flex gap-2"><span className="bg-[#5C3A21] text-white rounded-full w-5 h-5 flex items-center justify-center text-xs">2</span> CONDIÇÕES ATUAIS (PROBLEMA)</div>
                       <div className="p-2 text-[12px] bg-white h-full">
                         <div className="rich-text-content leading-relaxed" dangerouslySetInnerHTML={{ __html: formData.descricao || '' }} />
                         {tipoStr === 'Relatório de Não Conformidade - Cliente' && (
@@ -4418,7 +4418,7 @@ function App() {
 
                     {/* 3. OBJETIVOS E METAS */}
                     <div className="border border-gray-300 rounded shadow-sm overflow-hidden min-h-[100px]">
-                      <div className="bg-gray-100 border-b border-gray-300 px-2 py-1 font-bold text-[#1B365D] flex gap-2"><span className="bg-[#1B365D] text-white rounded-full w-5 h-5 flex items-center justify-center text-xs">3</span> OBJETIVOS / METAS DE MELHORIA</div>
+                      <div className="bg-[#FDF8F5] border-b border-gray-300 px-2 py-1 font-bold text-[#5C3A21] flex gap-2"><span className="bg-[#5C3A21] text-white rounded-full w-5 h-5 flex items-center justify-center text-xs">3</span> OBJETIVOS / METAS DE MELHORIA</div>
                       <div className="p-2 text-[12px] bg-white h-full">
                         <div className="rich-text-content" dangerouslySetInnerHTML={{ __html: formData.metasMelhoria || formData.acaoCorretiva || '' }} />
                       </div>
@@ -4429,7 +4429,7 @@ function App() {
                   <div className="flex flex-col gap-4">
                     {/* 4. ANÁLISE */}
                     <div className="border border-gray-300 rounded shadow-sm overflow-hidden min-h-[160px]">
-                      <div className="bg-gray-100 border-b border-gray-300 px-2 py-1 font-bold text-[#1B365D] flex gap-2"><span className="bg-[#1B365D] text-white rounded-full w-5 h-5 flex items-center justify-center text-xs">4</span> ANÁLISE DE CAUSA RAIZ (ISHIKAWA/5 PORQUÊS)</div>
+                      <div className="bg-[#FDF8F5] border-b border-gray-300 px-2 py-1 font-bold text-[#5C3A21] flex gap-2"><span className="bg-[#5C3A21] text-white rounded-full w-5 h-5 flex items-center justify-center text-xs">4</span> ANÁLISE DE CAUSA RAIZ (ISHIKAWA/5 PORQUÊS)</div>
                       <div className="p-2 text-[12px] bg-white h-full">
                          <div className="rich-text-content" dangerouslySetInnerHTML={{ __html: formData.causaRaiz || formData.consideracoes || '' }} />
                       </div>
@@ -4437,7 +4437,7 @@ function App() {
 
                     {/* 5. PLANO DE AÇÃO */}
                     <div className="border border-gray-300 rounded shadow-sm overflow-hidden flex-1">
-                      <div className="bg-gray-100 border-b border-gray-300 px-2 py-1 font-bold text-[#1B365D] flex gap-2"><span className="bg-[#1B365D] text-white rounded-full w-5 h-5 flex items-center justify-center text-xs">5</span> PLANO DE AÇÃO (5W2H)</div>
+                      <div className="bg-[#FDF8F5] border-b border-gray-300 px-2 py-1 font-bold text-[#5C3A21] flex gap-2"><span className="bg-[#5C3A21] text-white rounded-full w-5 h-5 flex items-center justify-center text-xs">5</span> PLANO DE AÇÃO (5W2H)</div>
                       <div className="p-2 text-[12px] bg-white h-full overflow-x-auto">
                         {formData.planoAcao ? (
                            <div className="rich-text-content" dangerouslySetInnerHTML={{ __html: formData.planoAcao }} />
@@ -4461,7 +4461,7 @@ function App() {
 
                     {/* 6. ACOMPANHAMENTO */}
                     <div className="border border-gray-300 rounded shadow-sm overflow-hidden min-h-[100px]">
-                      <div className="bg-gray-100 border-b border-gray-300 px-2 py-1 font-bold text-[#1B365D] flex gap-2"><span className="bg-[#1B365D] text-white rounded-full w-5 h-5 flex items-center justify-center text-xs">6</span> ACOMPANHAMENTO / VERIFICAÇÃO</div>
+                      <div className="bg-[#FDF8F5] border-b border-gray-300 px-2 py-1 font-bold text-[#5C3A21] flex gap-2"><span className="bg-[#5C3A21] text-white rounded-full w-5 h-5 flex items-center justify-center text-xs">6</span> ACOMPANHAMENTO / VERIFICAÇÃO</div>
                       <div className="p-2 text-[12px] bg-white h-full">
                          <p><strong>Status Parecer:</strong> {formData.statusParecer || 'Pendente'}</p>
                          <p><strong>Aprovação:</strong> {formData.conclusaoParecer ? 'Concluído' : 'Aberto'}</p>
@@ -4473,7 +4473,7 @@ function App() {
                 {/* IMAGENS / EVIDÊNCIAS (Full Width at bottom) */}
                 {Array.isArray(formData.imagens) && formData.imagens.length > 0 && (
                   <div className="mt-4 border border-gray-300 rounded shadow-sm overflow-hidden break-inside-avoid">
-                     <div className="bg-gray-100 border-b border-gray-300 px-2 py-1 font-bold text-[#1B365D]">EVIDÊNCIAS FOTOGRÁFICAS</div>
+                     <div className="bg-[#FDF8F5] border-b border-gray-300 px-2 py-1 font-bold text-[#5C3A21]">EVIDÊNCIAS FOTOGRÁFICAS</div>
                      <div className="p-2 bg-white">
                         <div className={`grid gap-4 ${formData.imagens.length === 1 ? 'grid-cols-1' : 'grid-cols-2 print:grid-cols-2'}`}>
                           {formData.imagens.map((img, index) => {
