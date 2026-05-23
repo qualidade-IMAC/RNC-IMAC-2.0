@@ -1305,7 +1305,6 @@ const GerenciarUsuariosModal = ({ isOpen, onClose, usersDirectory, currentUid, o
                 </li>
               ))}
             </ul>
-            </ul>
           </div>
           
           <div className="mt-4 border-t border-gray-200 pt-4 text-center bg-red-50 rounded-lg p-3">
