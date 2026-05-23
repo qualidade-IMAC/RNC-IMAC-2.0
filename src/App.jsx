@@ -4279,13 +4279,17 @@ function App() {
                   <p className="font-bold text-[14px] ml-1 mb-1">DESCRIÇÃO DA NÃO CONFORMIDADE APRESENTADA:</p>
                   <div className="text-justify text-black ml-1 rich-text-content text-[14px] leading-relaxed break-words mb-4" dangerouslySetInnerHTML={{ __html: formData.descricao || '' }} />
 
-                  <p className="font-bold text-[14px] ml-1 mb-2">CARACTERÍSTICAS DO PRODUTO:</p>
-                  <div className="grid grid-cols-2 md:grid-cols-4 print:grid-cols-4 gap-4 ml-1 mb-2">
-                    <div className="border border-gray-200 p-2 rounded bg-gray-50 text-center"><span className="block text-[11px] font-bold text-gray-500 uppercase">Sabor</span><span className="text-[14px] font-semibold">{formData.sabor || 'Não informado'}</span></div>
-                    <div className="border border-gray-200 p-2 rounded bg-gray-50 text-center"><span className="block text-[11px] font-bold text-gray-500 uppercase">Odor</span><span className="text-[14px] font-semibold">{formData.odor || 'Não informado'}</span></div>
-                    <div className="border border-gray-200 p-2 rounded bg-gray-50 text-center"><span className="block text-[11px] font-bold text-gray-500 uppercase">Cor</span><span className="text-[14px] font-semibold">{formData.cor || 'Não informado'}</span></div>
-                    <div className="border border-gray-200 p-2 rounded bg-gray-50 text-center"><span className="block text-[11px] font-bold text-gray-500 uppercase">Temp. °C</span><span className="text-[14px] font-semibold">{formData.temperatura || 'Não informado'}</span></div>
-                  </div>
+                  {(formData.sabor || formData.odor || formData.cor || formData.temperatura) && (
+                    <>
+                      <p className="font-bold text-[14px] ml-1 mb-2 mt-4">CARACTERÍSTICAS DO PRODUTO:</p>
+                      <div className="grid grid-cols-2 md:grid-cols-4 print:grid-cols-4 gap-4 ml-1 mb-2">
+                        <div className="border border-gray-200 p-2 rounded bg-gray-50 text-center"><span className="block text-[11px] font-bold text-gray-500 uppercase">Sabor</span><span className="text-[14px] font-semibold">{formData.sabor || 'Não informado'}</span></div>
+                        <div className="border border-gray-200 p-2 rounded bg-gray-50 text-center"><span className="block text-[11px] font-bold text-gray-500 uppercase">Odor</span><span className="text-[14px] font-semibold">{formData.odor || 'Não informado'}</span></div>
+                        <div className="border border-gray-200 p-2 rounded bg-gray-50 text-center"><span className="block text-[11px] font-bold text-gray-500 uppercase">Cor</span><span className="text-[14px] font-semibold">{formData.cor || 'Não informado'}</span></div>
+                        <div className="border border-gray-200 p-2 rounded bg-gray-50 text-center"><span className="block text-[11px] font-bold text-gray-500 uppercase">Temp. °C</span><span className="text-[14px] font-semibold">{formData.temperatura || 'Não informado'}</span></div>
+                      </div>
+                    </>
+                  )}
                 </div>
 
                 {Array.isArray(formData.imagens) && formData.imagens.length > 0 && (
@@ -4409,7 +4413,7 @@ function App() {
                       <div className="bg-[#FDF8F5] border-b border-gray-300 px-2 py-1 font-bold text-[#5C3A21] flex gap-2"><span className="bg-[#5C3A21] text-white rounded-full w-5 h-5 flex items-center justify-center text-xs">2</span> CONDIÇÕES ATUAIS (PROBLEMA)</div>
                       <div className="p-2 text-[12px] bg-white h-full">
                         <div className="rich-text-content leading-relaxed" dangerouslySetInnerHTML={{ __html: formData.descricao || '' }} />
-                        {tipoStr === 'Relatório de Não Conformidade - Cliente' && (
+                        {tipoStr === 'Relatório de Não Conformidade - Cliente' && (formData.sabor || formData.odor || formData.cor || formData.temperatura) && (
                           <div className="grid grid-cols-4 gap-1 mt-2 text-[10px] text-center border-t pt-2">
                             <div><strong>Sabor:</strong> {formData.sabor}</div>
                             <div><strong>Odor:</strong> {formData.odor}</div>
