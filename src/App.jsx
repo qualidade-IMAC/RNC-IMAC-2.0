@@ -1096,7 +1096,7 @@ const GerenciarClientesModal = ({ isOpen, onClose, clientes, onAdd, onEdit, onRe
   );
 };
 
-const GerenciarUsuariosModal = ({ isOpen, onClose, usersDirectory, currentUid, onAddUser, onRemoveUser, onResetPassword, onUpdatePermissions }) => {
+const GerenciarUsuariosModal = ({ isOpen, onClose, usersDirectory, currentUid, onAddUser, onRemoveUser, onResetPassword, onUpdatePermissions, onWipeDatabase }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [nome, setNome] = useState('');
@@ -1305,7 +1305,16 @@ const GerenciarUsuariosModal = ({ isOpen, onClose, usersDirectory, currentUid, o
                 </li>
               ))}
             </ul>
+            </ul>
           </div>
+          
+          <div className="mt-4 border-t border-gray-200 pt-4 text-center bg-red-50 rounded-lg p-3">
+            <p className="text-red-600 font-bold text-xs mb-2">ZONA DE PERIGO</p>
+            <button onClick={onWipeDatabase} className="w-full bg-red-100 text-red-600 font-bold hover:text-white border border-red-200 hover:bg-red-600 hover:border-red-600 px-4 py-2.5 rounded-lg transition text-xs flex justify-center items-center gap-2 shadow-sm uppercase tracking-wide">
+              <Trash2 size={16} /> Apagar todo o banco de dados
+            </button>
+          </div>
+
         </div>
 
       </div>
@@ -2086,6 +2095,37 @@ function App() {
       setIsDbConfirmedEmpty(true);
       setWelcomeMode('choice');
       setAppMessage("✅ Sistema resetado. Você pode criar um novo Administrador agora.");
+    }
+  };
+
+  const handleWipeDatabase = async () => {
+    if (window.confirm("ZONA DE PERIGO EXTREMO: Você tem certeza ABSOLUTA que deseja apagar TODOS os relatórios, clientes e fornecedores do banco de dados? Isso NÃO PODE ser desfeito!")) {
+      const confirmText = window.prompt("Para confirmar a exclusão de todos os dados do banco, digite a palavra 'APAGAR' (tudo maiúsculo):");
+      if (confirmText === 'APAGAR') {
+        try {
+          if (db && isConfigured) {
+             const collectionsToWipe = ['records', 'clientes', 'fornecedores'];
+             for (const collName of collectionsToWipe) {
+                 const snap = await getDocs(collection(db, 'artifacts', appId, 'public', 'data', collName));
+                 snap.forEach((docSnap) => {
+                     deleteDoc(doc(db, 'artifacts', appId, 'public', 'data', collName, docSnap.id)).catch(()=>{});
+                 });
+             }
+          }
+          setRecords([]);
+          setClientes([]);
+          setFornecedores([]);
+          localStorage.removeItem('imac_app_records');
+          localStorage.removeItem('imac_clientes');
+          localStorage.removeItem('imac_fornecedores');
+          setAppMessage("🚨 BANCO DE DADOS APAGADO COM SUCESSO!");
+          setIsUsersModalOpen(false);
+        } catch(e) {
+          setAppMessage("❌ Erro ao apagar banco de dados: " + e.message);
+        }
+      } else {
+        setAppMessage("Operação cancelada: confirmação de segurança incorreta.");
+      }
     }
   };
 
@@ -3149,6 +3189,7 @@ function App() {
           onRemoveUser={handleRemoveUser}
           onResetPassword={handleResetPassword}
           onUpdatePermissions={handleUpdatePermissions}
+          onWipeDatabase={handleWipeDatabase}
         />
 
         {isFornecedoresModalOpen && (
