@@ -4004,7 +4004,7 @@ function App() {
                   </div>
 
                   <div>
-                    <label className="block text-sm font-bold mb-3 text-gray-700">Características do Produto</label>
+                    <label className="block text-sm font-bold mb-3 text-gray-700">Características do Produto <span className="font-normal text-xs text-gray-500">(Opcional)</span></label>
                     <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                       <div><label className="block text-xs font-bold mb-1 text-gray-500 uppercase">Sabor</label><input type="text" maxLength={40} name="sabor" value={formData.sabor || ''} onChange={handleChange} placeholder="Ex: Não informado" className="w-full border border-gray-300 p-2.5 rounded focus:ring-2 focus:ring-[#F4B41A] outline-none shadow-sm text-sm font-semibold" /></div>
                       <div><label className="block text-xs font-bold mb-1 text-gray-500 uppercase">Odor</label><input type="text" maxLength={40} name="odor" value={formData.odor || ''} onChange={handleChange} placeholder="Ex: Não informado" className="w-full border border-gray-300 p-2.5 rounded focus:ring-2 focus:ring-[#F4B41A] outline-none shadow-sm text-sm font-semibold" /></div>
@@ -4319,7 +4319,7 @@ function App() {
                   <div className="grid grid-cols-1 md:grid-cols-2 print:grid-cols-2 gap-x-8 gap-y-6 text-[14px] mt-6 mb-4 print:mt-3 print:mb-2 break-inside-avoid print-grid-signatures">
                     {(Array.isArray(formData.assinaturas) ? formData.assinaturas : []).filter(Boolean).map((assinatura, index) => (
                       <div key={index} className={(formData.assinaturas || []).length % 2 !== 0 && index === (formData.assinaturas || []).length - 1 ? "md:col-span-2 print:col-span-2" : ""}>
-                        <p className="font-bold uppercase">Responsável: {assinatura?.nome}</p>
+                        <p className="font-bold uppercase">{assinatura?.nome}</p>
                         <p className="leading-snug whitespace-pre-line text-gray-600">{assinatura?.cargo}</p>
                       </div>
                     ))}
