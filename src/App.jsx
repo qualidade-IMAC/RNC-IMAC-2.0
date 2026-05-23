@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { initializeApp } from 'firebase/app';
-import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } from 'firebase/auth';
+import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut } from 'firebase/auth';
 import { getFirestore, collection, addDoc, updateDoc, onSnapshot, deleteDoc, doc, setDoc, getDocs, getDoc } from 'firebase/firestore';
 
 let firebaseConfig;
@@ -1704,6 +1704,9 @@ function App() {
   const [loginPassword, setLoginPassword] = useState('');
   const [loginNome, setLoginNome] = useState('');
   const [loginCargo, setLoginCargo] = useState('');
+  const [honeypot, setHoneypot] = useState('');
+  const [loginAttempts, setLoginAttempts] = useState(0);
+  const [isLocked, setIsLocked] = useState(false);
   const [isAdmin, setIsAdmin] = useState(false);
   const [canApprove, setCanApprove] = useState(false);
 
@@ -1862,12 +1865,31 @@ function App() {
 
   const handleEmailLogin = async (e) => {
     e.preventDefault();
+    if (honeypot) return; // Anti-bot silencioso
+    if (isLocked) {
+      setAuthError("Muitas tentativas inválidas. Conta bloqueada temporariamente (proteção anti-bot).");
+      return;
+    }
     setAuthError('');
-    const foundUser = usersDirectory.find(u => u.email === loginEmail && u.password === loginPassword);
-
-    if (foundUser) {
-      loginUser(foundUser);
-    } else {
+    try {
+      const userCredential = await signInWithEmailAndPassword(auth, loginEmail, loginPassword);
+      const foundUser = usersDirectory.find(u => u.email === loginEmail) || { 
+        email: loginEmail, 
+        nome: "Usuário Desconhecido", 
+        cargo: "Acesso Básico", 
+        isAdmin: false, 
+        canApprove: false 
+      };
+      loginUser({ ...foundUser, id: userCredential.user.uid });
+    } catch (error) {
+      setLoginAttempts(prev => {
+        if (prev >= 4) {
+          setIsLocked(true);
+          setTimeout(() => { setIsLocked(false); setLoginAttempts(0); }, 60000); // 1 minuto bloqueado
+          return 0;
+        }
+        return prev + 1;
+      });
       setAuthError("E-mail ou senha incorretos. Verifique suas credenciais.");
     }
   };
@@ -1880,13 +1902,13 @@ function App() {
       return;
     }
     try {
-      const newId = "admin_" + Date.now();
+      const userCred = await createUserWithEmailAndPassword(auth, loginEmail.trim(), loginPassword);
+      const newId = userCred.user.uid;
       const newUser = {
         id: newId,
         nome: loginNome.trim(),
         cargo: loginCargo.trim(),
         email: loginEmail.trim(),
-        password: loginPassword,
         isAdmin: true,
         canApprove: true,
         isManager: true,
@@ -1903,6 +1925,7 @@ function App() {
       }
 
       loginUser(newUser);
+      setWelcomeMode('choice');
     } catch (error) {
       setAuthError("Erro ao configurar a conta mestre: " + error.message);
     }
@@ -1916,13 +1939,17 @@ function App() {
         return false;
       }
 
-      const newId = "user_" + Date.now();
+      const secondaryApp = initializeApp(firebaseConfig, "SecondaryApp" + Date.now());
+      const secondaryAuth = getAuth(secondaryApp);
+      const userCred = await createUserWithEmailAndPassword(secondaryAuth, newEmail, newPassword);
+      const newId = userCred.user.uid;
+      await signOut(secondaryAuth);
+
       const newUser = {
         id: newId,
         nome: newNome,
         cargo: newCargo,
         email: newEmail,
-        password: newPassword,
         isAdmin: newIsAdmin,
         canApprove: newCanApprove,
         isManager: newIsManager || false,
@@ -1943,6 +1970,7 @@ function App() {
       setAppMessage("✅ Usuário criado com sucesso!");
       return true;
     } catch (error) {
+      console.error(error);
       setAppMessage("❌ Erro ao criar usuário: " + error.message);
       return false;
     }
@@ -1998,6 +2026,11 @@ function App() {
   };
 
   const handleLogout = async () => {
+    try {
+      await signOut(auth);
+    } catch (error) {
+      console.error(error);
+    }
     setAppUser(null);
     setUserName('');
     setUserRole('');
@@ -2007,6 +2040,7 @@ function App() {
     setLoginPassword('');
     localStorage.removeItem('imac_app_session_user');
     setView('welcome');
+    setWelcomeMode('choice');
   };
 
   const handleUpdateProfile = async (newName, newRole) => {
@@ -2953,10 +2987,11 @@ function App() {
                 <div>
                   <label className="block text-sm font-bold text-gray-700 mb-1">Senha</label>
                   <input type="password" required value={loginPassword} onChange={(e) => setLoginPassword(e.target.value)} placeholder="Sua senha de acesso" className="w-full border border-gray-300 p-3 rounded-lg focus:ring-2 focus:ring-[#F4B41A] outline-none" />
+                  <input type="text" value={honeypot} onChange={(e) => setHoneypot(e.target.value)} style={{ display: 'none' }} tabIndex="-1" autoComplete="off" />
                 </div>
                 <div className="flex gap-2 mt-2">
                   <button type="button" onClick={() => setWelcomeMode('choice')} className="px-4 bg-gray-200 text-gray-800 font-bold rounded-xl hover:bg-gray-300 transition"><ChevronLeft size={20}/></button>
-                  <button type="submit" className="flex-1 bg-[#5C3A21] text-[#F4B41A] font-bold py-3.5 px-4 rounded-xl shadow-md hover:bg-[#4a2e1a] transition flex items-center justify-center gap-2"><Check size={20}/> Entrar no Sistema</button>
+                  <button type="submit" disabled={isLocked || authLoading} className={`flex-1 font-bold py-3.5 px-4 rounded-xl shadow-md transition flex items-center justify-center gap-2 ${isLocked || authLoading ? 'bg-gray-400 cursor-not-allowed text-gray-200' : 'bg-[#5C3A21] text-[#F4B41A] hover:bg-[#4a2e1a]'}`}><Check size={20}/> Entrar no Sistema</button>
                 </div>
               </form>
             )}
