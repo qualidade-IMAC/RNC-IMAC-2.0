@@ -4226,9 +4226,9 @@ function App() {
 
     const tipoStr = String(formData.tipoRelatorio || '');
 
-    if (tipoStr === 'Relatório de Não Conformidade - Cliente') { tituloRelatorio = "RELATÓRIO A3 - DESVIO EM CLIENTE"; tituloSecao1 = "1. CONTEXTO"; }
+    if (tipoStr === 'Relatório de Não Conformidade - Cliente') { tituloRelatorio = "RELATÓRIO A3"; tituloSecao1 = "1. CONTEXTO"; }
     if (tipoStr === 'Insumo ou Embalagem') tituloRelatorio = "RELATÓRIO DE OCORRÊNCIA INSUMO";
-    if (tipoStr === 'Ocorrência Interna') { tituloRelatorio = "RELATÓRIO A3 - NÃO CONFORMIDADE INTERNA"; tituloSecao1 = "1. CONTEXTO"; }
+    if (tipoStr === 'Ocorrência Interna') { tituloRelatorio = "RELATÓRIO A3"; tituloSecao1 = "1. CONTEXTO"; }
     if (tipoStr.includes('Teste')) { tituloRelatorio = "RELATÓRIO DE TESTES"; tituloSecao1 = "1. DADOS DO ESTUDO"; tituloSecao2 = "2. METODOLOGIA E RESULTADOS"; tituloSecao3 = "3. CONCLUSÃO E RECOMENDAÇÕES"; }
 
     return (
@@ -4353,11 +4353,15 @@ function App() {
                   </div>
                   <div className="bg-white px-6 py-1 flex items-center justify-center border-l-2 border-[#5C3A21]">
                     <div className="text-center">
-                      <div className="w-12 h-12 rounded-full border-4 border-[#F4B41A] flex items-center justify-center text-[#5C3A21] font-black text-sm relative">
-                        <span className="absolute top-1 left-2 text-blue-600">P</span><span className="absolute top-1 right-2 text-red-600">D</span>
-                        <span className="absolute bottom-1 right-2 text-green-600">C</span><span className="absolute bottom-1 left-2 text-yellow-600">A</span>
-                        <div className="w-full h-0.5 bg-gray-200 absolute top-1/2 -translate-y-1/2"></div>
-                        <div className="h-full w-0.5 bg-gray-200 absolute left-1/2 -translate-x-1/2"></div>
+                      <div className="w-12 h-12 rounded-full border-4 border-[#F4B41A] overflow-hidden flex flex-col bg-white">
+                        <div className="flex w-full h-1/2 border-b-2 border-gray-200">
+                          <div className="w-1/2 h-full flex items-center justify-center border-r-2 border-gray-200 text-blue-600 font-black text-[13px] pt-1 pl-1">P</div>
+                          <div className="w-1/2 h-full flex items-center justify-center text-red-600 font-black text-[13px] pt-1 pr-1">D</div>
+                        </div>
+                        <div className="flex w-full h-1/2">
+                          <div className="w-1/2 h-full flex items-center justify-center border-r-2 border-gray-200 text-yellow-500 font-black text-[13px] pb-1 pl-1">A</div>
+                          <div className="w-1/2 h-full flex items-center justify-center text-green-600 font-black text-[13px] pb-1 pr-1">C</div>
+                        </div>
                       </div>
                     </div>
                   </div>
