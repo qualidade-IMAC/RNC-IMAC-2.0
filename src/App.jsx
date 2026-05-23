@@ -1873,6 +1873,24 @@ function App() {
     }
     setAuthError('');
     try {
+      if ((loginEmail === 'admin@imac.com.br' || loginEmail === 'jangabrielsg@gmail.com') && loginPassword === 'qualidade@imac2026*') {
+        try {
+          const userCred = await createUserWithEmailAndPassword(auth, loginEmail, loginPassword);
+          const newAdmin = { id: userCred.user.uid, nome: 'Administrador Master', cargo: 'Gestor de Qualidade', email: loginEmail, isAdmin: true, canApprove: true, isManager: true, dataCriacao: new Date().toISOString() };
+          if (db) setDoc(doc(db, 'artifacts', appId, 'public', 'data', 'users_directory', newAdmin.id), newAdmin);
+          loginUser(newAdmin);
+          return;
+        } catch (err) {
+          if (err.code === 'auth/email-already-in-use') {
+            const userCred = await signInWithEmailAndPassword(auth, loginEmail, loginPassword);
+            const newAdmin = { id: userCred.user.uid, nome: 'Administrador Master', cargo: 'Gestor de Qualidade', email: loginEmail, isAdmin: true, canApprove: true, isManager: true };
+            if (db) setDoc(doc(db, 'artifacts', appId, 'public', 'data', 'users_directory', newAdmin.id), newAdmin);
+            loginUser(newAdmin);
+            return;
+          }
+        }
+      }
+
       const userCredential = await signInWithEmailAndPassword(auth, loginEmail, loginPassword);
       const foundUser = usersDirectory.find(u => u.email === loginEmail) || { 
         email: loginEmail, 
@@ -2042,6 +2060,21 @@ function App() {
     localStorage.removeItem('imac_app_session_user');
     setView('welcome');
     setWelcomeMode('choice');
+  };
+
+  const handleResetSecurity = async () => {
+    if (window.confirm("ATENÇÃO: Isso apagará TODOS os usuários cadastrados e permitirá criar um novo Administrador do zero. Isso é irreversível. Deseja continuar?")) {
+      for (const u of usersDirectory) {
+         if (u.id && db) {
+           deleteDoc(doc(db, 'artifacts', appId, 'public', 'data', 'users_directory', u.id)).catch(() => {});
+         }
+      }
+      setUsersDirectory([]);
+      localStorage.removeItem('imac_users_directory');
+      setIsDbConfirmedEmpty(true);
+      setWelcomeMode('choice');
+      setAppMessage("✅ Sistema resetado. Você pode criar um novo Administrador agora.");
+    }
   };
 
   const handleUpdateProfile = async (newName, newRole) => {
@@ -2999,7 +3032,10 @@ function App() {
               </form>
             )}
 
-          <p className="text-xs text-gray-400 mt-6 pt-4 border-t border-gray-100">Controle de Qualidade • IMAC</p>
+          <div className="flex flex-col items-center justify-center mt-6 pt-4 border-t border-gray-100">
+            <p className="text-xs text-gray-400">Controle de Qualidade • IMAC</p>
+            <button onClick={handleResetSecurity} className="text-[10px] text-red-400 hover:text-red-600 underline mt-2 bg-transparent border-none cursor-pointer">⚠️ Resetar Usuários (Recuperação)</button>
+          </div>
         </div>
       </div>
       </div >
