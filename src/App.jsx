@@ -1662,6 +1662,11 @@ function App() {
   const [editingImageIndex, setEditingImageIndex] = useState(null);
   const [registros, setRegistros] = useState([]);
   const [registroToDelete, setRegistroToDelete] = useState(null);
+  const [linkedSolicitacaoToDelete, setLinkedSolicitacaoToDelete] = useState(null);
+
+  const getLinkedRegistro = (solId) => {
+    return (registros || []).find(r => r.solicitacaoOrigemId === solId);
+  };
   const [registroToView, setRegistroToView] = useState(null);
   const [evaluatingRegistro, setEvaluatingRegistro] = useState(null);
   const [editingReportId, setEditingReportId] = useState(null);
@@ -2297,11 +2302,11 @@ function App() {
     if (db && isConfigured) updateDoc(doc(db, 'artifacts', appId, 'public', 'data', 'sol_fornecedor', id), { status: ns }).catch(() => { });
   };
   const criarRelDeRncCliente = (rnc) => {
-    setFormData({ ...getEmptyForm(), tipoRelatorio: 'Relatório de Não Conformidade - Cliente', produto: rnc.produto || '', lote: rnc.lote || '', validade: rnc.validade || '', dataOcorrencia: rnc.dataOcorrencia || '', descricao: rnc.descricao || '', quantidade: rnc.quantidade || '', ocorrencia: (rnc.descricao || '').substring(0, 100) });
+    setFormData({ ...getEmptyForm(), tipoRelatorio: 'Relatório de Não Conformidade - Cliente', produto: rnc.produto || '', lote: rnc.lote || '', validade: rnc.validade || '', dataOcorrencia: rnc.dataOcorrencia || '', descricao: rnc.descricao || '', quantidade: rnc.quantidade || '', ocorrencia: (rnc.descricao || '').substring(0, 100), solicitacaoOrigemId: rnc.id, solicitacaoOrigemTipo: 'rncCliente' });
     setEditingReportId(null); setView('form'); window.scrollTo(0, 0);
   };
   const criarRelDeRncInterna = (rnc) => {
-    setFormData({ ...getEmptyForm(), tipoRelatorio: 'Ocorrência Interna', produto: rnc.produto || '', lote: rnc.lote || '', dataOcorrencia: rnc.dataOcorrencia || '', descricao: rnc.descricao || '', quantidade: rnc.quantidade || '', ocorrencia: (rnc.descricao || '').substring(0, 100) });
+    setFormData({ ...getEmptyForm(), tipoRelatorio: 'Ocorrência Interna', produto: rnc.produto || '', lote: rnc.lote || '', dataOcorrencia: rnc.dataOcorrencia || '', descricao: rnc.descricao || '', quantidade: rnc.quantidade || '', ocorrencia: (rnc.descricao || '').substring(0, 100), solicitacaoOrigemId: rnc.id, solicitacaoOrigemTipo: 'rncInterna' });
     setEditingReportId(null); setView('form'); window.scrollTo(0, 0);
   };
 
@@ -2501,7 +2506,9 @@ function App() {
       userId: appUser?.id || 'anonimo',
       autorNome: userName || 'Desconhecido',
       autorCargo: userRole || '',
-      enviado: false
+      enviado: false,
+      solicitacaoOrigemId: formData.solicitacaoOrigemId || null,
+      solicitacaoOrigemTipo: formData.solicitacaoOrigemTipo || null
     };
 
     let currentId = editingReportId;
@@ -2556,6 +2563,22 @@ function App() {
       } else { setAppMessage("💾 Relatório salvo localmente"); }
     }
 
+    if (formData.solicitacaoOrigemId && formData.solicitacaoOrigemTipo) {
+      const solId = formData.solicitacaoOrigemId;
+      const type = formData.solicitacaoOrigemTipo;
+      
+      if (type === 'rncCliente') {
+        updateStatusRncCliente(solId, 'Aguardando Correção');
+      } else if (type === 'rncInterna') {
+        updateStatusRncInterna(solId, 'Aguardando Correção');
+      } else if (type === 'solFornecedor') {
+        updateStatusSolForn(solId, 'Aguardando Correção');
+      } else if (type === 'solicitacao') {
+        if (db && isConfigured) updateDoc(doc(db, 'artifacts', appId, 'public', 'data', 'solicitacoes', solId), { status: 'Atendido' }).catch(() => { });
+        setSolicitacoes(prev => { const n = prev.map(s => s.id === solId ? { ...s, status: 'Atendido' } : s); saveToLocalStorage('imac_solicitacoes', n); return n; });
+      }
+    }
+
     if (action === 'save_and_preview') {
       setEditingReportId(currentId);
       setView('preview');
@@ -2586,6 +2609,44 @@ function App() {
     document.body.removeChild(fileDownload);
   };
 
+  const confirmDeleteLinked = (solInfo) => {
+    setLinkedSolicitacaoToDelete(solInfo);
+  };
+
+  const handleConfirmDeleteLinked = (mode) => {
+    if (!linkedSolicitacaoToDelete) return;
+    
+    const { id, type, linkedRegistroId } = linkedSolicitacaoToDelete;
+    
+    if (db && isConfigured) {
+      if (mode === 'ambos' && linkedRegistroId) {
+        deleteDoc(doc(db, 'artifacts', appId, 'public', 'data', 'registros', String(linkedRegistroId))).catch(() => { });
+        setRegistros(prev => {
+          const n = prev.filter(r => r.id !== linkedRegistroId);
+          saveToLocalStorage('imac_registros', n);
+          return n;
+        });
+      }
+
+      if (type === 'rncCliente') {
+        deleteDoc(doc(db, 'artifacts', appId, 'public', 'data', 'rnc_cliente', id)).catch(() => { });
+        setRncClientes(prev => { const n = prev.filter(r => r.id !== id); saveToLocalStorage('imac_rnc_cliente', n); return n; });
+      } else if (type === 'rncInterna') {
+        deleteDoc(doc(db, 'artifacts', appId, 'public', 'data', 'rnc_interna', id)).catch(() => { });
+        setRncInternas(prev => { const n = prev.filter(r => r.id !== id); saveToLocalStorage('imac_rnc_interna', n); return n; });
+      } else if (type === 'solFornecedor') {
+        deleteDoc(doc(db, 'artifacts', appId, 'public', 'data', 'sol_fornecedor', id)).catch(() => { });
+        setSolFornecedor(prev => { const n = prev.filter(s => s.id !== id); saveToLocalStorage('imac_sol_forn', n); return n; });
+      } else if (type === 'solicitacao') {
+        deleteDoc(doc(db, 'artifacts', appId, 'public', 'data', 'solicitacoes', id)).catch(() => { });
+        setSolicitacoes(prev => { const n = prev.filter(s => s.id !== id); saveToLocalStorage('imac_solicitacoes', n); return n; });
+      }
+    }
+    
+    setLinkedSolicitacaoToDelete(null);
+    setAppMessage("✅ Exclusão concluída com sucesso.");
+  };
+
   const confirmDeleteRegistro = (id) => {
     setRegistros(prev => {
       const newList = (prev || []).filter(r => r && r.id !== id);
@@ -2600,6 +2661,21 @@ function App() {
 
   const getFilteredRecords = () => {
     return (registros || []).filter(r => {
+      if (globalSearchTerm) {
+        const term = globalSearchTerm.toLowerCase();
+        const match = (
+          (r.id && r.id.toLowerCase().includes(term)) ||
+          (r.produto && r.produto.toLowerCase().includes(term)) ||
+          (r.fornecedor && r.fornecedor.toLowerCase().includes(term)) ||
+          (r.lote && r.lote.toLowerCase().includes(term)) ||
+          (r.supervisor && r.supervisor.toLowerCase().includes(term)) ||
+          (r.lojaLocal && r.lojaLocal.toLowerCase().includes(term)) ||
+          (r.solicitante && r.solicitante.toLowerCase().includes(term)) ||
+          (r.ocorrencia && r.ocorrencia.toLowerCase().includes(term))
+        );
+        if (!match) return false;
+      }
+
       if (!r || !r.dataCriacao) return false;
       const d = new Date(r.dataCriacao);
       if (isNaN(d.getTime())) return false;
@@ -2930,7 +3006,20 @@ function App() {
     const clienteBarData = Object.entries(clienteCounts).map(([label, value]) => ({ label, value })).sort((a, b) => b.value - a.value).slice(0, 10);
     const produtoBarData = Object.entries(produtoCounts).map(([label, value]) => ({ label, value })).sort((a, b) => b.value - a.value).slice(0, 5);
 
-    const pendingRecords = (registros || []).filter(r => r.status === 'Pendente' || !r.status);
+    const pendingRecords = (registros || []).filter(r => {
+      if (r.status !== 'Pendente' && r.status) return false;
+      if (globalSearchTerm) {
+        const term = globalSearchTerm.toLowerCase();
+        return (
+          (r.id && r.id.toLowerCase().includes(term)) ||
+          (r.produto && r.produto.toLowerCase().includes(term)) ||
+          (r.fornecedor && r.fornecedor.toLowerCase().includes(term)) ||
+          (r.solicitante && r.solicitante.toLowerCase().includes(term)) ||
+          (r.ocorrencia && r.ocorrencia.toLowerCase().includes(term))
+        );
+      }
+      return true;
+    });
 
     const totalRNCs = filteredRecords.length;
     const totalInternas = filteredRecords.filter(r => r.tipoRelatorio === 'Ocorrência Interna').length;
@@ -2951,7 +3040,7 @@ function App() {
     }
 
     return (
-      <div className="min-h-screen bg-[#DFA40A] py-8 px-4 font-sans text-gray-800 print:bg-white print:py-0 print:px-0" style={{ backgroundImage: `url("data:image/svg+xml,%3Csvg width='200' height='200' viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cg stroke='%235C3A21' stroke-width='3' fill='none' stroke-linecap='round' stroke-linejoin='round' opacity='0.08'%3E%3Cg transform='translate(30, 30) rotate(-20) scale(0.6)'%3E%3Cpath d='M10,50 C10,20 40,20 50,20 C60,20 90,20 90,50 C90,80 70,80 50,80 C30,80 10,80 10,50 Z' /%3E%3Cpath d='M25,50 Q50,25 75,50' /%3E%3C/g%3E%3Cg transform='translate(130, 40) rotate(15) scale(0.5)'%3E%3Cpath d='M10,60 C0,30 40,10 60,10 C80,10 120,30 110,60 C100,90 80,70 60,70 C40,70 20,90 10,60 Z' /%3E%3Cpath d='M30,30 L35,60 M50,15 L55,70 M70,15 L65,70 M90,30 L85,60' /%3E%3C/g%3E%3Cg transform='translate(40, 130) rotate(45) scale(0.6)'%3E%3Cpath d='M50,10 L50,90' /%3E%3Cpath d='M50,30 Q30,10 50,10 Q40,20 50,30' /%3E%3Cpath d='M50,45 Q30,25 50,25 Q40,35 50,45' /%3E%3Cpath d='M50,60 Q30,40 50,40 Q40,50 50,60' /%3E%3Cpath d='M50,75 Q30,55 50,55 Q40,65 50,75' /%3E%3Cpath d='M50,30 Q70,10 50,10 Q60,20 50,30' /%3E%3Cpath d='M50,45 Q70,25 50,25 Q60,35 50,45' /%3E%3Cpath d='M50,60 Q70,40 50,40 Q60,50 50,60' /%3E%3Cpath d='M50,75 Q70,55 50,55 Q60,65 50,75' /%3E%3C/g%3E%3Cg transform='translate(140, 140) scale(0.5)'%3E%3Ccircle cx='50' cy='50' r='30' /%3E%3Cpath d='M35,40 A5,5 0 0,1 45,40' /%3E%3Cpath d='M55,35 A4,4 0 0,1 60,45' /%3E%3Cpath d='M45,60 A6,6 0 0,1 55,60' /%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`, backgroundSize: '150px 150px' }}>
+      <div className="min-h-screen bg-[#DFA40A] py-8 px-4 font-sans text-gray-800 print:bg-white print:py-0 print:px-0" style={{ backgroundImage: `url("data:image/svg+xml,%3Csvg width='200' height='200' viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cg stroke='%235C3A21' stroke-width='3' fill='none' stroke-linecap='round' stroke-linejoin='round' opacity='0.2'%3E%3Cg transform='translate(30, 30) rotate(-20) scale(0.6)'%3E%3Cpath d='M10,50 C10,20 40,20 50,20 C60,20 90,20 90,50 C90,80 70,80 50,80 C30,80 10,80 10,50 Z' /%3E%3Cpath d='M25,50 Q50,25 75,50' /%3E%3C/g%3E%3Cg transform='translate(130, 40) rotate(15) scale(0.5)'%3E%3Cpath d='M10,60 C0,30 40,10 60,10 C80,10 120,30 110,60 C100,90 80,70 60,70 C40,70 20,90 10,60 Z' /%3E%3Cpath d='M30,30 L35,60 M50,15 L55,70 M70,15 L65,70 M90,30 L85,60' /%3E%3C/g%3E%3Cg transform='translate(40, 130) rotate(45) scale(0.6)'%3E%3Cpath d='M50,10 L50,90' /%3E%3Cpath d='M50,30 Q30,10 50,10 Q40,20 50,30' /%3E%3Cpath d='M50,45 Q30,25 50,25 Q40,35 50,45' /%3E%3Cpath d='M50,60 Q30,40 50,40 Q40,50 50,60' /%3E%3Cpath d='M50,75 Q30,55 50,55 Q40,65 50,75' /%3E%3Cpath d='M50,30 Q70,10 50,10 Q60,20 50,30' /%3E%3Cpath d='M50,45 Q70,25 50,25 Q60,35 50,45' /%3E%3Cpath d='M50,60 Q70,40 50,40 Q60,50 50,60' /%3E%3Cpath d='M50,75 Q70,55 50,55 Q60,65 50,75' /%3E%3C/g%3E%3Cg transform='translate(140, 140) scale(0.5)'%3E%3Ccircle cx='50' cy='50' r='30' /%3E%3Cpath d='M35,40 A5,5 0 0,1 45,40' /%3E%3Cpath d='M55,35 A4,4 0 0,1 60,45' /%3E%3Cpath d='M45,60 A6,6 0 0,1 55,60' /%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`, backgroundSize: '150px 150px' }}>
         {/* BACKGROUND COM PADRÃO DE SEMENTES/TRIGO (PÃO FRANCÊS) */}
         {registroToView && <RelatorioViewModal registro={registroToView} onClose={() => setRegistroToView(null)} />}
         {evaluatingRegistro && <StatusModal registro={evaluatingRegistro} onClose={() => setEvaluatingRegistro(null)} onSave={handleUpdateStatus} avaliadorAtual={userName} canApprove={canApprove} />}
@@ -3011,6 +3100,33 @@ function App() {
           </div>
         )}
 
+        {linkedSolicitacaoToDelete && (
+          <div className="fixed inset-0 bg-black/80 z-50 flex items-center justify-center p-4 no-print">
+            <div className="bg-white rounded-xl shadow-2xl p-6 max-w-md w-full animate-fade-in-up text-center">
+              <AlertCircle size={40} className="text-red-500 mx-auto mb-4" />
+              <h3 className="text-xl font-bold text-gray-900 mb-2">Excluir Solicitação</h3>
+              {linkedSolicitacaoToDelete.hasLinkedRegistro ? (
+                <>
+                  <p className="text-gray-600 text-sm mb-6">Esta solicitação já possui um relatório gerado e atrelado a ela. O que você deseja fazer?</p>
+                  <div className="flex flex-col gap-3">
+                    <button onClick={() => handleConfirmDeleteLinked('solicitacao')} className="px-5 py-3 bg-orange-100 text-orange-800 rounded-lg hover:bg-orange-200 font-bold transition text-sm flex items-center justify-center gap-2"><Trash2 size={16} /> Excluir apenas a Solicitação (Manter Relatório)</button>
+                    <button onClick={() => handleConfirmDeleteLinked('ambos')} className="px-5 py-3 bg-red-600 text-white rounded-lg hover:bg-red-700 font-bold transition text-sm flex items-center justify-center gap-2"><Trash2 size={16} /> Excluir Solicitação E Relatório Atrelado</button>
+                    <button onClick={() => setLinkedSolicitacaoToDelete(null)} className="px-5 py-2.5 bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300 font-bold transition text-sm mt-2">Cancelar</button>
+                  </div>
+                </>
+              ) : (
+                <>
+                  <p className="text-gray-600 text-sm mb-6">Deseja realmente apagar esta solicitação?</p>
+                  <div className="flex justify-center gap-3">
+                    <button onClick={() => setLinkedSolicitacaoToDelete(null)} className="px-5 py-2.5 bg-gray-200 rounded-lg hover:bg-gray-300 font-bold transition text-sm">Cancelar</button>
+                    <button onClick={() => handleConfirmDeleteLinked('solicitacao')} className="px-5 py-2.5 bg-red-600 text-white rounded-lg hover:bg-red-700 font-bold transition text-sm flex items-center gap-1"><Trash2 size={16} /> Sim, Apagar</button>
+                  </div>
+                </>
+              )}
+            </div>
+          </div>
+        )}
+
         {appMessage && <div className="fixed top-4 right-4 z-[100] animate-fade-in-up no-print"><div className="bg-white rounded-xl shadow-lg p-4 border-t-4 border-[#F4B41A] max-w-sm"><p className="text-sm font-medium text-gray-800">{appMessage}</p></div></div>}
 
         <div className={`max-w-7xl mx-auto ${registroToView ? 'no-print' : ''}`}>
@@ -3018,6 +3134,7 @@ function App() {
           {/* Header principal - iOS Minimalist com Destaque */}
           <div className="flex flex-col mb-8 gap-4 bg-white/40 p-6 rounded-2xl shadow-sm border border-white/60 animate-fade-in-up">
             <div className="flex items-center gap-3">
+              <img src="/logo.png" alt="IMAC" className="h-[50px] object-contain mr-2" onError={(e) => { e.target.style.display = 'none'; }} />
               <div>
                 <h1 className="text-3xl font-black text-[#5C3A21] tracking-tight drop-shadow-sm">Seja bem vindo, {userName} 👋</h1>
                 <p className="text-[#5C3A21] font-bold text-sm mt-1">O que você deseja fazer hoje?</p>
@@ -3114,15 +3231,32 @@ function App() {
                       </div>
 
                       <p className="text-xs text-gray-600 line-clamp-2 pl-2 border-t border-gray-100 pt-1 mt-1">{sol.descricao}</p>
-                      <button onClick={() => {
-                        const formImages = (sol.imagens || []).map(b64 => ({ isObject: true, id: Date.now() + Math.random(), baseSrc: b64, displaySrc: b64, shapes: [] }));
-                        setFormData({ ...getEmptyForm(), ...sol, imagens: formImages });
-                        setEditingReportId(null);
-                        setView('form');
-                        window.scrollTo(0, 0);
-                        if (db && isConfigured) updateDoc(doc(db, 'artifacts', appId, 'public', 'data', 'solicitacoes', sol.id), { status: 'Atendido' }).catch(() => { });
-                        setSolicitacoes(prev => { const n = prev.map(s => s.id === sol.id ? { ...s, status: 'Atendido' } : s); saveToLocalStorage('imac_solicitacoes', n); return n; });
-                      }} className="mt-2 w-full bg-blue-600 hover:bg-blue-700 text-white py-1.5 rounded text-xs font-bold transition flex items-center justify-center gap-1"><Plus size={14} /> Criar Relatório</button>
+                      
+                      {(() => {
+                        const linkedRegistro = getLinkedRegistro(sol.id);
+                        const isAguardandoOuAtendido = sol.status === 'Aguardando Correção' || sol.status === 'Atendido' || linkedRegistro;
+                        
+                        return isAguardandoOuAtendido ? (
+                          <div className="flex justify-between items-center bg-gray-50 p-2 mt-2 rounded border border-gray-100">
+                            <span className="text-[10px] font-bold text-gray-500 uppercase">Vinculado</span>
+                            <div className="flex justify-end gap-1">
+                              {linkedRegistro && <button onClick={() => setRegistroToView(linkedRegistro)} className="p-1.5 bg-white border border-gray-200 text-gray-600 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition" title="Visualizar Relatório"><Eye size={16} /></button>}
+                              {linkedRegistro && <button onClick={() => editRegistro(linkedRegistro)} className="p-1.5 bg-white border border-gray-200 text-gray-600 hover:text-amber-600 hover:bg-amber-50 rounded-lg transition" title="Editar Relatório"><Edit size={16} /></button>}
+                              <button onClick={() => confirmDeleteLinked({ id: sol.id, type: 'solicitacao', hasLinkedRegistro: !!linkedRegistro, linkedRegistroId: linkedRegistro?.id })} className="p-1.5 bg-white border border-gray-200 text-gray-600 hover:text-red-600 hover:bg-red-50 rounded-lg transition" title="Excluir"><Trash2 size={16} /></button>
+                            </div>
+                          </div>
+                        ) : (
+                          <button onClick={() => {
+                            const formImages = (sol.imagens || []).map(b64 => ({ isObject: true, id: Date.now() + Math.random(), baseSrc: b64, displaySrc: b64, shapes: [] }));
+                            setFormData({ ...getEmptyForm(), ...sol, imagens: formImages, solicitacaoOrigemId: sol.id, solicitacaoOrigemTipo: 'solicitacao' });
+                            setEditingReportId(null);
+                            setView('form');
+                            window.scrollTo(0, 0);
+                            if (db && isConfigured) updateDoc(doc(db, 'artifacts', appId, 'public', 'data', 'solicitacoes', sol.id), { status: 'Aguardando Correção' }).catch(() => { });
+                            setSolicitacoes(prev => { const n = prev.map(s => s.id === sol.id ? { ...s, status: 'Aguardando Correção' } : s); saveToLocalStorage('imac_solicitacoes', n); return n; });
+                          }} className="mt-2 w-full bg-blue-600 hover:bg-blue-700 text-white py-1.5 rounded text-xs font-bold transition flex items-center justify-center gap-1"><Plus size={14} /> Criar Relatório</button>
+                        );
+                      })()}
                     </div>
                   ))}
                 </div>
@@ -3338,13 +3472,16 @@ function App() {
                     <div className="divide-y divide-gray-100">
                       {rncClientesExt.length === 0 ? (
                         <div className="text-center py-12 text-gray-400"><AlertCircle size={32} className="mx-auto mb-2 opacity-30" /><p>Nenhuma NC de cliente registrada ainda.</p></div>
-                      ) : rncClientesExt.map(rnc => (
+                      ) : rncClientesExt.map(rnc => {
+                        const linkedRegistro = getLinkedRegistro(rnc.id);
+                        const isAguardandoOuAtendido = rnc.status === 'Aguardando Correção' || linkedRegistro;
+                        return (
                         <div key={rnc.id} className="p-4 hover:bg-gray-50 transition">
                           <div className="flex justify-between items-start gap-3 flex-wrap">
                             <div className="flex-1 min-w-0">
                               <div className="flex items-center gap-2 flex-wrap mb-1">
                                 <span className="font-black text-gray-800 truncate">{rnc.nomeCliente || 'Cliente'}</span>
-                                <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full border ${rnc.status === 'Concluído' ? 'bg-green-50 text-green-700 border-green-200' : rnc.status === 'Em andamento' ? 'bg-blue-50 text-blue-700 border-blue-200' : 'bg-yellow-50 text-yellow-700 border-yellow-200'}`}>{rnc.status || 'Pendente'}</span>
+                                <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full border ${rnc.status === 'Concluído' ? 'bg-green-50 text-green-700 border-green-200' : rnc.status === 'Em andamento' ? 'bg-blue-50 text-blue-700 border-blue-200' : rnc.status === 'Aguardando Correção' ? 'bg-purple-50 text-purple-700 border-purple-200' : 'bg-yellow-50 text-yellow-700 border-yellow-200'}`}>{rnc.status || 'Pendente'}</span>
                                 {rnc.origem === 'Externo' && <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-orange-50 text-orange-700 border border-orange-200">Externo</span>}
                               </div>
                               <p className="text-sm font-semibold text-gray-700">{rnc.produto} {rnc.lote ? `— Lote: ${rnc.lote}` : ''}</p>
@@ -3353,13 +3490,23 @@ function App() {
                             </div>
                             <div className="flex flex-col gap-1.5 shrink-0">
                               <select value={rnc.status || 'Pendente'} onChange={e => updateStatusRncCliente(rnc.id, e.target.value)} className="text-xs border border-gray-300 rounded-lg p-1.5 outline-none font-bold">
-                                <option>Pendente</option><option>Em andamento</option><option>Concluído</option>
+                                <option>Pendente</option><option>Em andamento</option><option>Aguardando Correção</option><option>Concluído</option>
                               </select>
-                              <button onClick={() => criarRelDeRncCliente(rnc)} className="bg-[#5C3A21] text-white text-xs font-bold py-1.5 px-3 rounded-lg hover:bg-[#4a2e1a] transition flex items-center gap-1 justify-center"><FileText size={12} /> Criar Relatório</button>
+                              
+                              {isAguardandoOuAtendido ? (
+                                <div className="flex justify-end gap-1 mt-1">
+                                  {linkedRegistro && <button onClick={() => setRegistroToView(linkedRegistro)} className="p-1.5 bg-gray-100 text-gray-600 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition" title="Visualizar Relatório"><Eye size={16} /></button>}
+                                  {linkedRegistro && <button onClick={() => editRegistro(linkedRegistro)} className="p-1.5 bg-gray-100 text-gray-600 hover:text-amber-600 hover:bg-amber-50 rounded-lg transition" title="Editar Relatório"><Edit size={16} /></button>}
+                                  <button onClick={() => confirmDeleteLinked({ id: rnc.id, type: 'rncCliente', hasLinkedRegistro: !!linkedRegistro, linkedRegistroId: linkedRegistro?.id })} className="p-1.5 bg-gray-100 text-gray-600 hover:text-red-600 hover:bg-red-50 rounded-lg transition" title="Excluir"><Trash2 size={16} /></button>
+                                </div>
+                              ) : (
+                                <button onClick={() => criarRelDeRncCliente(rnc)} className="bg-[#5C3A21] text-white text-xs font-bold py-1.5 px-3 rounded-lg hover:bg-[#4a2e1a] transition flex items-center gap-1 justify-center"><FileText size={12} /> Criar Relatório</button>
+                              )}
                             </div>
                           </div>
                         </div>
-                      ))}
+                        );
+                      })}
                     </div>
                   </div>
                 </div>
@@ -3433,13 +3580,16 @@ function App() {
                           
                           if (filtradas.length === 0) return <div className="text-center py-12 text-gray-400"><p>Nenhuma NC para a data selecionada.</p></div>;
 
-                          return filtradas.map(rnc => (
+                          return filtradas.map(rnc => {
+                            const linkedRegistro = getLinkedRegistro(rnc.id);
+                            const isAguardandoOuAtendido = rnc.status === 'Aguardando Correção' || linkedRegistro;
+                            return (
                             <div key={rnc.id} className="p-4 hover:bg-gray-50 transition">
                               <div className="flex justify-between items-start gap-3 flex-wrap">
                                 <div className="flex-1 min-w-0">
                                   <div className="flex items-center gap-2 flex-wrap mb-1">
                                     <span className="font-black text-gray-800">{rnc.setor || 'Setor'}</span>
-                                    <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full border ${rnc.status === 'Concluído' ? 'bg-green-50 text-green-700 border-green-200' : rnc.status === 'Em andamento' ? 'bg-blue-50 text-blue-700 border-blue-200' : 'bg-yellow-50 text-yellow-700 border-yellow-200'}`}>{rnc.status || 'Pendente'}</span>
+                                    <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full border ${rnc.status === 'Concluído' ? 'bg-green-50 text-green-700 border-green-200' : rnc.status === 'Em andamento' ? 'bg-blue-50 text-blue-700 border-blue-200' : rnc.status === 'Aguardando Correção' ? 'bg-purple-50 text-purple-700 border-purple-200' : 'bg-yellow-50 text-yellow-700 border-yellow-200'}`}>{rnc.status || 'Pendente'}</span>
                                   </div>
                                   <p className="text-sm font-semibold text-gray-700">{rnc.produto} {rnc.lote ? `— Lote: ${rnc.lote}` : ''}</p>
                                   <p className="text-xs text-gray-500 mt-0.5 line-clamp-2">{rnc.descricao}</p>
@@ -3447,13 +3597,22 @@ function App() {
                                 </div>
                                 <div className="flex flex-col gap-1.5 shrink-0">
                                   <select value={rnc.status || 'Pendente'} onChange={e => updateStatusRncInterna(rnc.id, e.target.value)} className="text-xs border border-gray-300 rounded-lg p-1.5 outline-none font-bold">
-                                    <option>Pendente</option><option>Em andamento</option><option>Concluído</option>
+                                    <option>Pendente</option><option>Em andamento</option><option>Aguardando Correção</option><option>Concluído</option>
                                   </select>
-                                  <button onClick={() => criarRelDeRncInterna(rnc)} className="bg-[#5C3A21] text-white text-xs font-bold py-1.5 px-3 rounded-lg hover:bg-[#4a2e1a] transition flex items-center gap-1 justify-center"><FileText size={12} /> Criar Relatório</button>
+                                  {isAguardandoOuAtendido ? (
+                                    <div className="flex justify-end gap-1 mt-1">
+                                      {linkedRegistro && <button onClick={() => setRegistroToView(linkedRegistro)} className="p-1.5 bg-gray-100 text-gray-600 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition" title="Visualizar Relatório"><Eye size={16} /></button>}
+                                      {linkedRegistro && <button onClick={() => editRegistro(linkedRegistro)} className="p-1.5 bg-gray-100 text-gray-600 hover:text-amber-600 hover:bg-amber-50 rounded-lg transition" title="Editar Relatório"><Edit size={16} /></button>}
+                                      <button onClick={() => confirmDeleteLinked({ id: rnc.id, type: 'rncInterna', hasLinkedRegistro: !!linkedRegistro, linkedRegistroId: linkedRegistro?.id })} className="p-1.5 bg-gray-100 text-gray-600 hover:text-red-600 hover:bg-red-50 rounded-lg transition" title="Excluir"><Trash2 size={16} /></button>
+                                    </div>
+                                  ) : (
+                                    <button onClick={() => criarRelDeRncInterna(rnc)} className="bg-[#5C3A21] text-white text-xs font-bold py-1.5 px-3 rounded-lg hover:bg-[#4a2e1a] transition flex items-center gap-1 justify-center"><FileText size={12} /> Criar Relatório</button>
+                                  )}
                                 </div>
                               </div>
                             </div>
-                          ));
+                            );
+                          });
                       })()}
                     </div>
                   </div>
@@ -3518,14 +3677,17 @@ function App() {
                     <div className="divide-y divide-gray-100">
                       {solFornecedor.length === 0 ? (
                         <div className="text-center py-12 text-gray-400"><Truck size={32} className="mx-auto mb-2 opacity-30" /><p>Nenhuma solicitação ao fornecedor ainda.</p></div>
-                      ) : solFornecedor.map(sol => (
+                      ) : solFornecedor.map(sol => {
+                        const linkedRegistro = getLinkedRegistro(sol.id);
+                        const isAguardandoOuAtendido = sol.status === 'Aguardando Correção' || linkedRegistro;
+                        return (
                         <div key={sol.id} className="p-4 hover:bg-gray-50 transition">
                           <div className="flex justify-between items-start gap-3 flex-wrap">
                             <div className="flex-1 min-w-0">
                               <div className="flex items-center gap-2 flex-wrap mb-1">
                                 <span className="font-black text-gray-800">{sol.fornecedor}</span>
                                 <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${sol.urgencia === 'Alta' ? 'bg-red-100 text-red-700' : sol.urgencia === 'Média' ? 'bg-yellow-100 text-yellow-700' : 'bg-green-100 text-green-700'}`}>{sol.urgencia}</span>
-                                <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full border ${sol.status === 'Atendido' ? 'bg-green-50 text-green-700 border-green-200' : sol.status === 'Em andamento' ? 'bg-blue-50 text-blue-700 border-blue-200' : 'bg-yellow-50 text-yellow-700 border-yellow-200'}`}>{sol.status || 'Pendente'}</span>
+                                <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full border ${sol.status === 'Atendido' ? 'bg-green-50 text-green-700 border-green-200' : sol.status === 'Em andamento' ? 'bg-blue-50 text-blue-700 border-blue-200' : sol.status === 'Aguardando Correção' ? 'bg-purple-50 text-purple-700 border-purple-200' : 'bg-yellow-50 text-yellow-700 border-yellow-200'}`}>{sol.status || 'Pendente'}</span>
                               </div>
                               <p className="text-sm font-semibold text-gray-700">{sol.produto} {sol.lote ? `— Lote: ${sol.lote}` : ''} {sol.nf ? `— NF: ${sol.nf}` : ''}</p>
                               <p className="text-xs text-gray-500 mt-0.5 line-clamp-2">{sol.descricao}</p>
@@ -3533,13 +3695,22 @@ function App() {
                             </div>
                             <div className="flex flex-col gap-1.5 shrink-0">
                               <select value={sol.status || 'Pendente'} onChange={e => updateStatusSolForn(sol.id, e.target.value)} className="text-xs border border-gray-300 rounded-lg p-1.5 outline-none font-bold">
-                                <option>Pendente</option><option>Em andamento</option><option>Atendido</option>
+                                <option>Pendente</option><option>Em andamento</option><option>Aguardando Correção</option><option>Atendido</option>
                               </select>
-                              <button onClick={() => { setFormData({ ...getEmptyForm(), tipoRelatorio: 'Problema com Fornecedor', fornecedor: sol.fornecedor || '', produto: sol.produto || '', lote: sol.lote || '', nf: sol.nf || '', dataRecebimento: sol.dataRecebimento || '', descricao: sol.descricao || '', ocorrencia: (sol.descricao || '').substring(0, 100) }); setEditingReportId(null); setView('form'); window.scrollTo(0, 0); }} className="bg-[#5C3A21] text-white text-xs font-bold py-1.5 px-3 rounded-lg hover:bg-[#4a2e1a] transition flex items-center gap-1 justify-center"><FileText size={12} /> Criar Relatório</button>
+                              {isAguardandoOuAtendido ? (
+                                <div className="flex justify-end gap-1 mt-1">
+                                  {linkedRegistro && <button onClick={() => setRegistroToView(linkedRegistro)} className="p-1.5 bg-gray-100 text-gray-600 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition" title="Visualizar Relatório"><Eye size={16} /></button>}
+                                  {linkedRegistro && <button onClick={() => editRegistro(linkedRegistro)} className="p-1.5 bg-gray-100 text-gray-600 hover:text-amber-600 hover:bg-amber-50 rounded-lg transition" title="Editar Relatório"><Edit size={16} /></button>}
+                                  <button onClick={() => confirmDeleteLinked({ id: sol.id, type: 'solFornecedor', hasLinkedRegistro: !!linkedRegistro, linkedRegistroId: linkedRegistro?.id })} className="p-1.5 bg-gray-100 text-gray-600 hover:text-red-600 hover:bg-red-50 rounded-lg transition" title="Excluir"><Trash2 size={16} /></button>
+                                </div>
+                              ) : (
+                                <button onClick={() => { setFormData({ ...getEmptyForm(), tipoRelatorio: 'Problema com Fornecedor', fornecedor: sol.fornecedor || '', produto: sol.produto || '', lote: sol.lote || '', nf: sol.nf || '', dataRecebimento: sol.dataRecebimento || '', descricao: sol.descricao || '', ocorrencia: (sol.descricao || '').substring(0, 100), solicitacaoOrigemId: sol.id, solicitacaoOrigemTipo: 'solFornecedor' }); setEditingReportId(null); setView('form'); window.scrollTo(0, 0); }} className="bg-[#5C3A21] text-white text-xs font-bold py-1.5 px-3 rounded-lg hover:bg-[#4a2e1a] transition flex items-center gap-1 justify-center"><FileText size={12} /> Criar Relatório</button>
+                              )}
                             </div>
                           </div>
                         </div>
-                      ))}
+                        );
+                      })}
                     </div>
                   </div>
                 </div>
@@ -3555,7 +3726,7 @@ function App() {
 
   if (view === 'form') {
     return (
-      <div className="min-h-screen bg-[#DFA40A] py-8 px-4 font-sans text-gray-800 relative" style={{ backgroundImage: `url("data:image/svg+xml,%3Csvg width='200' height='200' viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cg stroke='%235C3A21' stroke-width='3' fill='none' stroke-linecap='round' stroke-linejoin='round' opacity='0.08'%3E%3Cg transform='translate(30, 30) rotate(-20) scale(0.6)'%3E%3Cpath d='M10,50 C10,20 40,20 50,20 C60,20 90,20 90,50 C90,80 70,80 50,80 C30,80 10,80 10,50 Z' /%3E%3Cpath d='M25,50 Q50,25 75,50' /%3E%3C/g%3E%3Cg transform='translate(130, 40) rotate(15) scale(0.5)'%3E%3Cpath d='M10,60 C0,30 40,10 60,10 C80,10 120,30 110,60 C100,90 80,70 60,70 C40,70 20,90 10,60 Z' /%3E%3Cpath d='M30,30 L35,60 M50,15 L55,70 M70,15 L65,70 M90,30 L85,60' /%3E%3C/g%3E%3Cg transform='translate(40, 130) rotate(45) scale(0.6)'%3E%3Cpath d='M50,10 L50,90' /%3E%3Cpath d='M50,30 Q30,10 50,10 Q40,20 50,30' /%3E%3Cpath d='M50,45 Q30,25 50,25 Q40,35 50,45' /%3E%3Cpath d='M50,60 Q30,40 50,40 Q40,50 50,60' /%3E%3Cpath d='M50,75 Q30,55 50,55 Q40,65 50,75' /%3E%3Cpath d='M50,30 Q70,10 50,10 Q60,20 50,30' /%3E%3Cpath d='M50,45 Q70,25 50,25 Q60,35 50,45' /%3E%3Cpath d='M50,60 Q70,40 50,40 Q60,50 50,60' /%3E%3Cpath d='M50,75 Q70,55 50,55 Q60,65 50,75' /%3E%3C/g%3E%3Cg transform='translate(140, 140) scale(0.5)'%3E%3Ccircle cx='50' cy='50' r='30' /%3E%3Cpath d='M35,40 A5,5 0 0,1 45,40' /%3E%3Cpath d='M55,35 A4,4 0 0,1 60,45' /%3E%3Cpath d='M45,60 A6,6 0 0,1 55,60' /%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`, backgroundSize: '150px 150px' }}>
+      <div className="min-h-screen bg-[#DFA40A] py-8 px-4 font-sans text-gray-800 relative" style={{ backgroundImage: `url("data:image/svg+xml,%3Csvg width='200' height='200' viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cg stroke='%235C3A21' stroke-width='3' fill='none' stroke-linecap='round' stroke-linejoin='round' opacity='0.2'%3E%3Cg transform='translate(30, 30) rotate(-20) scale(0.6)'%3E%3Cpath d='M10,50 C10,20 40,20 50,20 C60,20 90,20 90,50 C90,80 70,80 50,80 C30,80 10,80 10,50 Z' /%3E%3Cpath d='M25,50 Q50,25 75,50' /%3E%3C/g%3E%3Cg transform='translate(130, 40) rotate(15) scale(0.5)'%3E%3Cpath d='M10,60 C0,30 40,10 60,10 C80,10 120,30 110,60 C100,90 80,70 60,70 C40,70 20,90 10,60 Z' /%3E%3Cpath d='M30,30 L35,60 M50,15 L55,70 M70,15 L65,70 M90,30 L85,60' /%3E%3C/g%3E%3Cg transform='translate(40, 130) rotate(45) scale(0.6)'%3E%3Cpath d='M50,10 L50,90' /%3E%3Cpath d='M50,30 Q30,10 50,10 Q40,20 50,30' /%3E%3Cpath d='M50,45 Q30,25 50,25 Q40,35 50,45' /%3E%3Cpath d='M50,60 Q30,40 50,40 Q40,50 50,60' /%3E%3Cpath d='M50,75 Q30,55 50,55 Q40,65 50,75' /%3E%3Cpath d='M50,30 Q70,10 50,10 Q60,20 50,30' /%3E%3Cpath d='M50,45 Q70,25 50,25 Q60,35 50,45' /%3E%3Cpath d='M50,60 Q70,40 50,40 Q60,50 50,60' /%3E%3Cpath d='M50,75 Q70,55 50,55 Q60,65 50,75' /%3E%3C/g%3E%3Cg transform='translate(140, 140) scale(0.5)'%3E%3Ccircle cx='50' cy='50' r='30' /%3E%3Cpath d='M35,40 A5,5 0 0,1 45,40' /%3E%3Cpath d='M55,35 A4,4 0 0,1 60,45' /%3E%3Cpath d='M45,60 A6,6 0 0,1 55,60' /%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`, backgroundSize: '150px 150px' }}>
         {appMessage && <div className="fixed top-4 right-4 z-[100] animate-fade-in-up"><div className="bg-white rounded-xl shadow-lg p-4 border-t-4 border-[#F4B41A] max-w-sm"><p className="text-sm font-medium text-gray-800">{appMessage}</p></div></div>}
 
         {editingImageIndex !== null && (() => {
