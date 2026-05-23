@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { initializeApp } from 'firebase/app';
 import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut } from 'firebase/auth';
 import { getFirestore, collection, addDoc, updateDoc, onSnapshot, deleteDoc, doc, setDoc, getDocs, getDoc } from 'firebase/firestore';
+import logoImg from './logo.png';
 
 let firebaseConfig;
 let isConfigured = false;
@@ -2777,7 +2778,7 @@ function App() {
         {appMessage && <div className="fixed top-4 right-4 z-[100] animate-fade-in-up"><div className="bg-white rounded-xl shadow-lg p-4 border-t-4 border-[#F4B41A] max-w-sm"><p className="text-sm font-medium text-gray-800">{appMessage}</p></div></div>}
         <div className="max-w-md w-full bg-white rounded-2xl shadow-2xl overflow-hidden relative z-10 border-t-[8px] border-[#5C3A21] animate-fade-in-up">
           <div className="bg-gray-50 p-8 text-center border-b border-gray-100">
-            <img src="/logo.png" alt="IMAC" className="max-h-20 object-contain mx-auto mb-4" onError={(e) => { e.target.style.display = 'none'; e.target.nextSibling.style.display = 'block'; }} />
+            <img src={logoImg} alt="IMAC" className="max-h-20 object-contain mx-auto mb-4" onError={(e) => { e.target.style.display = 'none'; e.target.nextSibling.style.display = 'block'; }} />
             <div className="w-20 h-20 bg-white rounded-full items-center justify-center mx-auto mb-4 shadow-md border border-gray-200 hidden">
               <h1 className="text-3xl font-black text-[#5C3A21]">IMAC</h1>
             </div>
@@ -3170,7 +3171,7 @@ function App() {
           {/* Header principal - iOS Minimalist com Destaque */}
           <div className="flex flex-col mb-8 gap-4 bg-white/40 p-6 rounded-2xl shadow-sm border border-white/60 animate-fade-in-up">
             <div className="flex items-center gap-3">
-              <img src="/logo.png" alt="IMAC" className="h-[50px] object-contain mr-2" onError={(e) => { e.target.style.display = 'none'; }} />
+              <img src={logoImg} alt="IMAC" className="h-[50px] object-contain mr-2" onError={(e) => { e.target.style.display = 'none'; }} />
               <div>
                 <h1 className="text-3xl font-black text-[#5C3A21] tracking-tight drop-shadow-sm">Seja bem vindo, {userName} 👋</h1>
                 <p className="text-[#5C3A21] font-bold text-sm mt-1">O que você deseja fazer hoje?</p>
@@ -4158,7 +4159,7 @@ function App() {
               <div className="mb-6 pb-6 border-b-2 border-dashed border-gray-300 print:break-after-page print:border-none print:pb-0 print:mb-0">
                 <div className="flex justify-between items-end border-b-2 border-gray-100 pb-4 mb-6 print:mb-4">
                   <div>
-                    <img src="/logo.png" alt="Logo IMAC" className="h-[50px] object-contain mb-1" onError={(e) => { e.target.style.display = 'none'; e.target.nextSibling.style.display = 'block'; }} />
+                    <img src={logoImg} alt="Logo IMAC" className="h-[50px] object-contain mb-1" onError={(e) => { e.target.style.display = 'none'; e.target.nextSibling.style.display = 'block'; }} />
                     <h1 className="text-[38px] font-black text-[#5C3A21] tracking-tighter leading-none mb-1 hidden">IMAC</h1>
                     <p className="font-bold text-black text-[14px]">Controle de Qualidade</p>
                   </div>
@@ -4240,7 +4241,7 @@ function App() {
             {(tipoStr === 'Ocorrência Interna') && (
               <div className="flex justify-between items-end border-b-2 border-gray-100 pb-4 mb-6 print:mb-4">
                 <div>
-                  <img src="/logo.png" alt="Logo IMAC" className="h-[50px] object-contain mb-1" onError={(e) => { e.target.style.display = 'none'; e.target.nextSibling.style.display = 'block'; }} />
+                  <img src={logoImg} alt="Logo IMAC" className="h-[50px] object-contain mb-1" onError={(e) => { e.target.style.display = 'none'; e.target.nextSibling.style.display = 'block'; }} />
                   <h1 className="text-[38px] font-black text-[#5C3A21] tracking-tighter leading-none mb-1 hidden">IMAC</h1>
                   <p className="font-bold text-black text-[14px]">Controle de Qualidade</p>
                 </div>
