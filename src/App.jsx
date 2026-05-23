@@ -1662,6 +1662,7 @@ function App() {
   const [editingImageIndex, setEditingImageIndex] = useState(null);
   const [registros, setRegistros] = useState([]);
   const [registroToDelete, setRegistroToDelete] = useState(null);
+  const [showPendingDetails, setShowPendingDetails] = useState(false);
   const [linkedSolicitacaoToDelete, setLinkedSolicitacaoToDelete] = useState(null);
 
   const getLinkedRegistro = (solId) => {
@@ -3265,36 +3266,56 @@ function App() {
 
             {pendingRecords.length > 0 && (
               <div className="mb-6 bg-orange-50 border-l-4 border-orange-500 p-4 rounded-r-xl shadow-sm animate-fade-in-up">
-                <div className="flex items-center gap-2 mb-3">
-                  <Clock size={20} className="text-orange-600" />
-                  <h2 className="text-lg font-bold text-orange-800">Atenção: Relatórios Pendentes de Avaliação ({pendingRecords.length})</h2>
+                <div className="flex items-center justify-between gap-2 mb-3">
+                  <div className="flex items-center gap-2">
+                    <Clock size={20} className="text-orange-600" />
+                    <h2 className="text-lg font-bold text-orange-800">Atenção: Relatórios Pendentes de Avaliação ({pendingRecords.length})</h2>
+                  </div>
+                  <button onClick={() => setShowPendingDetails(!showPendingDetails)} className="text-sm font-bold text-orange-700 bg-orange-100 hover:bg-orange-200 px-3 py-1.5 rounded-lg transition">
+                    {showPendingDetails ? 'Ocultar Detalhes' : 'Ver Detalhes'}
+                  </button>
                 </div>
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
-                  {pendingRecords.map(reg => {
-                    const dias = getPendingDays(reg.dataCriacao);
-                    return (
-                      <div key={reg.id} className="bg-white p-3 rounded-lg border border-orange-200 shadow-sm flex flex-col gap-2">
-                        <div className="flex justify-between items-start">
-                          <div className="flex flex-col gap-1 items-start">
-                            <span className="text-xs font-bold bg-orange-100 text-orange-800 px-2 py-1 rounded">ID: {String(reg.id).substring(0, 6)}</span>
-                            <span className={`text-[10px] font-bold px-1.5 py-0.5 rounded flex items-center gap-1 border ${reg.enviado ? 'bg-blue-50 text-blue-700 border-blue-200' : 'bg-gray-100 text-gray-500 border-gray-200'}`}>
-                              <Send size={10} /> {reg.enviado ? 'Enviado' : 'Não Enviado'}
+                
+                {!showPendingDetails ? (
+                  <div className="flex flex-wrap gap-2 mt-2">
+                    {Object.entries(pendingRecords.reduce((acc, reg) => {
+                      const tipo = reg.tipoRelatorio || 'Outros';
+                      acc[tipo] = (acc[tipo] || 0) + 1;
+                      return acc;
+                    }, {})).map(([tipo, count]) => (
+                      <span key={tipo} className="bg-white border border-orange-200 text-orange-800 text-xs font-bold px-3 py-1.5 rounded-full shadow-sm flex items-center gap-1">
+                        {tipo}: <span className="bg-orange-100 text-orange-700 px-1.5 py-0.5 rounded text-[10px]">{count}</span>
+                      </span>
+                    ))}
+                  </div>
+                ) : (
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 mt-4">
+                    {pendingRecords.map(reg => {
+                      const dias = getPendingDays(reg.dataCriacao);
+                      return (
+                        <div key={reg.id} className="bg-white p-3 rounded-lg border border-orange-200 shadow-sm flex flex-col gap-2">
+                          <div className="flex justify-between items-start">
+                            <div className="flex flex-col gap-1 items-start">
+                              <span className="text-xs font-bold bg-orange-100 text-orange-800 px-2 py-1 rounded">ID: {String(reg.id).substring(0, 6)}</span>
+                              <span className={`text-[10px] font-bold px-1.5 py-0.5 rounded flex items-center gap-1 border ${reg.enviado ? 'bg-blue-50 text-blue-700 border-blue-200' : 'bg-gray-100 text-gray-500 border-gray-200'}`}>
+                                <Send size={10} /> {reg.enviado ? 'Enviado' : 'Não Enviado'}
+                              </span>
+                            </div>
+                            <span className={`text-xs font-bold px-2 py-1 rounded ${dias > 3 ? 'bg-red-100 text-red-700' : 'bg-yellow-100 text-yellow-700'}`}>
+                              {dias === 0 ? 'Criado hoje' : `${dias} dia${dias > 1 ? 's' : ''} parado`}
                             </span>
                           </div>
-                          <span className={`text-xs font-bold px-2 py-1 rounded ${dias > 3 ? 'bg-red-100 text-red-700' : 'bg-yellow-100 text-yellow-700'}`}>
-                            {dias === 0 ? 'Criado hoje' : `${dias} dia${dias > 1 ? 's' : ''} parado`}
-                          </span>
+                          <p className="text-sm font-bold text-gray-800 truncate mt-1" title={reg.produto}>{reg.produto || 'Produto não informado'}</p>
+                          <p className="text-xs text-gray-600 truncate" title={reg.ocorrencia}>{reg.ocorrencia}</p>
+                          <div className="mt-2 flex gap-2">
+                            <button onClick={() => setEvaluatingRegistro(reg)} className="flex-1 bg-purple-100 text-purple-700 hover:bg-purple-200 text-xs font-bold py-1.5 rounded transition flex justify-center items-center gap-1"><CheckCircle size={14} /> Avaliar</button>
+                            <button onClick={() => shareViaWhatsApp(reg)} className="bg-green-100 text-green-700 hover:bg-green-200 p-1.5 rounded transition" title="Compartilhar no WhatsApp"><MessageCircle size={14} /></button>
+                          </div>
                         </div>
-                        <p className="text-sm font-bold text-gray-800 truncate mt-1" title={reg.produto}>{reg.produto || 'Produto não informado'}</p>
-                        <p className="text-xs text-gray-600 truncate" title={reg.ocorrencia}>{reg.ocorrencia}</p>
-                        <div className="mt-2 flex gap-2">
-                          <button onClick={() => setEvaluatingRegistro(reg)} className="flex-1 bg-purple-100 hover:bg-purple-200 text-purple-700 py-1.5 rounded text-xs font-bold transition flex justify-center items-center gap-1"><CheckCircle size={14} /> Avaliar</button>
-                          <button onClick={() => shareViaWhatsApp(reg)} className="bg-green-100 hover:bg-green-200 text-green-700 px-2 py-1.5 rounded text-xs transition flex justify-center items-center" title="Cobrar por WhatsApp"><MessageCircle size={14} /></button>
-                        </div>
-                      </div>
-                    );
-                  })}
-                </div>
+                      );
+                    })}
+                  </div>
+                )}
               </div>
             )}
 
