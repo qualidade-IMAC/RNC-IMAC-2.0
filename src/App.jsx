@@ -3241,7 +3241,7 @@ function App() {
                             <span className="text-[10px] font-bold text-gray-500 uppercase">Vinculado</span>
                             <div className="flex justify-end gap-1">
                               {linkedRegistro && <button onClick={() => setRegistroToView(linkedRegistro)} className="p-1.5 bg-white border border-gray-200 text-gray-600 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition" title="Visualizar Relatório"><Eye size={16} /></button>}
-                              {linkedRegistro && <button onClick={() => editRegistro(linkedRegistro)} className="p-1.5 bg-white border border-gray-200 text-gray-600 hover:text-amber-600 hover:bg-amber-50 rounded-lg transition" title="Editar Relatório"><Edit size={16} /></button>}
+                              {linkedRegistro && <button onClick={() => editRegistro(linkedRegistro)} className="p-1.5 bg-white border border-gray-200 text-gray-600 hover:text-amber-600 hover:bg-amber-50 rounded-lg transition" title="Editar Relatório"><Edit3 size={16} /></button>}
                               <button onClick={() => confirmDeleteLinked({ id: sol.id, type: 'solicitacao', hasLinkedRegistro: !!linkedRegistro, linkedRegistroId: linkedRegistro?.id })} className="p-1.5 bg-white border border-gray-200 text-gray-600 hover:text-red-600 hover:bg-red-50 rounded-lg transition" title="Excluir"><Trash2 size={16} /></button>
                             </div>
                           </div>
@@ -3496,7 +3496,7 @@ function App() {
                               {isAguardandoOuAtendido ? (
                                 <div className="flex justify-end gap-1 mt-1">
                                   {linkedRegistro && <button onClick={() => setRegistroToView(linkedRegistro)} className="p-1.5 bg-gray-100 text-gray-600 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition" title="Visualizar Relatório"><Eye size={16} /></button>}
-                                  {linkedRegistro && <button onClick={() => editRegistro(linkedRegistro)} className="p-1.5 bg-gray-100 text-gray-600 hover:text-amber-600 hover:bg-amber-50 rounded-lg transition" title="Editar Relatório"><Edit size={16} /></button>}
+                                  {linkedRegistro && <button onClick={() => editRegistro(linkedRegistro)} className="p-1.5 bg-gray-100 text-gray-600 hover:text-amber-600 hover:bg-amber-50 rounded-lg transition" title="Editar Relatório"><Edit3 size={16} /></button>}
                                   <button onClick={() => confirmDeleteLinked({ id: rnc.id, type: 'rncCliente', hasLinkedRegistro: !!linkedRegistro, linkedRegistroId: linkedRegistro?.id })} className="p-1.5 bg-gray-100 text-gray-600 hover:text-red-600 hover:bg-red-50 rounded-lg transition" title="Excluir"><Trash2 size={16} /></button>
                                 </div>
                               ) : (
@@ -3602,7 +3602,7 @@ function App() {
                                   {isAguardandoOuAtendido ? (
                                     <div className="flex justify-end gap-1 mt-1">
                                       {linkedRegistro && <button onClick={() => setRegistroToView(linkedRegistro)} className="p-1.5 bg-gray-100 text-gray-600 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition" title="Visualizar Relatório"><Eye size={16} /></button>}
-                                      {linkedRegistro && <button onClick={() => editRegistro(linkedRegistro)} className="p-1.5 bg-gray-100 text-gray-600 hover:text-amber-600 hover:bg-amber-50 rounded-lg transition" title="Editar Relatório"><Edit size={16} /></button>}
+                                      {linkedRegistro && <button onClick={() => editRegistro(linkedRegistro)} className="p-1.5 bg-gray-100 text-gray-600 hover:text-amber-600 hover:bg-amber-50 rounded-lg transition" title="Editar Relatório"><Edit3 size={16} /></button>}
                                       <button onClick={() => confirmDeleteLinked({ id: rnc.id, type: 'rncInterna', hasLinkedRegistro: !!linkedRegistro, linkedRegistroId: linkedRegistro?.id })} className="p-1.5 bg-gray-100 text-gray-600 hover:text-red-600 hover:bg-red-50 rounded-lg transition" title="Excluir"><Trash2 size={16} /></button>
                                     </div>
                                   ) : (
@@ -3700,7 +3700,7 @@ function App() {
                               {isAguardandoOuAtendido ? (
                                 <div className="flex justify-end gap-1 mt-1">
                                   {linkedRegistro && <button onClick={() => setRegistroToView(linkedRegistro)} className="p-1.5 bg-gray-100 text-gray-600 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition" title="Visualizar Relatório"><Eye size={16} /></button>}
-                                  {linkedRegistro && <button onClick={() => editRegistro(linkedRegistro)} className="p-1.5 bg-gray-100 text-gray-600 hover:text-amber-600 hover:bg-amber-50 rounded-lg transition" title="Editar Relatório"><Edit size={16} /></button>}
+                                  {linkedRegistro && <button onClick={() => editRegistro(linkedRegistro)} className="p-1.5 bg-gray-100 text-gray-600 hover:text-amber-600 hover:bg-amber-50 rounded-lg transition" title="Editar Relatório"><Edit3 size={16} /></button>}
                                   <button onClick={() => confirmDeleteLinked({ id: sol.id, type: 'solFornecedor', hasLinkedRegistro: !!linkedRegistro, linkedRegistroId: linkedRegistro?.id })} className="p-1.5 bg-gray-100 text-gray-600 hover:text-red-600 hover:bg-red-50 rounded-lg transition" title="Excluir"><Trash2 size={16} /></button>
                                 </div>
                               ) : (
